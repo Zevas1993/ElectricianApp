@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="wire_sizes">
+        <item>14 AWG</item>
+        <item>12 AWG</item>
+        <item>10 AWG</item>
+        <item>8 AWG</item>
+        <item>6 AWG</item>
+        <item>4 AWG</item>
+        <item>3 AWG</item>
+        <item>2 AWG</item>
+        <item>1 AWG</item>
+        <item>1/0 AWG</item>
+        <item>2/0 AWG</item>
+        <item>3/0 AWG</item>
+        <item>4/0 AWG</item>
+        <item>250 kcmil</item>
+        <item>300 kcmil</item>
+        <item>350 kcmil</item>
+        <item>400 kcmil</item>
+        <item>500 kcmil</item>
+        <item>600 kcmil</item>
+        <item>700 kcmil</item>
+        <item>750 kcmil</item>
+        <item>800 kcmil</item>
+        <item>900 kcmil</item>
+        <item>1000 kcmil</item>
+    </string-array>
+    
+    <string-array name="box_types">
+        <item>Device Box</item>
+        <item>Junction Box</item>
+        <item>Ceiling Box</item>
+        <item>Floor Box</item>
+        <item>Masonry Box</item>
+    </string-array>
+    
+    <string-array name="box_dimensions">
+        <item>4×1-1/2 Round (12.5 cu in)</item>
+        <item>4×1-1/2 Octagon (15.5 cu in)</item>
+        <item>4×2-1/8 Octagon (21.5 cu in)</item>
+        <item>3×2×1-1/2 Device (7.5 cu in)</item>
+        <item>3×2×2 Device (10.0 cu in)</item>
+        <item>3×2×2-1/4 Device (10.5 cu in)</item>
+        <item>3×2×2-1/2 Device (12.5 cu in)</item>
+        <item>3×2×2-3/4 Device (14.0 cu in)</item>
+        <item>3×2×3-1/2 Device (18.0 cu in)</item>
+        <item>4×2-1/8×1-1/2 Square (18.0 cu in)</item>
+        <item>4×2-1/8×1-7/8 Square (21.0 cu in)</item>
+        <item>4×2-1/8×2-1/8 Square (30.3 cu in)</item>
+        <item>4-11/16×2-1/8×1-1/2 Square (25.5 cu in)</item>
+        <item>4-11/16×2-1/8×2-1/8 Square (42.0 cu in)</item>
+    </string-array>
+    
+    <string-array name="device_types">
+        <item>Switch</item>
+        <item>Receptacle</item>
+        <item>GFCI Receptacle</item>
+        <item>Dimmer</item>
+        <item>Timer</item>
+    </string-array>
+</resources>

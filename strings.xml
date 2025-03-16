@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Electrical Calculator</string>
+    <string name="title_dwelling_load">Dwelling Load</string>
+    <string name="title_conduit_fill">Conduit Fill</string>
+    <string name="title_pipe_bending">Pipe Bending</string>
+    <string name="title_lighting_layout">Lighting Layout</string>
+    <string name="title_ar_view">AR View</string>
+    <string name="title_tap_counter">Tap Counter</string>
+    <string name="title_fraction_calculator">Fraction Calculator</string>
+    <string name="title_checklists">Checklists</string>
+    <string name="title_inventory">Inventory</string>
+    <string name="title_scheduling">Scheduling</string>
+</resources>
