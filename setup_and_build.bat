@@ -1,11 +1,23 @@
-@echo on
+@echo off
+setlocal EnableDelayedExpansion
+
 echo ElectricianApp Setup and Build Helper
 echo ====================================
 echo.
 
-:: Check if Java is installed
-java -version > nul 2>&1
-if %errorlevel% neq 0 (
+:: ===========================
+:: Check if Java is installed by capturing its output
+:: ===========================
+set "javaVersionOutput="
+for /f "delims=" %%a in ('java -version 2^>^&1') do (
+    set "javaVersionOutput=%%a"
+    goto gotVersion
+)
+:gotVersion
+echo Detected Java version output: !javaVersionOutput!
+:: Use findstr with a regex that looks for a line starting with "java version"
+echo !javaVersionOutput! | findstr /r /c:"^java version" >nul
+if errorlevel 1 (
     echo Java not found. You need to install Java JDK before building.
     echo.
     echo Installation steps:
@@ -16,32 +28,45 @@ if %errorlevel% neq 0 (
     echo.
     pause
     exit /b 1
+) else (
+    echo Java detected.
 )
+echo.
 
+:: ===========================
 :: Find Java home directory
+:: ===========================
 for /f "tokens=*" %%i in ('where java') do (
-    set JAVA_PATH=%%i
+    set "JAVA_PATH=%%i"
 )
-
 :: Remove \bin\java.exe from the path to get JAVA_HOME
-set JAVA_PATH=%JAVA_PATH:\bin\java.exe=%
-
+set "JAVA_PATH=%JAVA_PATH:\bin\java.exe=%"
 :: Set JAVA_HOME temporarily
-set JAVA_HOME=%JAVA_PATH%
+set "JAVA_HOME=%JAVA_PATH%"
 echo Using JAVA_HOME: %JAVA_HOME%
 echo.
 
-:: Add Java to path temporarily
-set PATH=%PATH%;%JAVA_HOME%\bin
-echo Java has been added to PATH for this session
+:: ===========================
+:: Add Java to PATH temporarily
+:: ===========================
+set "PATH=%PATH%;%JAVA_HOME%\bin"
+echo Java has been added to PATH for this session.
 echo.
 
-echo ===== Setting up Project =====
-echo.
+:: ===========================
+:: Check Android SDK path
+:: ===========================
+if not exist local.properties (
+    echo local.properties file not found!
+    echo Please create a local.properties file with the following content:
+    echo.
+    echo sdk.dir = C:\path\to\android\sdk
+    echo.
+    pause
+    exit /b 1
+)
 
-:: Check if Android SDK path in local.properties exists
-findstr /c:"sdk.dir" local.properties > nul 2>&1
-if %errorlevel% neq 0 (
+findstr /c:"sdk.dir" local.properties >nul 2>&1 || (
     echo Android SDK path not found in local.properties.
     echo Please install Android Studio first.
     echo Then run this script again.
@@ -49,21 +74,24 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-:: If you want to permanently set JAVA_HOME, uncomment these lines
+:: ===========================
+:: Option to permanently set JAVA_HOME
+:: ===========================
 echo Would you like to permanently set JAVA_HOME in your system? (Y/N)
 set /p SET_JAVA_HOME=
-if /i "%SET_JAVA_HOME%"=="Y" (
-    setx JAVA_HOME "%JAVA_PATH%"
-    setx PATH "%PATH%;%JAVA_HOME%\bin"
+if /i "!SET_JAVA_HOME!"=="Y" (
+    setx JAVA_HOME "!JAVA_PATH!"
+    setx PATH "!PATH!;!JAVA_HOME!\bin"
     echo JAVA_HOME and PATH have been permanently set!
     echo Please restart your command prompt after this script finishes.
 )
-
 echo.
+
+:: ===========================
+:: Build APK
+:: ===========================
 echo ===== Building APK =====
 echo.
-
-:: Run the build script with the temporary Java settings
 call build_apk.bat
 
 echo.
