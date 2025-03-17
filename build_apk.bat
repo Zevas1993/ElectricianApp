@@ -1,13 +1,13 @@
-@echo off
+@echo on
 echo Starting APK build process for ElectricianApp...
 echo.
 
 echo ===== Cleaning project =====
-call ./gradlew clean
+call gradlew.bat clean
 
 echo.
 echo ===== Assembling debug APK =====
-call ./gradlew assembleDebug
+call gradlew.bat --info assembleDebug
 
 echo.
 echo ===== Building complete =====
@@ -19,12 +19,12 @@ echo.
 
 echo ===== Optional: Install directly to connected device =====
 echo To install directly to a connected device, run:
-echo ./gradlew installDebug
+echo gradlew.bat installDebug
 echo.
 
 echo ===== Optional: Build release APK =====
 echo To build a release APK (requires signing configuration), run:
-echo ./gradlew assembleRelease
+echo gradlew.bat assembleRelease
 echo.
 
 pause
