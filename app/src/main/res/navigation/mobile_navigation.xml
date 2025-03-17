@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_dwelling_load">
+
+    <fragment
+        android:id="@+id/navigation_box_fill"
+        android:name="com.example.electricalcalculator.feature.box.BoxFillFragment"
+        android:label="@string/title_box_fill"
+        tools:layout="@layout/fragment_box_fill" />
+
+    <fragment
+        android:id="@+id/navigation_conduit_fill"
+        android:name="com.example.electricalcalculator.feature.conduit.ConduitFillFragment"
+        android:label="@string/title_conduit_fill"
+        tools:layout="@layout/fragment_conduit_fill" />
+
+    <fragment
+        android:id="@+id/navigation_dwelling_load"
+        android:name="com.example.electricalcalculator.feature.dwelling.DwellingLoadFragment"
+        android:label="@string/title_dwelling_load"
+        tools:layout="@layout/fragment_dwelling_load" />
+        
+    <fragment
+        android:id="@+id/navigation_lighting_layout"
+        android:name="com.example.electricalcalculator.feature.lighting.LightingLayoutFragment"
+        android:label="@string/title_lighting_layout"
+        tools:layout="@layout/fragment_lighting_layout" />
+        
+    <fragment
+        android:id="@+id/navigation_ar_view"
+        android:name="com.example.electricalcalculator.feature.ar.ArViewFragment"
+        android:label="@string/title_ar_view"
+        tools:layout="@layout/fragment_ar_view" />
+</navigation>

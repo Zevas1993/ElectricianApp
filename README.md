@@ -1,115 +1,94 @@
 # ElectricianApp
-An all round app for electricians
 
-Here’s how you can begin restructuring your Android app into a modular format:
+An all-round app for electricians to perform common electrical calculations according to NEC standards.
 
-### 1. **Create the Modules**:
+## Features
 
-In your root project directory, create the following modules:
+- **Box Fill Calculations**: Calculate box fill requirements for electrical boxes
+- **Conduit Fill Calculations**: Determine appropriate conduit sizes based on wire configurations
+- **Dwelling Load Calculations**: Calculate residential electrical load requirements
+- **AR Visualization**: Visualize electrical components in augmented reality
 
-```bash
-./app/             # Main app module (UI and navigation)
-./data/            # Data module (Room DB, Repositories)
-./domain/          # Domain module (Business logic, UseCases, Models)
-./feature/conduit  # Conduit fill feature module
-./feature/dwelling # Dwelling load feature module
-./feature/box      # Box fill feature module
+## Project Structure
+
+The application follows a modular, clean architecture approach:
+
+```
+.
+├── app/                 # Main application module
+├── data/                # Data layer (Room DB, Repositories)
+├── domain/              # Domain layer (Business logic, Models, UseCases)
+└── feature/             # Feature modules
+    ├── box/             # Box fill calculation feature
+    ├── conduit/         # Conduit fill calculation feature
+    └── dwelling/        # Dwelling load calculation feature
 ```
 
-### 2. **Modify `settings.gradle`**:
-Include these modules in `settings.gradle`:
+## Requirements
 
-```gradle
-include ':app', ':data', ':domain', ':feature:conduit', ':feature:dwelling', ':feature:box'
+- Android Studio Arctic Fox (2021.3.1) or newer
+- JDK 11 or higher
+- Android 5.0+ (API level 21+)
+- Android device with AR support for AR features
+
+## Building and Running
+
+### Build Debug APK
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/Zevas1993/ElectricianApp.git
+   cd ElectricianApp
+   ```
+
+2. Run the build script:
+   ```
+   # Windows
+   .\build_apk.bat
+   
+   # Linux/macOS
+   ./gradlew clean assembleDebug
+   ```
+
+3. The APK will be generated at:
+   ```
+   app/build/outputs/apk/debug/app-debug.apk
+   ```
+
+### Install Directly to Device
+
+Ensure you have a device connected with USB debugging enabled:
+
+```
+./gradlew installDebug
 ```
 
-### 3. **Dependencies in `build.gradle`**:
-Ensure proper dependency linking between modules in the `build.gradle` files.
+## Architecture
 
-#### **In `app/build.gradle`**:
+The application follows Clean Architecture principles with the following layers:
 
-```gradle
-dependencies {
-    implementation project(":data")
-    implementation project(":domain")
-    implementation project(":feature:conduit")
-    implementation project(":feature:dwelling")
-    implementation project(":feature:box")
-}
-```
+- **Presentation Layer**: MVVM pattern with ViewModels, Fragments, and Activities
+- **Domain Layer**: Contains business logic, use cases, and domain models
+- **Data Layer**: Implements repositories and data sources (Room database)
 
-#### **In `data/build.gradle`**:
+## Dependencies
 
-```gradle
-dependencies {
-    implementation "androidx.room:room-runtime:2.4.3"
-    implementation project(":domain")
-}
-```
+- **AndroidX**: Core, AppCompat, ConstraintLayout
+- **Navigation Component**: For navigation between screens
+- **Room**: For local database storage
+- **ViewModel & LiveData**: For UI state management
+- **Hilt**: For dependency injection
+- **ARCore**: For augmented reality features
+- **Material Design Components**: For UI
 
-#### **In `domain/build.gradle`**:
+## Contributing
 
-```gradle
-dependencies {
-    implementation project(":data")
-}
-```
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/my-feature`)
+3. Commit your changes (`git commit -m 'Add some feature'`)
+4. Push to the branch (`git push origin feature/my-feature`)
+5. Open a Pull Request
 
-### 4. **Structure the Code Inside Modules**:
+## License
 
-#### **App Module**: Contains core resources and navigation.
-
-```kotlin
-// In AppModule (MainActivity.kt)
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        // Navigation and common UI elements
-    }
-}
-```
-
-#### **Data Module**: Handles Room database and repositories.
-
-```kotlin
-// In DataModule (RoomDatabase.kt)
-@Database(entities = [Wire::class], version = 1)
-abstract class WireDatabase : RoomDatabase() {
-    abstract fun wireDao(): WireDao
-}
-```
-
-#### **Domain Module**: Holds business logic and use cases.
-
-```kotlin
-// In DomainModule (CalculateConduitFillUseCase.kt)
-class CalculateConduitFillUseCase(private val wireRepository: WireRepository) {
-    fun execute(wire: Wire): Double {
-        // Conduit fill calculation logic
-        return wire.diameter * Math.PI * wire.length
-    }
-}
-```
-
-#### **Feature Modules**: Contains feature-specific logic.
-
-```kotlin
-// In FeatureConduit (ConduitFillViewModel.kt)
-class ConduitFillViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: WireRepository = WireRepositoryImpl(application)
-    val result = MutableLiveData<Double>()
-
-    fun calculateConduitFill(wire: Wire) {
-        val useCase = CalculateConduitFillUseCase(repository)
-        result.value = useCase.execute(wire)
-    }
-}
-```
-
-### 5. **Sync and Build**:
-After setting up, sync the project and make sure each module is properly referenced.
-
----
-
-This setup will modularize your app, improve scalability, and allow for better separation of concerns.
+This project is licensed under the MIT License - see the LICENSE file for details.
