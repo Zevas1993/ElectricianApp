@@ -3,16 +3,36 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
+    
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+        classpath 'com.android.tools.build:gradle:8.9.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.8.9"
+        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.48'
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
+// Set common Java options across all modules
+subprojects {
+    afterEvaluate {
+        if (project.hasProperty('android')) {
+            android {
+                // Handle API level 34+ visibility issues
+                buildFeatures {
+                    buildConfig true
+                }
+                
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_17
+                    targetCompatibility JavaVersion.VERSION_17
+                }
+                
+                kotlinOptions {
+                    jvmTarget = '17'
+                }
+            }
+        }
     }
 }

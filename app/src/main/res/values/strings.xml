@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Electrical Calculator</string>
-    <string name="title_dwelling_load">Dwelling Load</string>
-    <string name="title_conduit_fill">Conduit Fill</string>
-    <string name="title_pipe_bending">Pipe Bending</string>
-    <string name="title_lighting_layout">Lighting Layout</string>
-    <string name="title_ar_view">AR View</string>
+    <string name="app_name">Electrician Pro Tools</string>
+    
+    <!-- App Store Descriptions -->
+    <string name="app_description_short">Complete toolkit for professional electricians - calculations, layouts, management tools and more</string>
+    <string name="app_description_full">The ultimate electrician\'s companion with comprehensive tools for every aspect of electrical work. Features include precise calculations for box fill, conduit fill, and dwelling loads; pipe bending assistance; lighting layout design; augmented reality visualization; measurement tools; project management with checklists, inventory tracking and job scheduling. Perfect for apprentices and master electricians alike.</string>
+    
+    <!-- Feature Names -->
+    <string name="title_box_fill">Box Fill Calculator</string>
+    <string name="title_dwelling_load">Dwelling Load Calculator</string>
+    <string name="title_conduit_fill">Conduit Fill Calculator</string>
+    <string name="title_pipe_bending">Pipe Bending Calculator</string>
+    <string name="title_lighting_layout">Lighting Layout Tools</string>
+    <string name="title_ar_view">AR Visualization</string>
     <string name="title_tap_counter">Tap Counter</string>
     <string name="title_fraction_calculator">Fraction Calculator</string>
-    <string name="title_checklists">Checklists</string>
-    <string name="title_inventory">Inventory</string>
-    <string name="title_scheduling">Scheduling</string>
+    <string name="title_checklists">Job Checklists</string>
+    <string name="title_inventory">Inventory Management</string>
+    <string name="title_scheduling">Job Scheduling</string>
+    
+    <!-- Feature Descriptions -->
+    <string name="desc_box_fill">Calculate box volume and fill capacity according to NEC requirements. Includes support for different box types and automatic calculations based on conductor count, device counts, and clamp requirements.</string>
+    <string name="desc_dwelling_load">Complete dwelling unit load calculations per NEC Article 220. Calculate service size, feeder requirements, and load distribution for residential projects.</string>
+    <string name="desc_conduit_fill">Determine appropriate conduit sizes based on conductor type, size, and quantity according to NEC fill requirements. Includes common conduit types and wire configurations.</string>
+    <string name="desc_pipe_bending">Calculate precise measurements for conduit bends including offsets, saddles, and 90° bends. Features adjustable bend radius and comprehensive bend guides.</string>
+    <string name="desc_lighting_layout">Design efficient lighting layouts with calculation tools for light levels, fixture spacing, and energy usage. Includes common fixture types and room templates.</string>
+    <string name="desc_ar_view">Visualize electrical installations in real-time using augmented reality. Position fixtures, panels, and devices in the real world to plan installations and present to clients.</string>
+    <string name="desc_tap_counter">Utility tool for counting taps when locating wires or breakers. Features visual and audio feedback.</string>
+    <string name="desc_fraction_calculator">Specialized calculator for working with fractions and mixed numbers common in electrical measurements.</string>
+    <string name="desc_checklists">Customizable checklists for installation, inspection, and maintenance tasks. Includes templates for residential, commercial, and industrial work.</string>
+    <string name="desc_inventory">Track tools, materials, and equipment for projects. Manage stock, create orders, and generate material lists for jobs.</string>
+    <string name="desc_scheduling">Plan and schedule jobs, track time, and coordinate with team members. Includes calendar integration and notification features.</string>
 </resources>
