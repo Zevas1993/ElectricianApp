@@ -1,8 +1,1 @@
-rootProject.name = "ElectricianApp"
-
-include ':app'
-include ':data'
-include ':domain'
-include ':feature:box'
-include ':feature:conduit'
-include ':feature:dwelling'
+include ':app' 
