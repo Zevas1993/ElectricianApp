@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_conduit_fill">Conduit Fill</string>
+    <string name="conduit_fill_calculate">Calculate</string>
+    <string name="conduit_fill_add_wire">Add Wire</string>
+    <string name="conduit_fill_wire_size">Wire Size</string>
+    <string name="conduit_fill_wire_quantity">Quantity</string>
+    <string name="conduit_fill_conduit_type">Conduit Type</string>
+    <string name="conduit_fill_conduit_size">Conduit Size</string>
+    <string name="conduit_fill_results">Conduit Fill Results</string>
+    <string name="conduit_fill_empty_state">Add wires to calculate conduit fill</string>
+    <string name="conduit_fill_within_limits">Conduit fill is within limits</string>
+    <string name="conduit_fill_exceeds_limits">Conduit fill exceeds limits</string>
+    <string name="conduit_fill_wire_type">Wire Type</string>
+    <string name="conduit_fill_remove_wire">Remove wire</string>
+</resources>

@@ -2,27 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_box_fill"
-        android:icon="@drawable/ic_box_fill"
-        android:title="@string/title_box_fill" />
+        android:id="@+id/navigation_dwelling_load"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="@string/title_dwelling_load" />
 
     <item
         android:id="@+id/navigation_conduit_fill"
-        android:icon="@drawable/ic_conduit_fill"
+        android:icon="@android:drawable/ic_menu_compass"
         android:title="@string/title_conduit_fill" />
 
     <item
-        android:id="@+id/navigation_dwelling_load"
-        android:icon="@drawable/ic_dwelling_load"
-        android:title="@string/title_dwelling_load" />
-        
+        android:id="@+id/navigation_pipe_bending"
+        android:icon="@android:drawable/ic_menu_directions"
+        android:title="@string/title_pipe_bending" />
+
     <item
         android:id="@+id/navigation_lighting_layout"
-        android:icon="@drawable/ic_lighting_layout"
+        android:icon="@android:drawable/ic_menu_gallery"
         android:title="@string/title_lighting_layout" />
-        
+
     <item
         android:id="@+id/navigation_ar_view"
-        android:icon="@drawable/ic_ar_view"
+        android:icon="@android:drawable/ic_menu_camera"
         android:title="@string/title_ar_view" />
+
 </menu>

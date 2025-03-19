@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.navigation_dwelling_load, 
                 R.id.navigation_conduit_fill, 
-                R.id.navigation_box_fill,
+                R.id.navigation_pipe_bending,
                 R.id.navigation_lighting_layout,
                 R.id.navigation_ar_view
             )

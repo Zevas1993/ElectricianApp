@@ -11,6 +11,7 @@ buildscript {
         junit_version = '4.13.2'
         espresso_version = '3.5.1'
         constraint_layout_version = '2.1.4'
+        agp_version = '8.2.0'
     }
     
     repositories {
@@ -19,7 +20,7 @@ buildscript {
     }
     
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath "com.android.tools.build:gradle:$agp_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
         
@@ -35,6 +36,7 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
+// Updated clean task for Gradle 8.x compatibility
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
