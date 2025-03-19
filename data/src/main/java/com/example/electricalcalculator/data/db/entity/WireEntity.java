@@ -17,6 +17,11 @@ public class WireEntity {
     private String wireColor;
     private double volumeRequirement;
 
+    // Default constructor required by Room
+    public WireEntity() {
+    }
+
+    // Constructor with parameters
     public WireEntity(String wireSize, String wireType, String wireColor, double volumeRequirement) {
         this.wireSize = wireSize;
         this.wireType = wireType;
