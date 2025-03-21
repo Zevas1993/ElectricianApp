@@ -53,3 +53,6 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:5.8.0'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
 }
+
+// Apply source set configuration fix
+apply from: '../config/fix_sourceset.gradle'

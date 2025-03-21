@@ -3,9 +3,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        gradlePluginPortal()
     }
-    
     dependencies {
         classpath 'com.android.tools.build:gradle:8.9.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"
@@ -14,23 +12,34 @@ buildscript {
     }
 }
 
-// Set common Java options across all modules
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
 subprojects {
-    afterEvaluate {
+    afterEvaluate { project ->
         if (project.hasProperty('android')) {
             android {
-                // Handle API level 34+ visibility issues
                 buildFeatures {
                     buildConfig true
                 }
-                
+ECHO is off.
                 compileOptions {
                     sourceCompatibility JavaVersion.VERSION_17
                     targetCompatibility JavaVersion.VERSION_17
                 }
-                
+ECHO is off.
                 kotlinOptions {
                     jvmTarget = '17'
+                }
+ECHO is off.
+                sourceSets {
+                    main {
+                        java.srcDirs = ['src/main/java']
+                    }
                 }
             }
         }

@@ -91,3 +91,6 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:1.1.5"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
 }
+
+// Apply source set configuration fix
+apply from: '../config/fix_sourceset.gradle'
