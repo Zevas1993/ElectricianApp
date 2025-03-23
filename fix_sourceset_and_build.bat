@@ -77,14 +77,28 @@ echo.
 :: Set Gradle options to disable incremental compilation and daemon
 set "GRADLE_OPTS=-Dkotlin.incremental=false -Dorg.gradle.daemon=false -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental.useClasspathSnapshot=false"
 
+:: Display download notice
+echo.
+echo NOTE: The build will download dependencies which may take several minutes
+echo If you see "Terminate batch job (Y/N)?", type N to continue the build.
+echo.
+echo Press any key to start the build process...
+pause > nul
+
 :: Clean first
 call gradlew.bat clean --info
 echo.
 echo Cleaning completed. Starting build...
 echo.
 
+:: Download dependencies first with longer timeouts
+echo Downloading dependencies (this may take a while)...
+call gradlew.bat --refresh-dependencies downloadDependencies || call gradlew.bat --stacktrace dependencies
+
 :: Then build with all optimizations
-call gradlew.bat assembleDebug --refresh-dependencies --no-daemon -Dorg.gradle.java.home="%JDK_PATH%" --stacktrace
+echo.
+echo Building app...
+call gradlew.bat assembleDebug --no-daemon -Dorg.gradle.java.home="%JDK_PATH%" --stacktrace
 
 if %ERRORLEVEL% EQU 0 (
     echo.

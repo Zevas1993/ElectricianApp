@@ -47,26 +47,36 @@ The ElectricianApp is an Android application designed to assist electricians wit
 
 ## Build Instructions
 
-### Using the Build Script
-The easiest way to build the app is by using the provided build script:
+### Using the Build Scripts
+The app comes with several build scripts to handle different scenarios:
 
+#### Standard Build (`fix_sourceset_and_build.bat`)
 1. Open a command prompt in the project directory
 2. Run `fix_sourceset_and_build.bat`
 3. The script will:
    - Set up JDK 17
    - Clean Gradle caches and build directories
    - Validate stub fragments
+   - Download dependencies (may take several minutes)
    - Build the app with proper configuration
+   - **Note:** If you see "Terminate batch job (Y/N)?" during dependencies download, type N to continue
+
+#### Offline Build (`offline_build.bat`)
+If you've already downloaded dependencies but want to build without network access:
+
+1. Open a command prompt in the project directory
+2. Run `offline_build.bat`
+3. This script will build using only the cached dependencies
 
 ### Manual Build
 If you prefer to build manually:
 
 1. Make sure JDK 17 is installed and set as JAVA_HOME
 2. Run `gradlew clean` to clear existing build files
-3. Run `gradlew assembleDebug --refresh-dependencies --no-daemon` with the following options:
+3. Run `gradlew dependencies` to pre-download dependencies if needed
+4. Run `gradlew assembleDebug --no-daemon` with the following options:
    - `-Dkotlin.incremental=false`
    - `-Dkotlin.compiler.execution.strategy=in-process`
-   - `-Dkotlin.incremental.useClasspathSnapshot=false`
 
 ## Project Structure
 - **app**: Main application module
