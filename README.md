@@ -90,6 +90,24 @@ For projects that have been automatically upgraded to Android Gradle Plugin 8.9.
    - Uses specific settings to ensure compatibility with AGP 8.9.0
    - Provides detailed error output if build issues persist
 
+#### JDK 17 Module Fix
+For Java module system errors with JDK 17 (IllegalAccessError with KAPT):
+
+1. The project is now configured with proper JVM arguments to work with JDK 17
+2. Added `--add-opens` parameters to allow access to Java compiler internals
+3. This fix resolves the "superclass access check failed" error with KAPT
+
+#### KSP Migration (`ksp_migration_build.bat`)
+Gradual migration from KAPT to Kotlin Symbol Processing (KSP):
+
+1. Open a command prompt in the project directory
+2. Run `ksp_migration_build.bat`
+3. This script:
+   - Configures the project to use both KAPT and KSP during transition
+   - Room now uses KSP for faster processing (up to 2x faster builds)
+   - Hilt still uses KAPT until full migration is complete
+   - Cleans both KSP and KAPT caches before building
+
 ### Manual Build
 If you prefer to build manually:
 

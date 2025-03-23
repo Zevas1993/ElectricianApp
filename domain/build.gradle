@@ -1,7 +1,8 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
+    id 'kotlin-kapt' // Keep for Hilt
+    id 'com.google.devtools.ksp' // Add KSP for future annotation processing
     id 'dagger.hilt.android.plugin'
 }
 
