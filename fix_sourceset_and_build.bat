@@ -2,7 +2,7 @@
 setlocal EnableDelayedExpansion
 
 echo ===================================
-echo ElectricianApp Source Set and Kotlin Compatibility Fix and Build Script
+echo ElectricianApp Source Set and Navigation Fix Build Script
 echo ===================================
 echo.
 
@@ -44,23 +44,36 @@ if not exist "config" (
     mkdir "config"
 )
 
-:: Step 5: Display Kotlin version information
-echo Using Kotlin version 1.7.0 (downgraded from 1.9.22)
+:: Step 5: Validate stub fragments existence
+echo Checking for stub fragments...
+if not exist "app\src\main\java\com\example\electricalcalculator\ui\pipebending\PipeBendingFragment.kt" (
+    echo Error: Stub fragments not found. Please run the script again after fixing this issue.
+    exit /b 1
+)
+echo Stub fragments present, continuing...
+echo.
 
-:: Step 6: Build the app with Kotlin compatibility fixes
-echo Building the app with enhanced Kotlin compatibility fixes...
+:: Step 6: Display configuration 
+echo Using Kotlin version 1.7.0 (downgraded for better compatibility)
+echo Repository configuration: settings.gradle managed (no allprojects in build.gradle)
+echo Stub fragments: PipeBendingFragment, LightingLayoutFragment, ArViewFragment created
+echo.
+
+:: Step 7: Build the app with all fixes
+echo Building the app with all fixes applied...
 echo This may take several minutes to download dependencies and compile.
 echo.
 
 :: Set Gradle options to disable incremental compilation and daemon
 set "GRADLE_OPTS=-Dkotlin.incremental=false -Dorg.gradle.daemon=false -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental.useClasspathSnapshot=false"
 
-:: Clean and build with refresh dependencies flag
+:: Clean first
 call gradlew.bat clean --info
 echo.
 echo Cleaning completed. Starting build...
 echo.
 
+:: Then build with all optimizations
 call gradlew.bat assembleDebug --refresh-dependencies --no-daemon -Dorg.gradle.java.home="%JDK_PATH%" --stacktrace
 
 if %ERRORLEVEL% EQU 0 (
@@ -68,6 +81,7 @@ if %ERRORLEVEL% EQU 0 (
     echo ===================================
     echo Build completed successfully!
     echo ===================================
+    echo Both repository configuration and navigation fragment issues fixed.
     echo APK location: app\build\outputs\apk\debug\app-debug.apk
 ) else (
     echo.
@@ -79,8 +93,8 @@ if %ERRORLEVEL% EQU 0 (
     echo 1. Check for Kotlin version conflicts with 'gradlew.bat app:dependencies'
     echo 2. Verify the Hilt version is correctly set to 2.44
     echo 3. Make sure packagingOptions excludes all necessary META-INF files
-    echo 4. Try running with JDK 17.0.2 if available instead of newer versions
-    echo 5. Try running with additional memory: -Dorg.gradle.jvmargs=-Xmx4g
+    echo 4. Check if stub fragments are properly created
+    echo 5. Examine settings.gradle for repository configuration
 )
 
 echo.

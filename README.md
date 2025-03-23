@@ -5,27 +5,23 @@ The ElectricianApp is an Android application designed to assist electricians wit
 
 ## Recent Fixes
 
-### Gradle Configuration Fixes
-1. **Removed Repository Duplication**
-   - Eliminated duplicate repository declarations in build.gradle
-   - Removed the redundant `allprojects` block that was causing conflicts
+### Repository Configuration Fix
+- Fixed conflict between `settings.gradle` and `build.gradle` repositories
+- Error: "Build was configured to prefer settings repositories over project repositories but repository 'Google' was added by build file 'build.gradle'"
+- Solution: Removed repository declarations from the `allprojects` block in `build.gradle` and moved Kotlin resolution strategy to `subprojects`
 
-2. **Fixed Build File Issues**
-   - Removed "ECHO is off" statements in build.gradle
-   - Updated Gradle plugin version to 7.4.2 for better compatibility
-
-3. **Module Structure Updates**
-   - Corrected plugin syntax with modern Gradle plugin approach
-   - Fixed sourceset configuration paths in all modules
+### Navigation Fragment Implementation
+- Added stub implementations for missing fragments:
+  - `PipeBendingFragment`
+  - `LightingLayoutFragment`
+  - `ArViewFragment`
+- Created corresponding layout files with "Under Construction" messages
+- This maintains the full navigation structure for future development
 
 ### Kotlin Compatibility Fixes
 1. **Kotlin Version Downgrade**
-   - First downgraded from 1.9.22 to 1.8.0
-   - Further downgraded to 1.7.0 for maximum compatibility with Android build tools
-   - Added explicit kotlin_version variable in root build.gradle:
-     ```gradle
-     ext.kotlin_version = '1.7.0'
-     ```
+   - Using version 1.7.0 for maximum compatibility with Android build tools
+   - Explicitly declaring Kotlin version in root build.gradle
 
 2. **Dependency Resolution Strategy**
    - Added forced resolution for Kotlin dependencies to ensure consistent versions:
@@ -40,58 +36,27 @@ The ElectricianApp is an Android application designed to assist electricians wit
      }
      ```
 
-3. **Expanded META-INF Exclusions**
-   - Comprehensive META-INF exclusions in app/build.gradle:
-     ```gradle
-     packagingOptions {
-         exclude 'META-INF/LICENSE.md'
-         exclude 'META-INF/LICENSE-notice.md'
-         exclude 'META-INF/*.kotlin_module'
-         exclude 'META-INF/AL2.0'
-         exclude 'META-INF/LGPL2.1'
-     }
-     ```
+3. **META-INF Exclusions**
+   - Comprehensive META-INF exclusions in app/build.gradle to prevent conflicts
 
 4. **Dexing Configuration**
-   - Added dexOptions to increase heap size and disable pre-dexing:
-     ```gradle
-     dexOptions {
-         javaMaxHeapSize "4g"
-         preDexLibraries = false
-     }
-     ```
+   - Added dexOptions to increase heap size and disable pre-dexing
 
 5. **Hilt Downgrade**
    - Downgraded Hilt from 2.48 to 2.44 for better compatibility with Kotlin 1.7.0
-   - Updated both implementation and kapt dependencies
-   - Updated the hilt-android-gradle-plugin in the root build.gradle
-
-6. **CompileSdk Compatibility**
-   - Added `android.suppressUnsupportedCompileSdk=34` to gradle.properties
-
-### Configuration Files Updates
-1. **Gradle Properties**
-   - Added dependency version variables
-   - Commented out hardcoded JDK path to avoid trailing space issues
-   - Added proper parallel execution configuration
-
-2. **Sourceset Configuration**
-   - Created a centralized fix_sourceset.gradle approach
-   - Applied it correctly to all modules with the proper relative paths
 
 ## Build Instructions
 
-### Using the Enhanced Build Script
-The easiest way to build the app is by using the provided build script with Kotlin fixes:
+### Using the Build Script
+The easiest way to build the app is by using the provided build script:
 
 1. Open a command prompt in the project directory
 2. Run `fix_sourceset_and_build.bat`
 3. The script will:
    - Set up JDK 17
    - Clean Gradle caches and build directories
-   - Clean Kotlin-specific caches
-   - Set up proper Gradle options for Kotlin compatibility
-   - Build the app with enhanced configuration
+   - Validate stub fragments
+   - Build the app with proper configuration
 
 ### Manual Build
 If you prefer to build manually:
@@ -111,24 +76,10 @@ If you prefer to build manually:
 - **feature/conduit**: Conduit fill calculation feature
 - **feature/dwelling**: Dwelling unit load calculation feature
 
-## Troubleshooting
-If you encounter build issues:
+## Future Development
+The app now has stub implementations for planned features:
+- Pipe bending calculations
+- Lighting layout planning
+- AR visualization
 
-1. **Kotlin Version Conflicts**
-   - Check for conflicts with `gradlew app:dependencies`
-   - Verify the Kotlin version is consistently 1.7.0 across dependencies
-
-2. **Memory Issues**
-   - Try increasing heap size: `-Dorg.gradle.jvmargs=-Xmx4g`
-   - Disable daemon: `--no-daemon`
-
-3. **JDK Compatibility**
-   - Ensure you're using JDK 17
-   - If possible, try JDK 17.0.2 which may have better compatibility than newer versions
-
-4. **META-INF Conflicts**
-   - Make sure all required exclusions are in packagingOptions
-
-5. **Build Cache Issues**
-   - Clear all Gradle caches in `%USERPROFILE%\.gradle\caches`
-   - Remove all `build` directories
+When ready to implement these features, you can expand the stub fragments with the actual functionality.
