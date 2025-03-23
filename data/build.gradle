@@ -1,9 +1,9 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt' // Keep for Hilt compatibility
-    id 'com.google.devtools.ksp' // Add KSP for Room
+    id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    // KSP removed for stability
 }
 
 android {
@@ -43,12 +43,10 @@ dependencies {
     implementation "androidx.core:core-ktx:$core_ktx_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     
-    // Room with KSP
+    // Room with KAPT
     implementation "androidx.room:room-runtime:2.6.1"
     implementation "androidx.room:room-ktx:2.6.1"
-    // KSP processor for Room - much faster than kapt
-    ksp "androidx.room:room-compiler:2.6.1"
-    // Keep kapt for backwards compatibility during migration
+    // Use KAPT for Room annotation processing
     kapt("androidx.room:room-compiler:2.6.1") {
         exclude group: 'com.google.auto', module: 'auto-common'
     }
@@ -95,3 +93,5 @@ kapt {
         arg("room.expandProjection", "true")
     }
 }
+
+// KSP configuration removed for KAPT-only build

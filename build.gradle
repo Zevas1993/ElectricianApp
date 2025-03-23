@@ -1,7 +1,8 @@
 // Top-level build file 
 buildscript {
-    ext.kotlin_version = '1.8.22' // Updated from 1.7.0 to resolve daemon compatibility issues
+    ext.kotlin_version = '1.8.22' // Fixed to ensure compatibility with KSP version
     ext.ksp_version = '1.8.22-1.0.11' // KSP version that matches the Kotlin version
+    ext.room_version = '2.6.1' // Room version for consistent declaration
     
     repositories {
         google()
@@ -13,6 +14,18 @@ buildscript {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.7.6"
         classpath 'com.google.dagger:hilt-android-gradle-plugin:2.44' // Downgraded from 2.48
         classpath "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:$ksp_version"
+    }
+}
+
+// Apply the KSP plugin to all subprojects that use it
+subprojects { subproject ->
+    afterEvaluate {
+        if (subproject.plugins.hasPlugin('com.google.devtools.ksp')) {
+            // Ensure KSP tasks run before Kotlin compile tasks
+            subproject.tasks.matching { it.name.startsWith('compile') && it.name.endsWith('Kotlin') }.all { compileTask ->
+                compileTask.dependsOn subproject.tasks.matching { it.name.startsWith('ksp') && it.name.endsWith('Kotlin') }
+            }
+        }
     }
 }
 

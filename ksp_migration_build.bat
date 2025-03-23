@@ -21,16 +21,25 @@ echo Stopping Gradle daemons...
 call gradlew.bat --stop
 timeout /t 2 /nobreak > nul
 
-:: Clean KSP and KAPT directories
-echo Cleaning generated code directories...
-rmdir /s /q "data\build\generated\ksp" 2>nul
-rmdir /s /q "data\build\generated\source\ksp" 2>nul
-rmdir /s /q "domain\build\generated\ksp" 2>nul
-rmdir /s /q "domain\build\generated\source\ksp" 2>nul
-rmdir /s /q "data\build\tmp\kapt3" 2>nul
-rmdir /s /q "data\build\generated\source\kapt" 2>nul
-rmdir /s /q "domain\build\tmp\kapt3" 2>nul
-rmdir /s /q "domain\build\generated\source\kapt" 2>nul
+:: More thorough cleaning for KSP and KAPT
+echo Performing deep clean of generated code directories...
+rmdir /s /q "data\build\generated" 2>nul
+rmdir /s /q "data\build\tmp" 2>nul
+rmdir /s /q "data\build\intermediates" 2>nul
+rmdir /s /q "domain\build\generated" 2>nul
+rmdir /s /q "domain\build\tmp" 2>nul
+rmdir /s /q "domain\build\intermediates" 2>nul
+rmdir /s /q "app\build\generated" 2>nul
+rmdir /s /q "app\build\tmp" 2>nul
+rmdir /s /q ".gradle\workspace-id.txt" 2>nul
+rmdir /s /q "build" 2>nul
+
+:: Create KSP directories explicitly to avoid issues
+echo Creating KSP directories...
+mkdir "data\build\generated\ksp\main\kotlin" 2>nul
+mkdir "data\build\generated\ksp\main\java" 2>nul
+mkdir "domain\build\generated\ksp\main\kotlin" 2>nul
+mkdir "domain\build\generated\ksp\main\java" 2>nul
 
 :: Set Gradle options
 set "GRADLE_OPTS=-Xmx4096m -Dfile.encoding=UTF-8 --add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED"

@@ -1,9 +1,9 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt' // Keep for Hilt
-    id 'com.google.devtools.ksp' // Add KSP for future annotation processing
+    id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    // KSP removed for stability
 }
 
 android {
@@ -64,3 +64,5 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
         jvmTarget = "17"
     }
 }
+
+// KSP configuration removed for KAPT-only build

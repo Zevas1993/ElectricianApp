@@ -90,12 +90,15 @@ For projects that have been automatically upgraded to Android Gradle Plugin 8.9.
    - Uses specific settings to ensure compatibility with AGP 8.9.0
    - Provides detailed error output if build issues persist
 
-#### JDK 17 Module Fix
+#### JDK 17 Module Fix (`jdk_module_fix.bat`)
 For Java module system errors with JDK 17 (IllegalAccessError with KAPT):
 
-1. The project is now configured with proper JVM arguments to work with JDK 17
-2. Added `--add-opens` parameters to allow access to Java compiler internals
-3. This fix resolves the "superclass access check failed" error with KAPT
+1. Open a command prompt in the project directory
+2. Run `jdk_module_fix.bat`
+3. This script:
+   - Adds JVM arguments to allow access to Java compiler internals
+   - Resolves the "superclass access check failed" error with KAPT
+   - Works with the standard KAPT annotation processing
 
 #### KSP Migration (`ksp_migration_build.bat`)
 Gradual migration from KAPT to Kotlin Symbol Processing (KSP):
@@ -107,6 +110,28 @@ Gradual migration from KAPT to Kotlin Symbol Processing (KSP):
    - Room now uses KSP for faster processing (up to 2x faster builds)
    - Hilt still uses KAPT until full migration is complete
    - Cleans both KSP and KAPT caches before building
+
+#### KAPT-Only Build (`kapt_only_build.bat`)
+For the most stable build configuration without KSP-related issues:
+
+1. Open a command prompt in the project directory
+2. Run `kapt_only_build.bat`
+3. This script:
+   - Completely removes KSP dependencies to avoid version conflicts
+   - Uses standard KAPT annotation processing for Room and Hilt
+   - Applies JDK 17 module system fixes for smooth compilation
+   - Most reliable fix for persistent build failures
+
+#### Kotlin-KSP Version Alignment (`kotlin_ksp_aligned_build.bat`)
+For version mismatch errors between Kotlin and KSP:
+
+1. Open a command prompt in the project directory
+2. Run `kotlin_ksp_aligned_build.bat`
+3. This script:
+   - Ensures Kotlin 1.8.22 and KSP 1.8.22-1.0.11 versions are aligned
+   - Performs a deep clean to remove any Kotlin 1.9.0 remnants
+   - Applies JDK module system fixes for smooth compilation
+   - Most reliable fix for "ksp is too old for kotlin" errors
 
 ### Manual Build
 If you prefer to build manually:

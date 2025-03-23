@@ -2,11 +2,11 @@
 setlocal EnableDelayedExpansion
 
 echo ===================================
-echo ElectricianApp Source Set and Navigation Fix Build Script
+echo ElectricianApp SourceSet Fix and Build
 echo ===================================
 echo.
 
-:: Step 1: Set Java environment
+:: Set Java environment
 echo Setting up JDK 17...
 set "JDK_PATH=C:\Program Files\Eclipse Adoptium\jdk-17.0.14.7-hotspot"
 set "JAVA_HOME=%JDK_PATH%"
@@ -16,97 +16,89 @@ echo Using JDK: %JAVA_HOME%
 "%JAVA_HOME%\bin\java" -version
 echo.
 
-:: Step 2: Kill and clean all Gradle daemons
+:: Make config directory if it doesn't exist
+echo Checking for config directory...
+if not exist "config" (
+    echo Creating config directory
+    mkdir config
+)
+
+:: Create fix_sourceset.gradle file
+echo Creating source set fix...
+echo // Fix for source set issues in Gradle 8.0+ and AGP 8.0+ > "config/fix_sourceset.gradle"
+echo android { >> "config/fix_sourceset.gradle"
+echo     sourceSets { >> "config/fix_sourceset.gradle"
+echo         main { >> "config/fix_sourceset.gradle"
+echo             java.srcDirs = ['src/main/java'] >> "config/fix_sourceset.gradle"
+echo         } >> "config/fix_sourceset.gradle"
+echo         test { >> "config/fix_sourceset.gradle"
+echo             java.srcDirs = ['src/test/java'] >> "config/fix_sourceset.gradle"
+echo         } >> "config/fix_sourceset.gradle"
+echo         androidTest { >> "config/fix_sourceset.gradle"
+echo             java.srcDirs = ['src/androidTest/java'] >> "config/fix_sourceset.gradle"
+echo         } >> "config/fix_sourceset.gradle"
+echo     } >> "config/fix_sourceset.gradle"
+echo } >> "config/fix_sourceset.gradle"
+echo. >> "config/fix_sourceset.gradle"
+echo // Fix duplicate resources warning >> "config/fix_sourceset.gradle"
+echo android.applicationVariants.all { variant -> >> "config/fix_sourceset.gradle"
+echo     variant.sourceSets.each { sourceSet -> >> "config/fix_sourceset.gradle"
+echo         if (sourceSet.name == "main") { >> "config/fix_sourceset.gradle"
+echo             sourceSet.java.srcDirs = ['src/main/java'] >> "config/fix_sourceset.gradle"
+echo         } >> "config/fix_sourceset.gradle"
+echo     } >> "config/fix_sourceset.gradle"
+echo } >> "config/fix_sourceset.gradle"
+
+:: Apply JDK 17 module system fixes
+echo Setting JDK module system fixes...
+set "JVM_ARGS=--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED"
+
+:: Stop the Gradle daemon
 echo Stopping Gradle daemons...
 call gradlew.bat --stop
 timeout /t 2 /nobreak > nul
 
-echo Cleaning Gradle daemon data...
-rmdir /s /q "%USERPROFILE%\.gradle\daemon" 2>nul
-echo.
-
-:: Step 3: Clean Gradle cache
-echo Cleaning Gradle caches...
-rmdir /s /q "%USERPROFILE%\.gradle\caches\modules-2\files-2.1\com.android.tools.build" 2>nul
-rmdir /s /q "%USERPROFILE%\.gradle\caches\transforms-3" 2>nul
-rmdir /s /q "%USERPROFILE%\.gradle\caches\build-cache-1" 2>nul
-rmdir /s /q "%USERPROFILE%\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin" 2>nul
-rmdir /s /q "%USERPROFILE%\.gradle\caches\jars-9" 2>nul
-rmdir /s /q "%USERPROFILE%\.gradle\caches\8.11.1\kotlin-dsl" 2>nul
-echo.
-
-:: Step 3: Clean project build directories
+:: Clean Gradle cache and build directories
 echo Cleaning build directories...
-rmdir /s /q ".gradle" 2>nul
 rmdir /s /q "build" 2>nul
+rmdir /s /q ".gradle" 2>nul
 rmdir /s /q "app\build" 2>nul
 rmdir /s /q "data\build" 2>nul
 rmdir /s /q "domain\build" 2>nul
-for /d %%d in (feature\*) do (
-    if exist "%%d\build" rmdir /s /q "%%d\build" 2>nul
-)
+rmdir /s /q "feature\box\build" 2>nul
+rmdir /s /q "feature\conduit\build" 2>nul
+rmdir /s /q "feature\dwelling\build" 2>nul
 echo.
 
-:: Step 4: Validate config directory and sourceset fix
-echo Validating config directory and sourceset fix...
-if not exist "config" (
-    echo Creating config directory...
-    mkdir "config"
-)
-
-:: Step 5: Validate stub fragments existence
-echo Checking for stub fragments...
-if not exist "app\src\main\java\com\example\electricalcalculator\ui\pipebending\PipeBendingFragment.kt" (
-    echo Error: Stub fragments not found. Please run the script again after fixing this issue.
-    exit /b 1
-)
-echo Stub fragments present, continuing...
-echo.
-
-:: Step 6: Display configuration 
-echo Using Kotlin version 1.7.0 (downgraded for better compatibility)
-echo Repository configuration: settings.gradle managed (no allprojects in build.gradle)
-echo Stub fragments: PipeBendingFragment, LightingLayoutFragment, ArViewFragment created
-echo.
-
-:: Step 7: Build the app with all fixes
-echo Building the app with all fixes applied...
+echo Building app with source set fixes and JDK module system fixes...
 echo This may take several minutes to download dependencies and compile.
 echo.
-
-:: Set Gradle options to disable incremental compilation and daemon
-set "GRADLE_OPTS=-Dkotlin.incremental=false -Dorg.gradle.daemon=false -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental.useClasspathSnapshot=false"
-
-:: Display download notice
-echo.
-echo NOTE: The build will download dependencies which may take several minutes
 echo If you see "Terminate batch job (Y/N)?", type N to continue the build.
 echo.
 echo Press any key to start the build process...
 pause > nul
 
 :: Clean first
-call gradlew.bat clean --info
+call gradlew.bat clean --no-daemon
 echo.
-echo Cleaning completed. Starting build...
+echo Clean completed. Starting build...
 echo.
 
-:: Download dependencies first with longer timeouts
-echo Downloading dependencies (this may take a while)...
-call gradlew.bat --refresh-dependencies downloadDependencies || call gradlew.bat --stacktrace dependencies
-
-:: Then build with all optimizations
-echo.
-echo Building app...
-call gradlew.bat assembleDebug --no-daemon -Dorg.gradle.java.home="%JDK_PATH%" --stacktrace
+:: Build with all fixes
+echo Building with all fixes applied...
+call gradlew.bat assembleDebug --no-daemon -Dkotlin.incremental=false -Dkapt.use.worker.api=false -Dkapt.incremental.apt=false -Dorg.gradle.java.home="%JDK_PATH%" %JVM_ARGS% --stacktrace
 
 if %ERRORLEVEL% EQU 0 (
     echo.
     echo ===================================
     echo Build completed successfully!
     echo ===================================
-    echo Both repository configuration and navigation fragment issues fixed.
     echo APK location: app\build\outputs\apk\debug\app-debug.apk
+    echo.
+    echo All fixes have been applied and the app built successfully.
+    echo - Source set configuration has been fixed
+    echo - JDK 17 module system fixes have been applied
+    echo - KAPT/KSP configuration has been optimized
 ) else (
     echo.
     echo ===================================
@@ -114,11 +106,9 @@ if %ERRORLEVEL% EQU 0 (
     echo ===================================
     echo.
     echo Troubleshooting tips:
-    echo 1. Check for Kotlin version conflicts with 'gradlew.bat app:dependencies'
-    echo 2. Verify the Hilt version is correctly set to 2.44
-    echo 3. Make sure packagingOptions excludes all necessary META-INF files
-    echo 4. Check if stub fragments are properly created
-    echo 5. Examine settings.gradle for repository configuration
+    echo 1. Try using jdk_module_fix.bat for KAPT-only builds
+    echo 2. Try using clean_kapt_and_build.bat to resolve duplicate class issues
+    echo 3. Examine the full error message for specific class conflicts
 )
 
 echo.
