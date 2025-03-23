@@ -2,25 +2,31 @@
 setlocal EnableDelayedExpansion
 
 echo ===================================
-echo ElectricianApp Package Structure Fix
+echo ElectricianApp Source Set and Kotlin Compatibility Fix and Build Script
 echo ===================================
 echo.
 
-cd /d "C:\Users\Chris Boyd\Documents\GitHub\ElectricianApp"
-
-echo Step 1: Setting up JDK 17
-echo -----------------------
+:: Step 1: Set Java environment
+echo Setting up JDK 17...
 set "JDK_PATH=C:\Program Files\Eclipse Adoptium\jdk-17.0.14.7-hotspot"
 set "JAVA_HOME=%JDK_PATH%"
 set "PATH=%JDK_PATH%\bin;%PATH%"
 
-echo Using JDK from: %JAVA_HOME%
+echo Using JDK: %JAVA_HOME%
 "%JAVA_HOME%\bin\java" -version
 echo.
 
-echo Step 2: Cleaning all build artifacts
-echo ---------------------------------
+:: Step 2: Clean Gradle cache
+echo Cleaning Gradle caches...
 call gradlew.bat --stop
+rmdir /s /q "%USERPROFILE%\.gradle\caches\modules-2\files-2.1\com.android.tools.build" 2>nul
+rmdir /s /q "%USERPROFILE%\.gradle\caches\transforms-3" 2>nul
+rmdir /s /q "%USERPROFILE%\.gradle\caches\build-cache-1" 2>nul
+rmdir /s /q "%USERPROFILE%\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin" 2>nul
+echo.
+
+:: Step 3: Clean project build directories
+echo Cleaning build directories...
 rmdir /s /q ".gradle" 2>nul
 rmdir /s /q "build" 2>nul
 rmdir /s /q "app\build" 2>nul
@@ -31,110 +37,52 @@ for /d %%d in (feature\*) do (
 )
 echo.
 
-echo Step 3: Creating source set configuration file
-echo -------------------------------------------
-echo // Fix for package name mismatch between declared package and expected package > config\fix_sourceset.gradle
-echo.>> config\fix_sourceset.gradle
-echo android.sourceSets {>> config\fix_sourceset.gradle
-echo     main.java.srcDirs += 'src/main/java'>> config\fix_sourceset.gradle
-echo     main.java.srcDirs -= 'src/main/kotlin'>> config\fix_sourceset.gradle
-echo     main.java.includes = ['**/*.java', '**/*.kt']>> config\fix_sourceset.gradle
-echo }>> config\fix_sourceset.gradle
-echo.>> config\fix_sourceset.gradle
-echo tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {>> config\fix_sourceset.gradle
-echo     kotlinOptions {>> config\fix_sourceset.gradle
-echo         jvmTarget = "17">> config\fix_sourceset.gradle
-echo     }>> config\fix_sourceset.gradle
-echo }>> config\fix_sourceset.gradle
-echo.>> config\fix_sourceset.gradle
-echo kapt {>> config\fix_sourceset.gradle
-echo     correctErrorTypes true>> config\fix_sourceset.gradle
-echo     useBuildCache false>> config\fix_sourceset.gradle
-echo     arguments {>> config\fix_sourceset.gradle
-echo         arg("room.schemaLocation", "$projectDir/schemas")>> config\fix_sourceset.gradle
-echo         arg("room.incremental", "true")>> config\fix_sourceset.gradle
-echo         arg("room.expandProjection", "true")>> config\fix_sourceset.gradle
-echo     }>> config\fix_sourceset.gradle
-echo }>> config\fix_sourceset.gradle
-echo.
-
-echo Step 4: Updating build.gradle files to use the configuration
-echo ---------------------------------------------------------
-if not exist config mkdir config 2>nul
-
-:: Update app build.gradle
-echo Updating app build.gradle
-call :append_apply_from "app\build.gradle"
-
-:: Update data build.gradle
-echo Updating data build.gradle
-call :append_apply_from "data\build.gradle"
-
-:: Update domain build.gradle
-echo Updating domain build.gradle
-call :append_apply_from "domain\build.gradle"
-
-:: Update feature modules build.gradle
-for /d %%d in (feature\*) do (
-    if exist "%%d\build.gradle" (
-        echo Updating %%d\build.gradle
-        call :append_apply_from "%%d\build.gradle"
-    )
+:: Step 4: Validate config directory and sourceset fix
+echo Validating config directory and sourceset fix...
+if not exist "config" (
+    echo Creating config directory...
+    mkdir "config"
 )
+
+:: Step 5: Display Kotlin version information
+echo Using Kotlin version 1.7.0 (downgraded from 1.9.22)
+
+:: Step 6: Build the app with Kotlin compatibility fixes
+echo Building the app with enhanced Kotlin compatibility fixes...
+echo This may take several minutes to download dependencies and compile.
 echo.
 
-echo Step 5: Fixing package structure in build.gradle
-echo ---------------------------------------------
-echo // Updated main build.gradle > build.gradle.temp
-echo.>> build.gradle.temp
-type build.gradle >> build.gradle.temp
+:: Set Gradle options to disable incremental compilation and daemon
+set "GRADLE_OPTS=-Dkotlin.incremental=false -Dorg.gradle.daemon=false -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental.useClasspathSnapshot=false"
 
-echo.>> build.gradle.temp
-echo // Fix for sourceset issues>> build.gradle.temp
-echo allprojects {>> build.gradle.temp
-echo     // Make sure to use full package names>> build.gradle.temp
-echo     android {>> build.gradle.temp
-echo         sourceSets {>> build.gradle.temp
-echo             main {>> build.gradle.temp
-echo                 java.srcDirs = ['src/main/java']>> build.gradle.temp
-echo             }>> build.gradle.temp
-echo         }>> build.gradle.temp
-echo     }>> build.gradle.temp
-echo }>> build.gradle.temp
-
-move /y build.gradle.temp build.gradle >nul
+:: Clean and build with refresh dependencies flag
+call gradlew.bat clean --info
+echo.
+echo Cleaning completed. Starting build...
 echo.
 
-echo Step 6: Running build with fixed configuration
-echo -------------------------------------------
-echo This might take several minutes to download dependencies and compile...
-echo.
+call gradlew.bat assembleDebug --refresh-dependencies --no-daemon -Dorg.gradle.java.home="%JDK_PATH%" --stacktrace
 
-call gradlew.bat assembleDebug --no-daemon --info -Dorg.gradle.java.home="%JDK_PATH%"
+if %ERRORLEVEL% EQU 0 (
+    echo.
+    echo ===================================
+    echo Build completed successfully!
+    echo ===================================
+    echo APK location: app\build\outputs\apk\debug\app-debug.apk
+) else (
+    echo.
+    echo ===================================
+    echo Build failed. See output above for details.
+    echo ===================================
+    echo.
+    echo Troubleshooting tips:
+    echo 1. Check for Kotlin version conflicts with 'gradlew.bat app:dependencies'
+    echo 2. Verify the Hilt version is correctly set to 2.44
+    echo 3. Make sure packagingOptions excludes all necessary META-INF files
+    echo 4. Try running with JDK 17.0.2 if available instead of newer versions
+    echo 5. Try running with additional memory: -Dorg.gradle.jvmargs=-Xmx4g
+)
 
 echo.
-echo ===================================
-echo Build process completed!
-echo ===================================
-echo.
-echo If you still see package path issues:
-echo 1. Open the project in Android Studio
-echo 2. Right-click on the 'data/src/main/java' folder
-echo 3. Select "Mark Directory as" > "Sources Root"
-echo.
-echo For detailed troubleshooting info: JDK_TROUBLESHOOTING.md
-echo.
-
 echo Press any key to exit...
 pause > nul
-exit /b 0
-
-:append_apply_from
-set "file=%~1"
-set "temp=%file%.temp"
-type "%file%" > "%temp%"
-echo.>> "%temp%"
-echo // Apply source set configuration fix>> "%temp%"
-echo apply from: '../config/fix_sourceset.gradle'>> "%temp%"
-move /y "%temp%" "%file%" >nul
-exit /b 0

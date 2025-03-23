@@ -64,4 +64,4 @@ dependencies {
 }
 
 // Apply source set configuration fix
-apply from: '../config/fix_sourceset.gradle'
+apply from: '../../config/fix_sourceset.gradle'

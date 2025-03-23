@@ -1,14 +1,16 @@
 // Top-level build file 
 buildscript {
+    ext.kotlin_version = '1.7.0' // Downgraded from 1.9.22 for better compatibility
+    
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.9.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.8.9"
-        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.48'
+        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.7.6"
+        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.44' // Downgraded from 2.48
     }
 }
 
@@ -16,6 +18,16 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+    }
+    
+    // Force all Kotlin dependencies to use the same version
+    configurations.all {
+        resolutionStrategy {
+            force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+            force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+            force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+            force "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+        }
     }
 }
 
@@ -26,16 +38,13 @@ subprojects {
                 buildFeatures {
                     buildConfig true
                 }
-ECHO is off.
                 compileOptions {
                     sourceCompatibility JavaVersion.VERSION_17
                     targetCompatibility JavaVersion.VERSION_17
                 }
-ECHO is off.
                 kotlinOptions {
                     jvmTarget = '17'
                 }
-ECHO is off.
                 sourceSets {
                     main {
                         java.srcDirs = ['src/main/java']

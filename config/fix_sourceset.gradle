@@ -1,17 +1,21 @@
 // Fix for package name mismatch between declared package and expected package 
-
 android.sourceSets {
     main.java.srcDirs += 'src/main/java'
     main.java.srcDirs -= 'src/main/kotlin'
     main.java.includes = ['**/*.java', '**/*.kt']
 }
 
+// Skip Kotlin-specific configuration to avoid org reference issues
+/*
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     kotlinOptions {
         jvmTarget = "17"
     }
 }
+*/
 
+// Skip kapt configuration to avoid dependency issues
+/*
 kapt {
     correctErrorTypes true
     useBuildCache false
@@ -21,3 +25,4 @@ kapt {
         arg("room.expandProjection", "true")
     }
 }
+*/
