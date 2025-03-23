@@ -1,28 +1,8 @@
-// Fix for package name mismatch between declared package and expected package 
+// Simplified source set fix
 android.sourceSets {
     main.java.srcDirs += 'src/main/java'
-    main.java.srcDirs -= 'src/main/kotlin'
     main.java.includes = ['**/*.java', '**/*.kt']
 }
 
-// Skip Kotlin-specific configuration to avoid org reference issues
-/*
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-}
-*/
-
-// Skip kapt configuration to avoid dependency issues
-/*
-kapt {
-    correctErrorTypes true
-    useBuildCache false
-    arguments {
-        arg("room.schemaLocation", "$projectDir/schemas")
-        arg("room.incremental", "true")
-        arg("room.expandProjection", "true")
-    }
-}
-*/
+// Skip Kotlin-specific configurations to avoid org reference issues
+// We've moved these to the main build.gradle files

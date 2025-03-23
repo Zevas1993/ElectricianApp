@@ -16,13 +16,23 @@ echo Using JDK: %JAVA_HOME%
 "%JAVA_HOME%\bin\java" -version
 echo.
 
-:: Step 2: Clean Gradle cache
-echo Cleaning Gradle caches...
+:: Step 2: Kill and clean all Gradle daemons
+echo Stopping Gradle daemons...
 call gradlew.bat --stop
+timeout /t 2 /nobreak > nul
+
+echo Cleaning Gradle daemon data...
+rmdir /s /q "%USERPROFILE%\.gradle\daemon" 2>nul
+echo.
+
+:: Step 3: Clean Gradle cache
+echo Cleaning Gradle caches...
 rmdir /s /q "%USERPROFILE%\.gradle\caches\modules-2\files-2.1\com.android.tools.build" 2>nul
 rmdir /s /q "%USERPROFILE%\.gradle\caches\transforms-3" 2>nul
 rmdir /s /q "%USERPROFILE%\.gradle\caches\build-cache-1" 2>nul
 rmdir /s /q "%USERPROFILE%\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin" 2>nul
+rmdir /s /q "%USERPROFILE%\.gradle\caches\jars-9" 2>nul
+rmdir /s /q "%USERPROFILE%\.gradle\caches\8.11.1\kotlin-dsl" 2>nul
 echo.
 
 :: Step 3: Clean project build directories

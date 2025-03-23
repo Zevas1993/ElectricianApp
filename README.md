@@ -19,8 +19,8 @@ The ElectricianApp is an Android application designed to assist electricians wit
 - This maintains the full navigation structure for future development
 
 ### Kotlin Compatibility Fixes
-1. **Kotlin Version Downgrade**
-   - Using version 1.7.0 for maximum compatibility with Android build tools
+1. **Kotlin Version Update**
+   - Using version 1.8.22 for compatibility with Kotlin daemon and EnumEntries class
    - Explicitly declaring Kotlin version in root build.gradle
 
 2. **Dependency Resolution Strategy**

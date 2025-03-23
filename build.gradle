@@ -1,6 +1,6 @@
 // Top-level build file 
 buildscript {
-    ext.kotlin_version = '1.7.0' // Downgraded from 1.9.22 for better compatibility
+    ext.kotlin_version = '1.8.22' // Updated from 1.7.0 to resolve daemon compatibility issues
     
     repositories {
         google()
