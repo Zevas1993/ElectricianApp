@@ -79,6 +79,17 @@ If you encounter duplicate class errors with Room entities or DAOs:
    - Restart the build process with verbose kapt logging
    - Use a special configuration to avoid duplicate class issues
 
+#### AGP 8.9.0 Fix (`agp_890_fix.bat`)
+For projects that have been automatically upgraded to Android Gradle Plugin 8.9.0:
+
+1. Open a command prompt in the project directory
+2. Run `agp_890_fix.bat`
+3. This script:
+   - Cleans all KAPT generated directories that may contain duplicate classes
+   - Disables incremental annotation processing to prevent conflicts
+   - Uses specific settings to ensure compatibility with AGP 8.9.0
+   - Provides detailed error output if build issues persist
+
 ### Manual Build
 If you prefer to build manually:
 
