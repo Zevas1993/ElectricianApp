@@ -5,17 +5,6 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
-// Fix for kapt duplicate class issues
-kapt {
-    correctErrorTypes true
-    useBuildCache false
-    arguments {
-        arg("room.schemaLocation", "$projectDir/schemas")
-        arg("room.incremental", "true")
-        arg("room.expandProjection", "true")
-    }
-}
-
 android {
     namespace 'com.example.electricalcalculator.data'
     compileSdk 34
@@ -23,17 +12,6 @@ android {
     defaultConfig {
         minSdk 21
         targetSdk 34
-
-        // Fix for Room annotation processor
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += [
-                    "room.schemaLocation": "$projectDir/schemas",
-                    "room.incremental": "true",
-                    "room.expandProjection": "true"
-                ]
-            }
-        }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -67,7 +45,7 @@ dependencies {
     // Room
     implementation "androidx.room:room-runtime:2.6.1"
     implementation "androidx.room:room-ktx:2.6.1"
-    // Explicitly adding the Room annotation processor with fixed version
+    // Room annotation processor with specific configuration
     kapt("androidx.room:room-compiler:2.6.1") {
         exclude group: 'com.google.auto', module: 'auto-common'
     }
@@ -99,5 +77,18 @@ apply from: '../config/fix_sourceset.gradle'
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     kotlinOptions {
         jvmTarget = "17"
+    }
+}
+
+// Configure kapt to fix duplicate class issues
+kapt {
+    correctErrorTypes = true
+    useBuildCache = false
+    keepJavacAnnotationProcessors = true
+    includeCompileClasspath = false
+    arguments {
+        arg("room.schemaLocation", "$projectDir/schemas")
+        arg("room.incremental", "true")
+        arg("room.expandProjection", "true")
     }
 }

@@ -68,6 +68,17 @@ If you've already downloaded dependencies but want to build without network acce
 2. Run `offline_build.bat`
 3. This script will build using only the cached dependencies
 
+#### Clean KAPT Build (`clean_kapt_and_build.bat`)
+If you encounter duplicate class errors with Room entities or DAOs:
+
+1. Open a command prompt in the project directory
+2. Run `clean_kapt_and_build.bat`
+3. This script will:
+   - Stop all Gradle daemons
+   - Clean all kapt generated code directories
+   - Restart the build process with verbose kapt logging
+   - Use a special configuration to avoid duplicate class issues
+
 ### Manual Build
 If you prefer to build manually:
 
