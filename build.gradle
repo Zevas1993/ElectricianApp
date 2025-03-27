@@ -9,7 +9,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.9.0'
+        classpath 'com.android.tools.build:gradle:8.2.2' // Downgraded from 8.9.0 for better compatibility
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.7.6"
         classpath 'com.google.dagger:hilt-android-gradle-plugin:2.44' // Downgraded from 2.48
