@@ -1,64 +1,22 @@
-// Top-level build file 
 buildscript {
-    ext.kotlin_version = '1.8.22' // Fixed to ensure compatibility with KSP version
-    ext.ksp_version = '1.8.22-1.0.11' // KSP version that matches the Kotlin version
-    ext.room_version = '2.6.1' // Room version for consistent declaration
-    
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.2' // Downgraded from 8.9.0 for better compatibility
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.7.6"
-        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.44' // Downgraded from 2.48
-        classpath "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:$ksp_version"
+        classpath "com.android.tools.build:gradle:8.1.1" // Or latest stable
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0" // Match Kotlin version if possible
+        classpath "com.google.dagger:hilt-android-gradle-plugin:2.48" // Or latest stable Hilt
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.7.5" // Or latest stable Nav
+        classpath 'com.google.gms:google-services:4.4.1' // Or latest stable
     }
 }
 
-// Apply the KSP plugin to all subprojects that use it
-subprojects { subproject ->
-    afterEvaluate {
-        if (subproject.plugins.hasPlugin('com.google.devtools.ksp')) {
-            // Ensure KSP tasks run before Kotlin compile tasks
-            subproject.tasks.matching { it.name.startsWith('compile') && it.name.endsWith('Kotlin') }.all { compileTask ->
-                compileTask.dependsOn subproject.tasks.matching { it.name.startsWith('ksp') && it.name.endsWith('Kotlin') }
-            }
-        }
-    }
+plugins {
+    id 'com.android.application' version '8.1.1' apply false // Match classpath version
+    id 'org.jetbrains.kotlin.android' version '1.9.0' apply false // Match classpath version
 }
 
-subprojects {
-    // Force all Kotlin dependencies to use the same version
-    configurations.all {
-        resolutionStrategy {
-            force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-            force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-            force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-            force "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-        }
-    }
-    
-    afterEvaluate { project ->
-        if (project.hasProperty('android')) {
-            android {
-                buildFeatures {
-                    buildConfig true
-                }
-                compileOptions {
-                    sourceCompatibility JavaVersion.VERSION_17
-                    targetCompatibility JavaVersion.VERSION_17
-                }
-                kotlinOptions {
-                    jvmTarget = '17'
-                }
-                sourceSets {
-                    main {
-                        java.srcDirs = ['src/main/java']
-                    }
-                }
-            }
-        }
-    }
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }

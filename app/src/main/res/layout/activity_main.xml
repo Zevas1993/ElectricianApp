@@ -1,13 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?> 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" 
-    android:layout_width="match_parent" 
-    android:layout_height="match_parent"> 
- 
-    <TextView 
-        android:layout_width="wrap_content" 
-        android:layout_height="wrap_content" 
-        android:layout_centerInParent="true" 
-        android:text="Electrician App" 
-        android:textSize="24sp" /> 
- 
-</RelativeLayout> 
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.MainActivity">
+
+    <!--
+    This FragmentContainerView acts as the host for all the Fragments
+    defined in your navigation graph (nav_graph.xml).
+    The NavHostFragment manages swapping Fragments in and out of this container.
+    Make sure the 'android:name' attribute points to NavHostFragment and
+    'app:navGraph' points to your navigation resource file.
+    'app:defaultNavHost="true"' ensures this NavHost intercepts system Back button presses.
+    -->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment_container"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/nav_graph" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

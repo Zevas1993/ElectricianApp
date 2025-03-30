@@ -1,90 +1,100 @@
-// App module build file 
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
-    id 'kotlin-parcelize' // Added for Parcelable support without boilerplate
+    id 'kotlin-android'
+    id 'kotlin-kapt' // For Hilt and Room
+    id 'androidx.navigation.safeargs.kotlin' // Navigation Safe Args
+    id 'dagger.hilt.android.plugin' // Hilt
+    id 'com.google.gms.google-services' // Google Services
 }
 
 android {
-    namespace 'com.example.electricalcalculator'
-    compileSdk 34
+    namespace 'com.example.electricianapp' // Ensure this matches your package
+    compileSdk 34 // Use latest stable SDK
 
     defaultConfig {
-        applicationId "com.example.electricalcalculator"
-        minSdk 21
+        applicationId "com.example.electricianapp" // Ensure this matches your package
+        minSdk 24 // Android 7.0 Nougat
         targetSdk 34
         versionCode 1
         versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Room Schema Location Argument for KAPT
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled false // Set to true for release builds later
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
-
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = '1.8'
     }
-    
     buildFeatures {
-        viewBinding true
-        buildConfig true
+        viewBinding true // Enable ViewBinding
     }
-    
-    // Enhanced META-INF exclusions for better compatibility
-    packagingOptions {
-        resources {
-            excludes += ['META-INF/LICENSE.md', 'META-INF/LICENSE-notice.md', 'META-INF/*.kotlin_module', 'META-INF/AL2.0', 'META-INF/LGPL2.1', 'META-INF/LICENSE', 'META-INF/NOTICE', 'META-INF/DEPENDENCIES', 'META-INF/*.version']
+    // Needed for Room schema export location with KAPT
+    kapt {
+        arguments {
+            arg("room.schemaLocation", "$projectDir/schemas".toString())
         }
-        resources.excludes.add("META-INF/gradle/incremental.annotation.processors")
-        resources.pickFirsts.add("META-INF/atomicfu.kotlin_module")
+        correctErrorTypes true // Helps with Hilt/DataBinding errors
     }
-    
-    // Note: dexOptions is deprecated and has been removed
-    // Android Gradle plugin now optimizes dexing automatically
 }
 
 dependencies {
-    // Feature modules
-    implementation project(':feature:box')
-    implementation project(':feature:conduit')
-    implementation project(':feature:dwelling')
-    
-    // Data and domain layers
-    implementation project(':data')
-    implementation project(':domain')
-    
-    // Android core
-    implementation "androidx.core:core-ktx:$core_ktx_version"
-    implementation "androidx.appcompat:appcompat:$appcompat_version"
-    implementation "com.google.android.material:material:$material_version"
-    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
-    
-    // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-    
-    // Dependency Injection
-    implementation 'com.google.dagger:hilt-android:2.44'
-    kapt 'com.google.dagger:hilt-android-compiler:2.44'
-    implementation 'javax.inject:javax.inject:1'
-}
+    // Core Android & UI
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.10.0' // Material Components
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-// Apply source set configuration fix
-apply from: '../config/fix_sourceset.gradle'
+    // Navigation Component
+    implementation "androidx.navigation:navigation-fragment-ktx:2.7.5"
+    implementation "androidx.navigation:navigation-ui-ktx:2.7.5"
 
-// Add jvmTarget configuration for Kotlin
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-    kotlinOptions {
-        jvmTarget = "17"
-    }
+    // Lifecycle Components (ViewModel, LiveData, Coroutine Scopes)
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.2"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
+
+    // Room Persistence Library
+    def room_version = "2.6.0" // Use latest stable Room
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version" // Kotlin Extensions and Coroutines support
+
+    // Hilt Dependency Injection
+    def hilt_version = "2.48" // Use latest stable Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-navigation-fragment:1.1.0" // For Hilt ViewModel in Navigation
+
+    // Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+
+    // Firebase (Bill of Materials manages versions)
+    implementation platform('com.google.firebase:firebase-bom:32.7.4') // Check latest BoM
+    implementation 'com.google.firebase:firebase-auth-ktx' // Authentication
+    // implementation 'com.google.firebase:firebase-firestore-ktx' // Firestore Database (Uncomment if using sync)
+
+    // Google Sign-In (part of Play Services)
+    implementation 'com.google.android.gms:play-services-auth:21.0.0' // Check latest
+
+    // Testing Dependencies
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

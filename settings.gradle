@@ -1,33 +1,16 @@
 pluginManagement {
     repositories {
-        google() // Google must be first for Android projects
-        mavenCentral()
-        gradlePluginPortal()
-        // jcenter() removed - deprecated
-    }
-}
-
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS) // Stricter enforcement
-    repositories {
         google()
         mavenCentral()
         gradlePluginPortal()
-        // jcenter() removed - deprecated
     }
 }
-
-// Enable downloading dependencies over HTTPS
-System.setProperty('https.protocols', 'TLSv1.2,TLSv1.3')
-
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
 rootProject.name = "ElectricianApp"
-
-// Core modules
 include ':app'
-include ':domain'
-include ':data'
-
-// Feature modules
-include ':feature:box'
-include ':feature:conduit'
-include ':feature:dwelling'

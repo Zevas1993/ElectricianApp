@@ -1,19 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.electricianapp"> {/* Make sure package matches your project */}
+
+    <!-- Permissions: INTERNET is required for Firebase Auth and Google Sign-In -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Add other permissions like CAMERA, LOCATION later if needed -->
+    <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
 
     <application
+        android:name=".ElectricianApplication" {/* Hilt requires custom Application class */}
         android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat">
+        android:theme="@style/Theme.ElectricianApp" {/* Refers to your theme in themes.xml */}
+        tools:targetApi="31">
 
-        <activity android:name="com.example.electricalcalculator.MainActivity" android:exported="true">
+        <!-- MainActivity: The single entry point for the app UI -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"> {/* Helps layout adjust when keyboard appears */}
+            <!-- Intent filter marks this as the main launcher activity -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Optional: If using Google Sign-In credential manager features later -->
+        <!-- <activity
+             android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+             android:theme="@android:style/Theme.Translucent.NoTitleBar"
+             android:exported="false" /> -->
+
     </application>
+
 </manifest>
