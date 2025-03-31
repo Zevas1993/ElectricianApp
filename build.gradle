@@ -8,7 +8,8 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0" // Match Kotlin version if possible
         classpath "com.google.dagger:hilt-android-gradle-plugin:2.48" // Or latest stable Hilt
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.7.5" // Or latest stable Nav
-        classpath 'com.google.gms:google-services:4.4.1' // Or latest stable
+        // Add the dependency for the Google services Gradle plugin (ensure version is appropriate, 4.4.1 is recent as of writing)
+        classpath 'com.google.gms:google-services:4.4.1'
     }
 }
 

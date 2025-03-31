@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Edit Job Action Item -->
+    <item
+        android:id="@+id/action_edit_job"
+        android:title="@string/action_edit_job"
+        android:icon="@drawable/ic_edit"
+        app:showAsAction="ifRoom" />
+        <!-- Ensure you have an 'ic_edit' drawable resource -->
+
+    <!-- Delete Job Action Item -->
+    <item
+        android:id="@+id/action_delete_job"
+        android:title="@string/action_delete_job"
+        android:icon="@drawable/ic_delete"
+        app:showAsAction="ifRoom" />
+        <!-- Ensure you have an 'ic_delete' drawable resource -->
+
+</menu>

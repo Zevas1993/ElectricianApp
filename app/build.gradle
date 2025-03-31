@@ -86,8 +86,9 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
 
     // Firebase (Bill of Materials manages versions)
+    // Make sure BoM is declared BEFORE other Firebase dependencies
     implementation platform('com.google.firebase:firebase-bom:32.7.4') // Check latest BoM
-    implementation 'com.google.firebase:firebase-auth-ktx' // Authentication
+    implementation 'com.google.firebase:firebase-auth-ktx' // Authentication SDK
     // implementation 'com.google.firebase:firebase-firestore-ktx' // Firestore Database (Uncomment if using sync)
 
     // Google Sign-In (part of Play Services)
@@ -98,3 +99,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
+
+// Apply the Google services plugin using the older syntax as well, often needed at the bottom
+apply plugin: 'com.google.gms.google-services'

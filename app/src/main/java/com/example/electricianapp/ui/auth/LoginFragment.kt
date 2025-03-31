@@ -48,7 +48,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) { // Use layout construc
     private lateinit var googleSignInLauncher: ActivityResultLauncher<Intent>
 
     // ** VERY IMPORTANT: Replace this placeholder with your actual Web Client ID from Firebase Console **
-    private val WEB_CLIENT_ID = "YOUR_WEB_CLIENT_ID.apps.googleusercontent.com"
+    // Value obtained from google-services.json (client_type: 3)
+    private val WEB_CLIENT_ID = "1057858465622-tpklck4hev33otfcqhmr90m4bhlonj29.apps.googleusercontent.com"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout using ViewBinding

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <!-- Login Screen -->
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.electricianapp.ui.auth.LoginFragment"
+        android:label="@string/title_login"
+        tools:layout="@layout/fragment_login">
+        <!-- Action to navigate from Login to Job List after successful login -->
+        <action
+            android:id="@+id/action_loginFragment_to_jobListFragment"
+            app:destination="@id/jobListFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+            <!-- popUpTo clears the back stack up to the root (nav_graph) -->
+            <!-- popUpToInclusive="true" also removes the start destination (Login) -->
+        <!-- Argument definition (if needed, e.g., for deep linking) -->
+        <!-- <argument android:name="someArg" app:argType="string" android:defaultValue="default" /> -->
+    </fragment>
+
+    <!-- Job List Screen -->
+    <fragment
+        android:id="@+id/jobListFragment"
+        android:name="com.example.electricianapp.ui.jobs.JobListFragment"
+        android:label="@string/title_jobs"
+        tools:layout="@layout/fragment_job_list">
+        <!-- Argument to receive the user ID from Login -->
+        <argument
+            android:name="userId"
+            app:argType="long" />
+        <!-- Action to navigate from Job List to Job Detail -->
+        <action
+            android:id="@+id/action_jobListFragment_to_jobDetailFragment"
+            app:destination="@id/jobDetailFragment" />
+        <!-- Action to navigate from Job List to Add/Edit Job (for adding) -->
+        <action
+            android:id="@+id/action_jobListFragment_to_addEditJobFragment"
+            app:destination="@id/addEditJobFragment" />
+            <!-- userId argument is passed directly -->
+            <!-- jobId argument will default to -1L as defined in addEditJobFragment -->
+    </fragment>
+
+    <!-- Job Detail Screen -->
+    <fragment
+        android:id="@+id/jobDetailFragment"
+        android:name="com.example.electricianapp.ui.jobs.JobDetailFragment"
+        android:label="@string/title_job_detail"
+        tools:layout="@layout/fragment_job_detail">
+        <!-- Argument to receive the job ID from Job List -->
+        <argument
+            android:name="jobId"
+            app:argType="long" />
+        <!-- Action to navigate from Job Detail to Add/Edit Job (for editing) -->
+        <action
+            android:id="@+id/action_jobDetailFragment_to_addEditJobFragment"
+            app:destination="@id/addEditJobFragment" />
+            <!-- userId and jobId arguments are passed -->
+        <!-- Action to navigate from Job Detail to Add/Edit Task -->
+        <action
+            android:id="@+id/action_jobDetailFragment_to_addEditTaskFragment"
+            app:destination="@id/addEditTaskFragment" />
+            <!-- jobId and taskId arguments are passed -->
+    </fragment>
+
+    <!-- Add/Edit Job Screen -->
+    <!-- Title set dynamically in fragment -->
+    <fragment
+        android:id="@+id/addEditJobFragment"
+        android:name="com.example.electricianapp.ui.jobs.AddEditJobFragment"
+        android:label="@string/add_job_title"
+        tools:layout="@layout/fragment_add_edit_job">
+        <!-- Argument for the user ID (required) -->
+        <argument
+            android:name="userId"
+            app:argType="long" />
+        <!-- Argument for the job ID (optional, defaults to -1 for adding) -->
+        <argument
+            android:name="jobId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <!-- Argument to dynamically set the ActionBar title -->
+        <argument
+            android:name="title"
+            app:argType="string"
+            android:defaultValue="@string/add_job_title" /> <!-- Default title -->
+    </fragment>
+
+    <!-- Add/Edit Task Screen -->
+    <!-- Title set dynamically in fragment -->
+    <fragment
+        android:id="@+id/addEditTaskFragment"
+        android:name="com.example.electricianapp.ui.tasks.AddEditTaskFragment"
+        android:label="@string/add_task_title" <!-- Set static label, will be overridden in fragment -->
+        tools:layout="@layout/fragment_add_edit_task">
+        <!-- Argument for the parent job ID (required) -->
+        <argument
+            android:name="jobId"
+            app:argType="long" />
+        <!-- Argument for the task ID (optional, defaults to -1 for adding) -->
+        <argument
+            android:name="taskId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <!-- Argument to dynamically set the ActionBar title -->
+         <argument
+            android:name="title"
+            app:argType="string"
+            android:defaultValue="@string/add_task_title" /> <!-- Default title -->
+    </fragment>
+
+</navigation>

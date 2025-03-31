@@ -1,34 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Electrician Pro Tools</string>
-    
-    <!-- App Store Descriptions -->
-    <string name="app_description_short">Complete toolkit for professional electricians - calculations, layouts, management tools and more</string>
-    <string name="app_description_full">The ultimate electrician\'s companion with comprehensive tools for every aspect of electrical work. Features include precise calculations for box fill, conduit fill, and dwelling loads; pipe bending assistance; lighting layout design; augmented reality visualization; measurement tools; project management with checklists, inventory tracking and job scheduling. Perfect for apprentices and master electricians alike.</string>
-    
-    <!-- Feature Names -->
-    <string name="title_box_fill">Box Fill Calculator</string>
-    <string name="title_dwelling_load">Dwelling Load Calculator</string>
-    <string name="title_conduit_fill">Conduit Fill Calculator</string>
-    <string name="title_pipe_bending">Pipe Bending Calculator</string>
-    <string name="title_lighting_layout">Lighting Layout Tools</string>
-    <string name="title_ar_view">AR Visualization</string>
-    <string name="title_tap_counter">Tap Counter</string>
-    <string name="title_fraction_calculator">Fraction Calculator</string>
-    <string name="title_checklists">Job Checklists</string>
-    <string name="title_inventory">Inventory Management</string>
-    <string name="title_scheduling">Job Scheduling</string>
-    
-    <!-- Feature Descriptions -->
-    <string name="desc_box_fill">Calculate box volume and fill capacity according to NEC requirements. Includes support for different box types and automatic calculations based on conductor count, device counts, and clamp requirements.</string>
-    <string name="desc_dwelling_load">Complete dwelling unit load calculations per NEC Article 220. Calculate service size, feeder requirements, and load distribution for residential projects.</string>
-    <string name="desc_conduit_fill">Determine appropriate conduit sizes based on conductor type, size, and quantity according to NEC fill requirements. Includes common conduit types and wire configurations.</string>
-    <string name="desc_pipe_bending">Calculate precise measurements for conduit bends including offsets, saddles, and 90° bends. Features adjustable bend radius and comprehensive bend guides.</string>
-    <string name="desc_lighting_layout">Design efficient lighting layouts with calculation tools for light levels, fixture spacing, and energy usage. Includes common fixture types and room templates.</string>
-    <string name="desc_ar_view">Visualize electrical installations in real-time using augmented reality. Position fixtures, panels, and devices in the real world to plan installations and present to clients.</string>
-    <string name="desc_tap_counter">Utility tool for counting taps when locating wires or breakers. Features visual and audio feedback.</string>
-    <string name="desc_fraction_calculator">Specialized calculator for working with fractions and mixed numbers common in electrical measurements.</string>
-    <string name="desc_checklists">Customizable checklists for installation, inspection, and maintenance tasks. Includes templates for residential, commercial, and industrial work.</string>
-    <string name="desc_inventory">Track tools, materials, and equipment for projects. Manage stock, create orders, and generate material lists for jobs.</string>
-    <string name="desc_scheduling">Plan and schedule jobs, track time, and coordinate with team members. Includes calendar integration and notification features.</string>
+    <!-- App Name -->
+    <string name="app_name">Electrician App</string>
+
+    <!-- Login Screen -->
+    <string name="title_login">Login</string>
+    <string name="hint_username_or_email">Username or Email</string>
+    <string name="hint_password">Password</string>
+    <string name="button_login">Login</string>
+    <string name="separator_or">OR</string>
+    <string name="login_successful">Login Successful</string>
+    <string name="error_empty_credentials">Username/Email and Password cannot be empty.</string>
+    <string name="error_google_signin_failed_code">Google Sign-In failed. Code: %1$d</string>
+    <string name="error_google_signin_failed_generic">Google Sign-In failed. Please try again.</string>
+    <string name="error_google_no_token">Google Sign-In succeeded but failed to get token.</string>
+
+    <!-- Job List Screen -->
+    <string name="title_jobs">Jobs</string>
+    <string name="empty_job_list">No jobs found. Tap the + button to add one!</string>
+    <string name="add_job_fab_description">Add New Job</string>
+    <string name="action_logout">Logout</string>
+
+    <!-- Job Detail Screen -->
+    <string name="title_job_detail">Job Details</string>
+    <string name="job_date_prefix">Date: %1$s</string>
+    <string name="job_address_prefix">Address: %1$s</string>
+    <string name="job_status_prefix">Status: %1$s</string>
+    <string name="tasks_section_title">Tasks</string>
+    <string name="empty_task_list">No tasks for this job yet.</string>
+    <string name="add_task_fab_description">Add New Task</string>
+    <string name="action_edit_job">Edit Job</string>
+    <string name="action_delete_job">Delete Job</string>
+    <string name="delete_job_confirmation_title">Delete Job?</string>
+    <string name="delete_job_confirmation_message">Are you sure you want to delete this job and all its tasks? This cannot be undone.</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="job_deleted_success">Job deleted successfully</string>
+    <string name="task_deleted">Task deleted</string>
+    <string name="undo">Undo</string>
+    <string name="not_available">N/A</string>
+    <string name="no_description">(No description provided)</string>
+
+    <!-- Add/Edit Job Screen -->
+    <string name="add_job_title">Add New Job</string>
+    <string name="edit_job_title">Edit Job</string>
+    <string name="hint_job_title">Job Title*</string>
+    <string name="hint_job_address">Site Address</string>
+    <string name="hint_job_description">Description</string>
+    <string name="hint_job_status">Status</string>
+    <string name="button_save_job">Save Job</string>
+
+    <!-- Add/Edit Task Screen -->
+    <string name="add_task_title">Add New Task</string>
+    <string name="edit_task_title">Edit Task</string>
+    <string name="hint_task_description">Task Description*</string>
+    <string name="checkbox_task_completed">Completed</string>
+    <string name="button_save_task">Save Task</string>
+
 </resources>
