@@ -11,6 +11,10 @@ android {
     namespace 'com.example.electricianapp' // Ensure this matches your package
     compileSdk 34 // Use latest stable SDK
 
+    buildFeatures {
+        buildConfig true
+    }
+
     defaultConfig {
         applicationId "com.example.electricianapp" // Ensure this matches your package
         minSdk 24 // Android 7.0 Nougat
@@ -20,12 +24,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        // Room Schema Location Argument for KAPT
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
-            }
-        }
+        // Room schema location argument is now handled in the kapt block below
     }
 
     buildTypes {
@@ -75,6 +74,9 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version" // Kotlin Extensions and Coroutines support
 
+    // Kotlin Gradle Plugin version (upgrade to 1.9.22)
+    ext.kotlin_version = '1.9.22'
+
     // Hilt Dependency Injection
     def hilt_version = "2.48" // Use latest stable Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
@@ -84,6 +86,9 @@ dependencies {
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+
+    // Gson (for JSON serialization in Room TypeConverters/Entities)
+    implementation 'com.google.code.gson:gson:2.10.1' // Check for latest version
 
     // Firebase (Bill of Materials manages versions)
     // Make sure BoM is declared BEFORE other Firebase dependencies

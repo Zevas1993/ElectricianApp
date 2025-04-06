@@ -95,7 +95,7 @@
     <fragment
         android:id="@+id/addEditTaskFragment"
         android:name="com.example.electricianapp.ui.tasks.AddEditTaskFragment"
-        android:label="@string/add_task_title" <!-- Set static label, will be overridden in fragment -->
+        android:label="@string/add_task_title"
         tools:layout="@layout/fragment_add_edit_task">
         <!-- Argument for the parent job ID (required) -->
         <argument
@@ -110,7 +110,34 @@
          <argument
             android:name="title"
             app:argType="string"
-            android:defaultValue="@string/add_task_title" /> <!-- Default title -->
+             android:defaultValue="@string/add_task_title" /> <!-- Default title -->
     </fragment>
+
+    <!-- Dwelling Load Calculation -->
+    <fragment
+        android:id="@+id/dwellingLoadFragment"
+        android:name="com.example.electricianapp.presentation.fragment.dwellingload.DwellingLoadFragment"
+        android:label="Dwelling Load Calculator"
+        tools:layout="@layout/fragment_dwelling_load">
+        <action
+            android:id="@+id/action_dwellingLoadFragment_to_dwellingLoadResultsFragment"
+            app:destination="@id/dwellingLoadResultsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dwellingLoadResultsFragment"
+        android:name="com.example.electricianapp.presentation.fragment.dwellingload.DwellingLoadResultsFragment"
+        android:label="Dwelling Load Results"
+        tools:layout="@layout/fragment_dwelling_load_results">
+        <!-- Define arguments if needed, e.g., to receive calculation results -->
+        <!-- <argument android:name="resultId" app:argType="long" /> -->
+    </fragment>
+
+    <!-- Lighting Layout (Placeholder - Add actions/arguments as needed) -->
+    <fragment
+        android:id="@+id/lightingLayoutFragment"
+        android:name="com.example.electricianapp.presentation.fragment.lightinglayout.LightingLayoutFragment"
+        android:label="Lighting Layout"
+        tools:layout="@layout/fragment_lighting_layout"/>
 
 </navigation>

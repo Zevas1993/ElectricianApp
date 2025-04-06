@@ -57,4 +57,26 @@
     <string name="checkbox_task_completed">Completed</string>
     <string name="button_save_task">Save Task</string>
 
+    <!-- Titles from the comprehensive guide's navigation/menus -->
+    <string name="title_dwelling_load">Dwelling Load</string>
+    <string name="title_dwelling_load_results">Load Results</string>
+    <string name="title_conduit_fill">Conduit Fill</string>
+    <string name="title_conduit_fill_results">Conduit Results</string>
+    <string name="title_box_fill">Box Fill</string>
+    <string name="title_box_fill_results">Box Results</string>
+    <string name="title_pipe_bending">Pipe Bending</string>
+    <string name="title_lighting_layout">Lighting Layout</string>
+    <string name="title_ar_view">AR View</string>
+
+    <!-- Additional strings likely needed based on guide layouts -->
+    <string name="calculating">Calculating...</string>
+    <string name="calculate">Calculate</string>
+    <string name="box_fill_calculator">Box Fill Calculator</string>
+    <string name="box_type">Box Type:</string>
+    <string name="box_size">Box Size:</string>
+    <string name="device_count">Devices:</string>
+    <string name="decrease_device_count">Decrease device count</string>
+    <string name="increase_device_count">Increase device count</string>
+    <!-- Add other strings referenced in the guide's layouts/code as needed -->
+
 </resources>

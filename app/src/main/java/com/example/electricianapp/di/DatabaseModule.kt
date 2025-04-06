@@ -1,9 +1,15 @@
-package com.example.electricianapp.di
+package com.example.electricianapp.di // Corrected package
+
 import android.content.Context
-import com.example.electricianapp.data.local.AppDatabase
-import com.example.electricianapp.data.local.dao.JobDao
-import com.example.electricianapp.data.local.dao.TaskDao
-import com.example.electricianapp.data.local.dao.UserDao
+import androidx.room.Room
+import com.example.electricianapp.data.local.AppDatabase // Corrected import
+import com.example.electricianapp.data.local.dao.JobDao // Corrected import
+import com.example.electricianapp.data.local.dao.TaskDao // Corrected import
+import com.example.electricianapp.data.local.dao.UserDao // Corrected import
+// TODO: Import calculator DAOs when entities and AppDatabase are updated
+// import com.example.electricianapp.data.local.dao.BoxFillDao
+// import com.example.electricianapp.data.local.dao.ConduitFillDao
+import com.example.electricianapp.data.local.dao.DwellingLoadDao // Uncomment import
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,65 +18,99 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 /**
- * Hilt Module responsible for providing database-related dependencies.
- *
- * @Module Marks this class as a Hilt module.
- * @InstallIn(SingletonComponent::class) Specifies that the bindings defined in this module
- *   will be available application-wide and have a singleton scope (only one instance created).
+ * Hilt module for providing database related dependencies.
  */
 @Module
 @InstallIn(SingletonComponent::class)
-object DatabaseModule { // Use 'object' for modules providing dependencies via @Provides
+object DatabaseModule {
 
     /**
-     * Provides the singleton instance of the AppDatabase.
-     * Hilt automatically provides the ApplicationContext needed here.
-     *
-     * @param appContext The application context provided by Hilt.
-     * @return A singleton instance of AppDatabase.
+     * Provides the Room database instance.
      */
+    @Singleton
     @Provides
-    @Singleton // Ensures only one instance of the database is created
     fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
-        return AppDatabase.getDatabase(appContext)
+        // Use the AppDatabase class we defined earlier
+        return Room.databaseBuilder(
+            appContext,
+            AppDatabase::class.java,
+            "electrician_app_database" // Consistent DB name
+        )
+        .fallbackToDestructiveMigration() // Suitable for development
+        .build()
+        // Note: Removed the manual singleton implementation as Hilt handles it with @Singleton
     }
 
-    /**
-     * Provides the UserDao instance.
-     * Depends on the AppDatabase instance provided by `provideAppDatabase`.
-     * Hilt figures out the dependency graph.
-     *
-     * @param db The AppDatabase instance provided by Hilt.
-     * @return An instance of UserDao.
-     */
+    // --- DAOs for Job/Task App (Commented out as they are not in AppDatabase currently) ---
+    /*
     @Provides
-    // No @Singleton needed here if the DAO itself doesn't maintain state and AppDatabase is singleton.
-    // Room DAOs are typically lightweight.
-    fun provideUserDao(db: AppDatabase): UserDao {
-        return db.userDao()
+    fun provideUserDao(database: AppDatabase): UserDao {
+        return database.userDao()
     }
 
-    /**
-     * Provides the JobDao instance.
-     * Depends on the AppDatabase instance.
-     *
-     * @param db The AppDatabase instance provided by Hilt.
-     * @return An instance of JobDao.
-     */
     @Provides
-    fun provideJobDao(db: AppDatabase): JobDao {
-        return db.jobDao()
+    fun provideJobDao(database: AppDatabase): JobDao {
+        return database.jobDao()
     }
 
-    /**
-     * Provides the TaskDao instance.
-     * Depends on the AppDatabase instance.
-     *
-     * @param db The AppDatabase instance provided by Hilt.
-     * @return An instance of TaskDao.
-     */
     @Provides
-    fun provideTaskDao(db: AppDatabase): TaskDao {
-        return db.taskDao()
+    fun provideTaskDao(database: AppDatabase): TaskDao {
+        return database.taskDao()
     }
+    */
+
+    // --- DAOs for Calculator Features (Commented out until needed) ---
+    /* // Keep BoxFillDao commented
+    @Provides
+    fun provideBoxFillDao(database: AppDatabase): BoxFillDao {
+        return database.boxFillDao()
+    }
+    */
+    /* // Keep ConduitFillDao commented
+    @Provides
+    fun provideConduitFillDao(database: AppDatabase): ConduitFillDao {
+        return database.conduitFillDao()
+    }
+    */
+
+    @Provides // Uncomment this provider
+    fun provideDwellingLoadDao(database: AppDatabase): DwellingLoadDao {
+        return database.dwellingLoadDao()
+    }
+
+
+    // --- Repositories (Moved to RepositoryModule) ---
+    // Providing repositories here is possible, but binding interfaces to implementations
+    // in a separate RepositoryModule (like we did) is often preferred.
+    // These @Provides methods are commented out assuming RepositoryModule handles bindings.
+
+    /*
+    @Singleton
+    @Provides
+    fun provideWireRepository(wireDao: WireDao): WireRepository {
+        // Assuming WireRepositoryImpl exists and takes WireDao
+        return WireRepositoryImpl(wireDao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideBoxFillRepository(boxFillDao: BoxFillDao): BoxFillRepository {
+         // Assuming BoxFillRepositoryImpl exists and takes BoxFillDao
+        return BoxFillRepositoryImpl(boxFillDao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideConduitFillRepository(conduitFillDao: ConduitFillDao): ConduitFillRepository {
+         // Assuming ConduitFillRepositoryImpl exists and takes ConduitFillDao
+        return ConduitFillRepositoryImpl(conduitFillDao) // Might need other DAOs too
+    }
+
+     @Singleton
+     @Provides
+     fun provideDwellingLoadRepository(dwellingLoadDao: DwellingLoadDao): DwellingLoadRepository {
+          // Assuming DwellingLoadRepositoryImpl exists and takes DwellingLoadDao
+         return DwellingLoadRepositoryImpl(dwellingLoadDao) // Might need other DAOs too
+     }
+     */
 }

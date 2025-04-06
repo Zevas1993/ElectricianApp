@@ -1,0 +1,344 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "26625cd1ad748dc470926f019d6205e8",
+    "entities": [
+      {
+        "tableName": "box_fill_inputs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `boxType` TEXT NOT NULL, `boxDimensions` TEXT NOT NULL, `boxVolumeInCubicInches` REAL NOT NULL, `componentsJson` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "boxType",
+            "columnName": "boxType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "boxDimensions",
+            "columnName": "boxDimensions",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "boxVolumeInCubicInches",
+            "columnName": "boxVolumeInCubicInches",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "componentsJson",
+            "columnName": "componentsJson",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "box_fill_results",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `inputId` INTEGER NOT NULL, `boxType` TEXT NOT NULL, `boxDimensions` TEXT NOT NULL, `boxVolumeInCubicInches` REAL NOT NULL, `totalRequiredVolumeInCubicInches` REAL NOT NULL, `remainingVolumeInCubicInches` REAL NOT NULL, `fillPercentage` REAL NOT NULL, `isWithinLimits` INTEGER NOT NULL, `componentDetailsJson` TEXT NOT NULL, FOREIGN KEY(`inputId`) REFERENCES `box_fill_inputs`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "inputId",
+            "columnName": "inputId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "boxType",
+            "columnName": "boxType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "boxDimensions",
+            "columnName": "boxDimensions",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "boxVolumeInCubicInches",
+            "columnName": "boxVolumeInCubicInches",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalRequiredVolumeInCubicInches",
+            "columnName": "totalRequiredVolumeInCubicInches",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "remainingVolumeInCubicInches",
+            "columnName": "remainingVolumeInCubicInches",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fillPercentage",
+            "columnName": "fillPercentage",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isWithinLimits",
+            "columnName": "isWithinLimits",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "componentDetailsJson",
+            "columnName": "componentDetailsJson",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_box_fill_results_inputId",
+            "unique": false,
+            "columnNames": [
+              "inputId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_box_fill_results_inputId` ON `${TABLE_NAME}` (`inputId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "box_fill_inputs",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "inputId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "conduit_fill_history",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `conduitType` TEXT NOT NULL, `conduitSize` TEXT NOT NULL, `wiresJson` TEXT NOT NULL, `conduitAreaInSqInches` REAL NOT NULL, `totalWireAreaInSqInches` REAL NOT NULL, `fillPercentage` REAL NOT NULL, `maximumAllowedFillPercentage` REAL NOT NULL, `isWithinLimits` INTEGER NOT NULL, `wireDetailsJson` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "conduitType",
+            "columnName": "conduitType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "conduitSize",
+            "columnName": "conduitSize",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wiresJson",
+            "columnName": "wiresJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "conduitAreaInSqInches",
+            "columnName": "conduitAreaInSqInches",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalWireAreaInSqInches",
+            "columnName": "totalWireAreaInSqInches",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fillPercentage",
+            "columnName": "fillPercentage",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maximumAllowedFillPercentage",
+            "columnName": "maximumAllowedFillPercentage",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isWithinLimits",
+            "columnName": "isWithinLimits",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wireDetailsJson",
+            "columnName": "wireDetailsJson",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "dwelling_load_history",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `dwellingType` TEXT NOT NULL, `squareFootage` REAL NOT NULL, `smallApplianceCircuits` INTEGER NOT NULL, `laundryCircuits` INTEGER NOT NULL, `appliancesJson` TEXT NOT NULL, `totalConnectedLoad` REAL NOT NULL, `totalDemandLoad` REAL NOT NULL, `serviceSize` INTEGER NOT NULL, `generalLightingLoad` REAL NOT NULL, `smallApplianceLoad` REAL NOT NULL, `laundryLoad` REAL NOT NULL, `applianceLoadsJson` TEXT NOT NULL, `demandFactorsJson` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dwellingType",
+            "columnName": "dwellingType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "squareFootage",
+            "columnName": "squareFootage",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "smallApplianceCircuits",
+            "columnName": "smallApplianceCircuits",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "laundryCircuits",
+            "columnName": "laundryCircuits",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appliancesJson",
+            "columnName": "appliancesJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalConnectedLoad",
+            "columnName": "totalConnectedLoad",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalDemandLoad",
+            "columnName": "totalDemandLoad",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "serviceSize",
+            "columnName": "serviceSize",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "generalLightingLoad",
+            "columnName": "generalLightingLoad",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "smallApplianceLoad",
+            "columnName": "smallApplianceLoad",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "laundryLoad",
+            "columnName": "laundryLoad",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "applianceLoadsJson",
+            "columnName": "applianceLoadsJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "demandFactorsJson",
+            "columnName": "demandFactorsJson",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '26625cd1ad748dc470926f019d6205e8')"
+    ]
+  }
+}

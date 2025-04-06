@@ -1,82 +1,53 @@
-package com.example.electricianapp.data.local
-import android.content.Context
-import androidx.room.*
-import com.example.electricianapp.data.local.dao.* // Import all DAOs
-import com.example.electricianapp.data.model.* // Import all Entities
+package com.example.electricianapp.data.local // Corrected package
 
-/**
- * The main Room database class for the application.
- *
- * Annotated with @Database to define the entities included and the database version.
- * Annotated with @TypeConverters to register custom converters (e.g., for Date, Enums).
- * Provides abstract methods to access the Data Access Objects (DAOs).
- * Implements a Singleton pattern using a companion object to ensure only one
- * instance of the database exists throughout the app's lifecycle.
- */
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.electricianapp.data.local.dao.BoxFillDao // Corrected import path
+import com.example.electricianapp.data.local.dao.ConduitFillDao // Corrected import path
+import com.example.electricianapp.data.local.dao.DwellingLoadDao // Corrected import path
+// TODO: Add DAOs for Job/Task/User if merging functionality later
+// import com.example.electricianapp.data.local.dao.JobDao
+// import com.example.electricianapp.data.local.dao.TaskDao
+// import com.example.electricianapp.data.local.dao.UserDao
+import com.example.electricianapp.data.local.entity.BoxFillInputEntity // Corrected import path
+import com.example.electricianapp.data.local.entity.BoxFillResultEntity // Corrected import path
+import com.example.electricianapp.data.local.entity.ConduitFillEntity // Corrected import path
+import com.example.electricianapp.data.local.entity.DwellingLoadEntity // Corrected import path
+// TODO: Add Entities for Job/Task/User if merging functionality later
+// import com.example.electricianapp.data.model.JobEntity
+// import com.example.electricianapp.data.model.TaskEntity
+// import com.example.electricianapp.data.model.UserEntity
+import com.example.electricianapp.data.local.converter.Converters // Corrected import path
+
 @Database(
     entities = [
-        UserEntity::class,  // List all entities included in this database
-        JobEntity::class,
-        TaskEntity::class
+        // Entities for Calculator Features
+        BoxFillInputEntity::class, // Assuming these exist or will be created
+        BoxFillResultEntity::class, // Assuming these exist or will be created
+        ConduitFillEntity::class, // Assuming these exist or will be created
+        DwellingLoadEntity::class, // Assuming these exist or will be created
+
+        // Entities from Job/Task App (Comment out if replacing functionality)
+        // com.example.electricianapp.data.model.UserEntity::class,
+        // com.example.electricianapp.data.model.JobEntity::class,
+        // com.example.electricianapp.data.model.TaskEntity::class
     ],
-    version = 1, // Start with version 1. **Increment this number whenever you change the schema** (add/remove/modify tables or columns).
-    exportSchema = true // Recommended: Exports the schema to a JSON file in your project (usually app/schemas/). Helps with version tracking and testing migrations.
+    version = 1, // Start with version 1. Increment on schema changes.
+    exportSchema = true // Recommended for version tracking
 )
-@TypeConverters(Converters::class) // Register the Converters class to handle Date <-> Long and JobStatus <-> String conversions.
+@TypeConverters(Converters::class) // Use the corrected Converters class
 abstract class AppDatabase : RoomDatabase() {
+    // DAOs for Calculator Features
+    abstract fun boxFillDao(): BoxFillDao // Assuming this exists or will be created
+    abstract fun conduitFillDao(): ConduitFillDao // Assuming this exists or will be created
+    abstract fun dwellingLoadDao(): DwellingLoadDao // Assuming this exists or will be created
 
-    // Abstract methods that Room will implement to provide access to each DAO.
-    abstract fun userDao(): UserDao
-    abstract fun jobDao(): JobDao
-    abstract fun taskDao(): TaskDao
+    // DAOs from Job/Task App (Comment out if replacing functionality)
+    // abstract fun userDao(): com.example.electricianapp.data.local.dao.UserDao
+    // abstract fun jobDao(): com.example.electricianapp.data.local.dao.JobDao
+    // abstract fun taskDao(): com.example.electricianapp.data.local.dao.TaskDao
 
-    /** Companion object for static access, primarily for the Singleton database instance. */
-    companion object {
-        // @Volatile: Ensures that the value of INSTANCE is always up-to-date and the same to all execution threads.
-        // It means that writes to this field are immediately made visible to other threads.
-        @Volatile private var INSTANCE: AppDatabase? = null
-
-        /**
-         * Gets the singleton database instance. If it doesn't exist, creates it.
-         * Uses synchronized block to ensure thread safety during instance creation.
-         *
-         * @param context The application context.
-         * @return The singleton AppDatabase instance.
-         */
-        fun getDatabase(context: Context): AppDatabase {
-            // Return the existing instance if it's already created.
-            return INSTANCE ?: synchronized(this) {
-                // If instance is still null inside the synchronized block, create it.
-                val instance = Room.databaseBuilder(
-                    context.applicationContext, // Use application context to avoid leaks
-                    AppDatabase::class.java,
-                    "electrician_app_database" // Define the name for the database file
-                )
-                // ** Migration Strategy **
-                // `fallbackToDestructiveMigration()`: If Room needs to migrate to a new version
-                // and no specific `Migration` path is provided, it will simply delete all
-                // existing tables and data, then recreate the schema.
-                // **WARNING:** Suitable for development ONLY. Data will be lost on schema change.
-                // Replace with `.addMigrations(MIGRATION_X_Y, ...)` for production releases.
-                .fallbackToDestructiveMigration()
-                // Example of adding a proper migration (requires defining MIGRATION_1_2 etc.)
-                // .addMigrations(MIGRATION_1_2)
-                .build() // Builds the database instance.
-
-                INSTANCE = instance // Assign the newly created instance to the static field.
-                instance // Return the instance.
-            }
-        }
-
-        // Example of defining a Migration (needed for production instead of fallback)
-        /*
-        val MIGRATION_1_2: Migration = object : Migration(1, 2) {
-            override fun migrate(db: SupportSQLiteDatabase) {
-                // Example: Add a 'notes' column to the 'jobs' table in version 2
-                db.execSQL("ALTER TABLE jobs ADD COLUMN notes TEXT")
-            }
-        }
-        */
-
-    }
+    // Note: The Singleton pattern (companion object with getInstance) is often handled
+    // by Hilt's @Provides method in the AppModule now, so it's removed from here.
 }

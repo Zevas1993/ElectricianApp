@@ -1,5 +1,9 @@
 package com.example.electricianapp.di
 import com.example.electricianapp.data.repository.* // Import interfaces and implementations
+import com.example.electricianapp.data.repository.conduitfill.ConduitFillRepositoryImpl // Specific import
+import com.example.electricianapp.data.repository.dwellingload.DwellingLoadRepositoryImpl // Specific import
+import com.example.electricianapp.domain.repository.conduitfill.ConduitFillRepository // Specific import
+import com.example.electricianapp.domain.repository.dwellingload.DwellingLoadRepository // Specific import
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -55,4 +59,22 @@ abstract class RepositoryModule {
     abstract fun bindTaskRepository(
         taskRepositoryImpl: TaskRepositoryImpl
     ): TaskRepository
+
+    /**
+     * Binds the ConduitFillRepository interface to its concrete implementation ConduitFillRepositoryImpl.
+     */
+    @Binds
+    @Singleton
+    abstract fun bindConduitFillRepository(
+        conduitFillRepositoryImpl: ConduitFillRepositoryImpl
+    ): ConduitFillRepository
+
+    /**
+     * Binds the DwellingLoadRepository interface to its concrete implementation DwellingLoadRepositoryImpl.
+     */
+    @Binds
+    @Singleton
+    abstract fun bindDwellingLoadRepository(
+        dwellingLoadRepositoryImpl: DwellingLoadRepositoryImpl
+    ): DwellingLoadRepository
 }

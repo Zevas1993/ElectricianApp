@@ -1,23 +1,20 @@
-package com.example.electricianapp // Adjust package name if needed
+package com.example.electricianapp // Corrected package
+
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 /**
- * Base Application class for the ElectricianApp.
- * Required by Hilt for dependency injection setup.
- * Annotated with @HiltAndroidApp to enable Hilt's code generation.
- * This class is specified in the AndroidManifest.xml <application> tag's android:name attribute.
- * You can also place application-wide initialization code here (like logging setup) if needed.
+ * Custom Application class required for Hilt setup.
+ * The @HiltAndroidApp annotation triggers Hilt's code generation,
+ * including a base class for your application that serves as the
+ * application-level dependency container.
  */
 @HiltAndroidApp
 class ElectricianApplication : Application() {
+    // No need to manually initialize Hilt here; the annotation handles it.
+    // You can add other application-wide initialization logic in onCreate if needed.
     override fun onCreate() {
         super.onCreate()
-        // Initialization code here, e.g.:
-        // if (BuildConfig.DEBUG) {
-        //     Timber.plant(Timber.DebugTree())
-        // }
-        // Analytics.init(this)
-        // etc.
+        // Example: Initialize Timber logging, analytics, etc.
     }
 }
