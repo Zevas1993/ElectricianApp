@@ -3,7 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/homeFragment"> <!-- Changed start destination -->
+
+    <!-- Home Screen (New) -->
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.electricianapp.ui.home.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" />
 
     <!-- Login Screen -->
     <fragment
@@ -11,10 +18,10 @@
         android:name="com.example.electricianapp.ui.auth.LoginFragment"
         android:label="@string/title_login"
         tools:layout="@layout/fragment_login">
-        <!-- Action to navigate from Login to Job List after successful login -->
+        <!-- Action to navigate from Login to Home after successful login -->
         <action
-            android:id="@+id/action_loginFragment_to_jobListFragment"
-            app:destination="@id/jobListFragment"
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
             <!-- popUpTo clears the back stack up to the root (nav_graph) -->
@@ -45,7 +52,7 @@
             <!-- jobId argument will default to -1L as defined in addEditJobFragment -->
     </fragment>
 
-    <!-- Job Detail Screen -->
+    <!-- Job Detail Screen (Keep as is, accessed from Job List) -->
     <fragment
         android:id="@+id/jobDetailFragment"
         android:name="com.example.electricianapp.ui.jobs.JobDetailFragment"
@@ -67,13 +74,12 @@
             <!-- jobId and taskId arguments are passed -->
     </fragment>
 
-    <!-- Add/Edit Job Screen -->
+    <!-- Add/Edit Job Screen (Keep as is, accessed from Job List/Detail) -->
     <!-- Title set dynamically in fragment -->
     <fragment
         android:id="@+id/addEditJobFragment"
         android:name="com.example.electricianapp.ui.jobs.AddEditJobFragment"
-        android:label="@string/add_job_title"
-        tools:layout="@layout/fragment_add_edit_job">
+        tools:layout="@layout/fragment_add_edit_job"> <!-- Removed android:label -->
         <!-- Argument for the user ID (required) -->
         <argument
             android:name="userId"
@@ -86,11 +92,10 @@
         <!-- Argument to dynamically set the ActionBar title -->
         <argument
             android:name="title"
-            app:argType="string"
-            android:defaultValue="@string/add_job_title" /> <!-- Default title -->
+            app:argType="string" /> <!-- Removed default value -->
     </fragment>
 
-    <!-- Add/Edit Task Screen -->
+    <!-- Add/Edit Task Screen (Keep as is, accessed from Job Detail) -->
     <!-- Title set dynamically in fragment -->
     <fragment
         android:id="@+id/addEditTaskFragment"
@@ -109,21 +114,22 @@
         <!-- Argument to dynamically set the ActionBar title -->
          <argument
             android:name="title"
-            app:argType="string"
-             android:defaultValue="@string/add_task_title" /> <!-- Default title -->
+            app:argType="string" /> <!-- Removed default value -->
     </fragment>
 
-    <!-- Dwelling Load Calculation -->
+    <!-- Dwelling Load Calculation (Top Level) -->
     <fragment
         android:id="@+id/dwellingLoadFragment"
         android:name="com.example.electricianapp.presentation.fragment.dwellingload.DwellingLoadFragment"
         android:label="Dwelling Load Calculator"
         tools:layout="@layout/fragment_dwelling_load">
+        <!-- Action to results screen remains nested -->
         <action
             android:id="@+id/action_dwellingLoadFragment_to_dwellingLoadResultsFragment"
             app:destination="@id/dwellingLoadResultsFragment" />
     </fragment>
 
+    <!-- Dwelling Load Results (Keep nested under Dwelling Load) -->
     <fragment
         android:id="@+id/dwellingLoadResultsFragment"
         android:name="com.example.electricianapp.presentation.fragment.dwellingload.DwellingLoadResultsFragment"
@@ -133,7 +139,23 @@
         <!-- <argument android:name="resultId" app:argType="long" /> -->
     </fragment>
 
-    <!-- Lighting Layout (Placeholder - Add actions/arguments as needed) -->
+    <!-- Conduit Fill Calculation (Top Level) -->
+    <fragment
+        android:id="@+id/conduitFillFragment"
+        android:name="com.example.electricianapp.presentation.fragment.conduitfill.ConduitFillFragment"
+        android:label="Conduit Fill Calculator"
+        tools:layout="@layout/fragment_conduit_fill" />
+        <!-- Add actions if needed, e.g., to a results screen -->
+
+    <!-- Box Fill Calculation (Top Level) -->
+    <fragment
+        android:id="@+id/boxFillFragment"
+        android:name="com.example.electricianapp.presentation.fragment.boxfill.BoxFillFragment"
+        android:label="Box Fill Calculator"
+        tools:layout="@layout/fragment_box_fill" />
+        <!-- Add actions if needed -->
+
+    <!-- Lighting Layout (Placeholder - Top Level) -->
     <fragment
         android:id="@+id/lightingLayoutFragment"
         android:name="com.example.electricianapp.presentation.fragment.lightinglayout.LightingLayoutFragment"

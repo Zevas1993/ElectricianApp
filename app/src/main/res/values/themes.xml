@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.ElectricianApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.ElectricianApp" parent="Theme.MaterialComponents.DayNight.NoActionBar"> <!-- Changed parent theme -->
         <!-- Customize your theme here. -->
         <!-- Example Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>

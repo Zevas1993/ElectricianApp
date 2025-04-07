@@ -17,6 +17,7 @@
 
     <!-- Job List Screen -->
     <string name="title_jobs">Jobs</string>
+    <string name="add_job">Add Job</string> <!-- Added string for FAB -->
     <string name="empty_job_list">No jobs found. Tap the + button to add one!</string>
     <string name="add_job_fab_description">Add New Job</string>
     <string name="action_logout">Logout</string>
@@ -49,6 +50,7 @@
     <string name="hint_job_description">Description</string>
     <string name="hint_job_status">Status</string>
     <string name="button_save_job">Save Job</string>
+    <string name="add_new_job_label">Add New Job</string> <!-- Added for nav graph argument -->
 
     <!-- Add/Edit Task Screen -->
     <string name="add_task_title">Add New Task</string>

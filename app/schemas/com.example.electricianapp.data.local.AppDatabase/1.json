@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1e60ad198e3665ea79f51a4dd04b2129",
+    "identityHash": "7fdf2611f3bdc57cb6e73bf08ac4127b",
     "entities": [
       {
         "tableName": "box_fill_inputs",
@@ -151,8 +151,8 @@
         ]
       },
       {
-        "tableName": "conduit_fill_history",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `conduitType` TEXT NOT NULL, `conduitSize` TEXT NOT NULL, `wiresJson` TEXT NOT NULL, `conduitAreaInSqInches` REAL NOT NULL, `totalWireAreaInSqInches` REAL NOT NULL, `fillPercentage` REAL NOT NULL, `maximumAllowedFillPercentage` REAL NOT NULL, `isWithinLimits` INTEGER NOT NULL, `wireDetailsJson` TEXT NOT NULL)",
+        "tableName": "conduit_fill_calculations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `conduitType` TEXT NOT NULL, `conduitSize` TEXT NOT NULL, `wires` TEXT NOT NULL, `conduitAreaInSqInches` REAL NOT NULL, `totalWireAreaInSqInches` REAL NOT NULL, `fillPercentage` REAL NOT NULL, `maximumAllowedFillPercentage` REAL NOT NULL, `isWithinLimits` INTEGER NOT NULL, `wireDetails` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -179,8 +179,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "wiresJson",
-            "columnName": "wiresJson",
+            "fieldPath": "wires",
+            "columnName": "wires",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -215,8 +215,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "wireDetailsJson",
-            "columnName": "wireDetailsJson",
+            "fieldPath": "wireDetails",
+            "columnName": "wireDetails",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -339,12 +339,74 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "jobs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userId` INTEGER NOT NULL, `name` TEXT NOT NULL, `address` TEXT NOT NULL, `description` TEXT, `status` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1e60ad198e3665ea79f51a4dd04b2129')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7fdf2611f3bdc57cb6e73bf08ac4127b')"
     ]
   }
 }

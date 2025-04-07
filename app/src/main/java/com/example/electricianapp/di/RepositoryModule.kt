@@ -1,9 +1,18 @@
 package com.example.electricianapp.di
-import com.example.electricianapp.data.repository.* // Import interfaces and implementations
+
+// Remove wildcard import
+import com.example.electricianapp.data.repository.TaskRepositoryImpl // Explicit import
+// import com.example.electricianapp.data.repository.UserRepositoryImpl // Commented out as file is missing
+import com.example.electricianapp.data.repository.boxfill.BoxFillRepositoryImpl // Specific import
 import com.example.electricianapp.data.repository.conduitfill.ConduitFillRepositoryImpl // Specific import
 import com.example.electricianapp.data.repository.dwellingload.DwellingLoadRepositoryImpl // Specific import
+import com.example.electricianapp.data.repository.jobs.JobRepositoryImpl // Explicit import for new Job Repo Impl
+// import com.example.electricianapp.domain.repository.TaskRepository // Commented out as file is missing or incorrect
+// import com.example.electricianapp.domain.repository.UserRepository // Commented out as file is missing
+import com.example.electricianapp.domain.repository.boxfill.BoxFillRepository // Specific import
 import com.example.electricianapp.domain.repository.conduitfill.ConduitFillRepository // Specific import
 import com.example.electricianapp.domain.repository.dwellingload.DwellingLoadRepository // Specific import
+import com.example.electricianapp.domain.repository.jobs.JobRepository // Explicit import for new Job Repo Interface
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -23,6 +32,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
 
+    /* TODO: Uncomment when UserRepository files exist
     /**
      * Binds the UserRepository interface to its concrete implementation UserRepositoryImpl.
      * When a component requests `UserRepository`, Hilt will provide an instance of `UserRepositoryImpl`.
@@ -35,6 +45,7 @@ abstract class RepositoryModule {
     abstract fun bindUserRepository(
         userRepositoryImpl: UserRepositoryImpl
     ): UserRepository
+    */
 
     /**
      * Binds the JobRepository interface to its concrete implementation JobRepositoryImpl.
@@ -48,6 +59,7 @@ abstract class RepositoryModule {
         jobRepositoryImpl: JobRepositoryImpl
     ): JobRepository
 
+    /* TODO: Uncomment when TaskRepository files exist/are correct
     /**
      * Binds the TaskRepository interface to its concrete implementation TaskRepositoryImpl.
      *
@@ -59,6 +71,7 @@ abstract class RepositoryModule {
     abstract fun bindTaskRepository(
         taskRepositoryImpl: TaskRepositoryImpl
     ): TaskRepository
+    */
 
     /**
      * Binds the ConduitFillRepository interface to its concrete implementation ConduitFillRepositoryImpl.
@@ -77,4 +90,13 @@ abstract class RepositoryModule {
     abstract fun bindDwellingLoadRepository(
         dwellingLoadRepositoryImpl: DwellingLoadRepositoryImpl
     ): DwellingLoadRepository
+
+    /**
+     * Binds the BoxFillRepository interface to its concrete implementation BoxFillRepositoryImpl.
+     */
+    @Binds
+    @Singleton
+    abstract fun bindBoxFillRepository(
+        boxFillRepositoryImpl: BoxFillRepositoryImpl
+    ): BoxFillRepository
 }

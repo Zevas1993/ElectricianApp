@@ -146,10 +146,10 @@ class CalculateConduitFillUseCase @Inject constructor() {
      */
     private fun getMaximumAllowedFillPercentage(numberOfConductors: Int): Double {
         return when {
-            numberOfConductors <= 0 -> 0.0 // No conductors, 0% fill allowed conceptually
-            numberOfConductors == 1 -> 53.0  // Over 2 wires note 1: "Use 53 percent for 1 conductor"
-            numberOfConductors == 2 -> 31.0  // Over 2 wires note 2: "Use 31 percent for 2 conductors"
-            else -> 40.0 // Covers >= 3 and any other theoretical case
+            numberOfConductors <= 0 -> 0.0  // No conductors, 0% fill allowed conceptually
+            numberOfConductors == 1 -> 53.0   // Over 2 wires note 1: "Use 53 percent for 1 conductor"
+            numberOfConductors == 2 -> 31.0   // Over 2 wires note 2: "Use 31 percent for 2 conductors"
+            else -> 40.0 // Covers >= 3 conductors (NEC Chapter 9, Table 1) and ensures exhaustiveness
         }
     }
 }

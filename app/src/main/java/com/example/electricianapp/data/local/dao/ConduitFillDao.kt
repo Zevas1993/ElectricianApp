@@ -1,29 +1,27 @@
-package com.example.electricianapp.data.local.dao // Corrected package
+package com.example.electricianapp.data.local.dao
 
-import androidx.room.*
-import com.example.electricianapp.data.local.entity.ConduitFillEntity // Corrected import
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.example.electricianapp.data.local.entity.ConduitFillCalculationEntity
 import kotlinx.coroutines.flow.Flow
 
-/**
- * Data Access Object for conduit fill calculation history.
- */
 @Dao
 interface ConduitFillDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(conduitFillEntity: ConduitFillEntity): Long // Returns the new rowId
+    suspend fun insertCalculation(calculation: ConduitFillCalculationEntity): Long
 
-    @Query("SELECT * FROM conduit_fill_history ORDER BY timestamp DESC")
-    fun getAllCalculations(): Flow<List<ConduitFillEntity>>
+    @Query("SELECT * FROM conduit_fill_calculations ORDER BY timestamp DESC")
+    fun getAllCalculations(): Flow<List<ConduitFillCalculationEntity>>
 
-    @Query("SELECT * FROM conduit_fill_history WHERE id = :id")
-    suspend fun getCalculationById(id: Long): ConduitFillEntity?
+    @Query("SELECT * FROM conduit_fill_calculations WHERE id = :id")
+    suspend fun getCalculationById(id: Long): ConduitFillCalculationEntity?
 
-    @Query("DELETE FROM conduit_fill_history WHERE id = :id")
+    @Query("DELETE FROM conduit_fill_calculations WHERE id = :id")
     suspend fun deleteCalculationById(id: Long)
 
-    @Query("DELETE FROM conduit_fill_history")
-    suspend fun clearAll()
-
-    // Add other queries if needed, e.g., filtering by conduit type or size
+    @Query("DELETE FROM conduit_fill_calculations")
+    suspend fun clearAllCalculations()
 }

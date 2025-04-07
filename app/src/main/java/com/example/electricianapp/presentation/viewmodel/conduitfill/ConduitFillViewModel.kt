@@ -48,9 +48,35 @@ class ConduitFillViewModel @Inject constructor(
     private val _calculationHistory = MutableLiveData<List<Pair<ConduitFillInput, ConduitFillResult>>>()
     val calculationHistory: LiveData<List<Pair<ConduitFillInput, ConduitFillResult>>> = _calculationHistory
 
-    // Wire area lookup table (THHN wire sizes in AWG to area in square inches)
     // TODO: Move this data to a more appropriate layer (e.g., data source or constants file)
+    // Wire area lookup table (Wire size string to area in square inches)
+    // Using common NEC sizes for THHN/THWN-2. Ensure these match expected input formats.
     private val wireAreaMap = mapOf(
+        "14" to 0.0097, // Assumes AWG if just number
+        "12" to 0.0133,
+        "10" to 0.0211,
+        "8" to 0.0366,
+        "6" to 0.0507,
+        "4" to 0.0824,
+        "3" to 0.0973,
+        "2" to 0.1158,
+        "1" to 0.1562,
+        "1/0" to 0.1855,
+        "2/0" to 0.2223,
+        "3/0" to 0.2679,
+        "4/0" to 0.3237,
+        "250" to 0.3970, // Assumes kcmil if >= 250
+        "300" to 0.4608,
+        "350" to 0.5242,
+        "400" to 0.5863,
+        "500" to 0.7073,
+        "600" to 0.8676,
+        "700" to 0.9887,
+        "750" to 1.0496,
+        "800" to 1.1085,
+        "900" to 1.2311,
+        "1000" to 1.3478,
+        // Explicit AWG/kcmil keys for robustness if needed, but keep primary keys simple
         "14 AWG" to 0.0097,
         "12 AWG" to 0.0133,
         "10 AWG" to 0.0211,
@@ -77,6 +103,19 @@ class ConduitFillViewModel @Inject constructor(
         "1000 kcmil" to 1.3478
     )
 
+    // Expose the valid wire sizes for the UI dropdown
+    val availableWireSizes: List<String> = wireAreaMap.keys.filterNot { it.contains(" ") }.sortedWith(
+        // Custom sort: AWG descending, then kcmil ascending
+        compareBy { size ->
+            when {
+                size.contains("/") -> -size.split("/")[0].toInt() // Handle 1/0, 2/0 etc.
+                size.toIntOrNull() != null && size.toInt() < 250 -> -size.toInt() // AWG sizes (negative for descending)
+                else -> size.toIntOrNull() ?: Int.MAX_VALUE // kcmil sizes or non-numeric last
+            }
+        }
+    )
+
+
     init {
         loadCalculationHistory()
     }
@@ -99,12 +138,10 @@ class ConduitFillViewModel @Inject constructor(
      * Add a wire to the list
      */
     fun addWire(wireType: WireType, wireSize: String, quantity: Int) {
-        val areaKey = "$wireSize AWG" // Assuming input size might just be number
-        val area = wireAreaMap[areaKey] ?:
-                   wireAreaMap[wireSize] ?: // Try without AWG suffix
-                   run {
-                       _uiState.value = ConduitFillUiState.Error("Unsupported wire size: $wireSize for type $wireType")
-                       return // Stop execution if area not found
+        // Use the provided wireSize directly as the key
+        val area = wireAreaMap[wireSize] ?: run {
+            _uiState.value = ConduitFillUiState.Error("Unsupported wire size: $wireSize")
+            return // Stop execution if area not found
                    }
 
         val wire = Wire(
@@ -135,12 +172,10 @@ class ConduitFillViewModel @Inject constructor(
     fun updateWire(index: Int, wireType: WireType, wireSize: String, quantity: Int) {
         val currentList = _wires.value ?: return
         if (index in currentList.indices) {
-            val areaKey = "$wireSize AWG"
-            val area = wireAreaMap[areaKey] ?:
-                       wireAreaMap[wireSize] ?:
-                       run {
-                           _uiState.value = ConduitFillUiState.Error("Unsupported wire size: $wireSize for type $wireType")
-                           return
+            // Use the provided wireSize directly as the key
+            val area = wireAreaMap[wireSize] ?: run {
+                _uiState.value = ConduitFillUiState.Error("Unsupported wire size: $wireSize")
+                return
                        }
 
             val updatedWire = Wire(

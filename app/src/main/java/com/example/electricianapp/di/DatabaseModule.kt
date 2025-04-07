@@ -7,8 +7,8 @@ import com.example.electricianapp.data.local.dao.JobDao // Corrected import
 import com.example.electricianapp.data.local.dao.TaskDao // Corrected import
 import com.example.electricianapp.data.local.dao.UserDao // Corrected import
 // TODO: Import calculator DAOs when entities and AppDatabase are updated
-// import com.example.electricianapp.data.local.dao.BoxFillDao
-// import com.example.electricianapp.data.local.dao.ConduitFillDao
+import com.example.electricianapp.data.local.dao.BoxFillDao // Uncomment import
+import com.example.electricianapp.data.local.dao.ConduitFillDao // Uncomment import
 import com.example.electricianapp.data.local.dao.DwellingLoadDao // Uncomment import
 import dagger.Module
 import dagger.Provides
@@ -41,18 +41,20 @@ object DatabaseModule {
         // Note: Removed the manual singleton implementation as Hilt handles it with @Singleton
     }
 
-    // --- DAOs for Job/Task App (Commented out as they are not in AppDatabase currently) ---
-    /*
+    // --- DAOs for Job/Task App ---
+    /* TODO: Uncomment when User/Task functionality is added
     @Provides
     fun provideUserDao(database: AppDatabase): UserDao {
         return database.userDao()
     }
+    */
 
-    @Provides
+    @Provides // Uncomment JobDao provider
     fun provideJobDao(database: AppDatabase): JobDao {
         return database.jobDao()
     }
 
+    /* TODO: Uncomment when Task functionality is added
     @Provides
     fun provideTaskDao(database: AppDatabase): TaskDao {
         return database.taskDao()
@@ -60,18 +62,18 @@ object DatabaseModule {
     */
 
     // --- DAOs for Calculator Features (Commented out until needed) ---
-    /* // Keep BoxFillDao commented
-    @Provides
+    // Keep BoxFillDao commented // Remove this comment line
+    @Provides // Uncomment this provider
     fun provideBoxFillDao(database: AppDatabase): BoxFillDao {
         return database.boxFillDao()
     }
-    */
-    /* // Keep ConduitFillDao commented
-    @Provides
+
+    // Keep ConduitFillDao commented // Remove this comment line
+    @Provides // Uncomment this provider
     fun provideConduitFillDao(database: AppDatabase): ConduitFillDao {
         return database.conduitFillDao()
     }
-    */
+
 
     @Provides // Uncomment this provider
     fun provideDwellingLoadDao(database: AppDatabase): DwellingLoadDao {

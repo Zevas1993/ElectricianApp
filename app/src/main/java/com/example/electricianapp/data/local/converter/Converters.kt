@@ -7,6 +7,11 @@ import androidx.room.TypeConverter
 import java.util.Date // Import Date for potential future use
 import com.example.electricianapp.domain.model.dwellingload.Appliance // Import Appliance
 import com.example.electricianapp.domain.model.dwellingload.DwellingType // Import DwellingType
+import com.example.electricianapp.domain.model.conduitfill.Wire // Import Wire
+import com.example.electricianapp.domain.model.conduitfill.WireDetail // Import WireDetail
+import com.example.electricianapp.domain.model.boxfill.BoxComponent // Import BoxComponent
+import com.example.electricianapp.domain.model.boxfill.BoxType // Import BoxType
+import com.example.electricianapp.domain.model.boxfill.ComponentDetail // Import ComponentDetail
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -152,5 +157,63 @@ class Converters {
     fun toStringDoubleMap(value: String?): Map<String, Double>? {
         val mapType = object : TypeToken<Map<String, Double>>() {}.type
         return Gson().fromJson(value, mapType)
+    }
+
+    // --- Converters for ConduitFillCalculationEntity ---
+
+    @TypeConverter
+    fun fromWireList(list: List<Wire>?): String? {
+        return Gson().toJson(list)
+    }
+
+    @TypeConverter
+    fun toWireList(value: String?): List<Wire>? {
+        val listType = object : TypeToken<List<Wire>>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromWireDetailList(list: List<WireDetail>?): String? {
+        return Gson().toJson(list)
+    }
+
+    @TypeConverter
+    fun toWireDetailList(value: String?): List<WireDetail>? {
+        val listType = object : TypeToken<List<WireDetail>>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    // --- Converters for BoxFill Entities ---
+
+    @TypeConverter
+    fun fromBoxType(type: BoxType?): String? {
+        return type?.name
+    }
+
+    @TypeConverter
+    fun toBoxType(value: String?): BoxType? {
+        return value?.let { enumValueOf<BoxType>(it) }
+    }
+
+    @TypeConverter
+    fun fromBoxComponentList(list: List<BoxComponent>?): String? {
+        return Gson().toJson(list)
+    }
+
+    @TypeConverter
+    fun toBoxComponentList(value: String?): List<BoxComponent>? {
+        val listType = object : TypeToken<List<BoxComponent>>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromComponentDetailList(list: List<ComponentDetail>?): String? {
+        return Gson().toJson(list)
+    }
+
+    @TypeConverter
+    fun toComponentDetailList(value: String?): List<ComponentDetail>? {
+        val listType = object : TypeToken<List<ComponentDetail>>() {}.type
+        return Gson().fromJson(value, listType)
     }
 }
