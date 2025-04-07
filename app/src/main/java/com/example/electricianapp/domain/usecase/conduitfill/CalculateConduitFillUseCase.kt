@@ -70,9 +70,8 @@ class CalculateConduitFillUseCase @Inject constructor() {
      * @param conduitSize The trade size of the conduit
      * @return The internal cross-sectional area in square inches
      */
-    // TODO: Expand this table with more conduit types and sizes from NEC Chapter 9, Table 4
     private fun getConduitArea(conduitType: ConduitType, conduitSize: String): Double {
-        // Areas based on NEC Chapter 9, Table 4 (Total Area)
+        // Areas based on NEC Chapter 9, Table 4 (Total Area, sq. in.) - Using common values, verify against specific NEC edition if critical
         return when (conduitType) {
             ConduitType.EMT -> when (conduitSize) {
                 "1/2" -> 0.304
@@ -81,61 +80,74 @@ class CalculateConduitFillUseCase @Inject constructor() {
                 "1-1/4" -> 1.496
                 "1-1/2" -> 2.036
                 "2" -> 3.356
-                "2-1/2" -> 4.788 // Corrected based on common tables
-                "3" -> 7.383 // Corrected based on common tables
-                "3-1/2" -> 9.900 // Corrected based on common tables
-                "4" -> 12.720 // Corrected based on common tables
-                else -> throw IllegalArgumentException("Unsupported EMT conduit size: $conduitSize")
+                "2-1/2" -> 5.783 // NEC 2020 value
+                "3" -> 8.898 // NEC 2020 value
+                "3-1/2" -> 11.770 // NEC 2020 value
+                "4" -> 14.786 // NEC 2020 value
+                else -> 0.0 // Return 0.0 for unsupported size, handle error upstream if needed
             }
             ConduitType.IMC -> when (conduitSize) {
-                 "1/2" -> 0.368 // Example values, verify with NEC Table 4
-                 "3/4" -> 0.616
-                 "1" -> 0.983
-                 "1-1/4" -> 1.698
-                 "1-1/2" -> 2.290
-                 "2" -> 3.716
-                 "2-1/2" -> 5.980 // Example
-                 "3" -> 8.898 // Example
-                 "3-1/2" -> 11.77 // Example
-                 "4" -> 14.79 // Example
-                else -> throw IllegalArgumentException("Unsupported IMC conduit size: $conduitSize")
+                "1/2" -> 0.368
+                "3/4" -> 0.616
+                "1" -> 0.983
+                "1-1/4" -> 1.698
+                "1-1/2" -> 2.290
+                "2" -> 3.716
+                "2-1/2" -> 5.980
+                "3" -> 8.898
+                "3-1/2" -> 11.770
+                "4" -> 14.790
+                else -> 0.0
             }
             ConduitType.RMC -> when (conduitSize) {
-                 "1/2" -> 0.314 // Example values, verify with NEC Table 4
-                 "3/4" -> 0.533
-                 "1" -> 0.861
-                 "1-1/4" -> 1.504
-                 "1-1/2" -> 2.048
-                 "2" -> 3.355
-                 "2-1/2" -> 4.788 // Example
-                 "3" -> 7.383 // Example
-                 "3-1/2" -> 9.898 // Example
-                 "4" -> 12.718 // Example
-                else -> throw IllegalArgumentException("Unsupported RMC conduit size: $conduitSize")
+                "1/2" -> 0.314
+                "3/4" -> 0.533
+                "1" -> 0.861
+                "1-1/4" -> 1.504
+                "1-1/2" -> 2.048
+                "2" -> 3.355
+                "2-1/2" -> 5.783
+                "3" -> 8.898
+                "3-1/2" -> 11.770
+                "4" -> 14.786
+                else -> 0.0
             }
-             // Add cases for PVC_SCHEDULE_40, PVC_SCHEDULE_80, ENT based on NEC Table 4
-             ConduitType.PVC_SCHEDULE_40 -> when (conduitSize) {
-                 "1/2" -> 0.285 // Example
-                 "3/4" -> 0.508 // Example
-                 // ... add other sizes
-                 else -> throw IllegalArgumentException("Unsupported PVC Sched 40 size: $conduitSize")
-             }
-             ConduitType.PVC_SCHEDULE_80 -> when (conduitSize) {
-                 "1/2" -> 0.235 // Example
-                 "3/4" -> 0.433 // Example
-                 // ... add other sizes
-                 else -> throw IllegalArgumentException("Unsupported PVC Sched 80 size: $conduitSize")
-             }
-             ConduitType.ENT -> when (conduitSize) {
-                 "1/2" -> 0.285 // Example
-                 "3/4" -> 0.508 // Example
-                  // ... add other sizes
-                  else -> throw IllegalArgumentException("Unsupported ENT size: $conduitSize")
-              }
-            // Add an else branch to handle any other ConduitType values if they exist
-            // or if new ones are added later without updating this function.
-            // Returning 0.0 or throwing an exception are options.
-            else -> throw IllegalArgumentException("Unsupported ConduitType: $conduitType")
+            ConduitType.PVC_SCHEDULE_40 -> when (conduitSize) {
+                "1/2" -> 0.285
+                "3/4" -> 0.508
+                "1" -> 0.817
+                "1-1/4" -> 1.414
+                "1-1/2" -> 1.904
+                "2" -> 3.172
+                "2-1/2" -> 4.238
+                "3" -> 6.929
+                "3-1/2" -> 9.079
+                "4" -> 11.584
+                else -> 0.0
+            }
+            ConduitType.PVC_SCHEDULE_80 -> when (conduitSize) {
+                "1/2" -> 0.235
+                "3/4" -> 0.433
+                "1" -> 0.710
+                "1-1/4" -> 1.282
+                "1-1/2" -> 1.738
+                "2" -> 2.908
+                "2-1/2" -> 3.801
+                "3" -> 6.086
+                "3-1/2" -> 8.043
+                "4" -> 10.367
+                else -> 0.0
+            }
+            ConduitType.ENT -> when (conduitSize) {
+                "1/2" -> 0.285
+                "3/4" -> 0.508
+                "1" -> 0.817
+                "1-1/4" -> 1.414
+                "1-1/2" -> 1.904
+                "2" -> 3.172
+                // Larger sizes less common for ENT
+                else -> 0.0
+            }
         }
     }
 

@@ -48,8 +48,39 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
+        android:fitsSystemWindows="true" >
+        <!-- Removed app:menu attribute -->
 
-        app:menu="@menu/drawer_menu" />
+        <!-- Custom Drawer Content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- Optional Header (Can be replaced with app:headerLayout later if needed) -->
+            <TextView
+                android:id="@+id/textViewDrawerHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Recent Activity"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:background="?attr/colorPrimary"
+                android:textColor="?attr/colorOnPrimary" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewDrawerRecents"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_drawer_recent" /> <!-- Placeholder item layout -->
+
+            <!-- Optional Footer (e.g., Settings, Logout) -->
+            <!-- Add footer items here if needed -->
+
+        </LinearLayout>
+
+    </com.google.android.material.navigation.NavigationView>
         <!-- Removed headerLayout and comment -->
 </androidx.drawerlayout.widget.DrawerLayout>

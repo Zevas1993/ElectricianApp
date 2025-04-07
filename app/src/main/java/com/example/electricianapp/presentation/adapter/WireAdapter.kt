@@ -55,9 +55,8 @@ class WireAdapter(
 
     class WireDiffCallback : DiffUtil.ItemCallback<Wire>() {
         override fun areItemsTheSame(oldItem: Wire, newItem: Wire): Boolean {
-            // In a real app, you might want to use a unique ID if available
-            // For now, comparing object identity or key properties
-            return oldItem.type == newItem.type && oldItem.size == newItem.size // Example: Treat same type/size as same item
+            // Compare by the unique ID added to the Wire data class
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Wire, newItem: Wire): Boolean {

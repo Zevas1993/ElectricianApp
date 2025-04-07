@@ -4,17 +4,101 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".ui.home.HomeFragment">
 
+    <!-- Job Summary Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardJobSummary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp"
+        android:layout_marginBottom="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/textViewJobSummaryTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Job Summary"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/textViewActiveJobsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Active Jobs:"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/textViewJobSummaryTitle"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/textViewActiveJobsCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="5"
+                android:layout_marginStart="8dp"
+                app:layout_constraintTop_toTopOf="@id/textViewActiveJobsLabel"
+                app:layout_constraintBottom_toBottomOf="@id/textViewActiveJobsLabel"
+                app:layout_constraintStart_toEndOf="@id/textViewActiveJobsLabel"/>
+
+            <TextView
+                android:id="@+id/textViewTotalJobsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Jobs:"
+                android:layout_marginTop="4dp"
+                app:layout_constraintTop_toBottomOf="@id/textViewActiveJobsLabel"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/textViewTotalJobsCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="20"
+                android:layout_marginStart="8dp"
+                app:layout_constraintTop_toTopOf="@id/textViewTotalJobsLabel"
+                app:layout_constraintBottom_toBottomOf="@id/textViewTotalJobsLabel"
+                app:layout_constraintStart_toEndOf="@id/textViewTotalJobsLabel"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Quick Access Title -->
     <TextView
-        android:id="@+id/textViewWelcome"
+        android:id="@+id/textViewQuickAccessTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to the Electrician App!"
+        android:text="Quick Access"
         android:textAppearance="?attr/textAppearanceHeadline6"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/cardJobSummary"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <!-- Quick Access Grid -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewQuickAccess"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/textViewQuickAccessTitle"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_home_quick_access"
+        tools:itemCount="4"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"/> <!-- Default to 2 columns -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

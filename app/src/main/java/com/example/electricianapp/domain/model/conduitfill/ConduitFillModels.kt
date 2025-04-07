@@ -30,6 +30,7 @@ enum class WireType {
  * Data class representing a wire/conductor for conduit fill calculations
  */
 data class Wire(
+    val id: Long = System.nanoTime(), // Add a unique ID for DiffUtil
     val type: WireType,
     val size: String,  // AWG or kcmil size (e.g., "14", "12", "1/0", "250") - Note: "AWG" or "kcmil" suffix might be handled separately or assumed based on size value
     val quantity: Int,

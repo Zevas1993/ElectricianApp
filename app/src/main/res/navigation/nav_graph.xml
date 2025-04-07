@@ -10,7 +10,18 @@
         android:id="@+id/homeFragment"
         android:name="com.example.electricianapp.ui.home.HomeFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_calculatorListFragment"
+            app:destination="@id/calculatorListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_jobListFragment"
+            app:destination="@id/jobListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_addEditJobFragment"
+            app:destination="@id/addEditJobFragment" />
+            <!-- TODO: Need to figure out how to pass userId=-1L or current user ID here -->
+    </fragment>
 
     <!-- Login Screen -->
     <fragment
@@ -161,5 +172,22 @@
         android:name="com.example.electricianapp.presentation.fragment.lightinglayout.LightingLayoutFragment"
         android:label="Lighting Layout"
         tools:layout="@layout/fragment_lighting_layout"/>
+
+    <!-- Calculator List Screen (New) -->
+    <fragment
+        android:id="@+id/calculatorListFragment"
+        android:name="com.example.electricianapp.presentation.fragment.calculators.CalculatorListFragment"
+        android:label="Calculators"
+        tools:layout="@layout/fragment_calculator_list">
+        <action
+            android:id="@+id/action_calculatorListFragment_to_dwellingLoadFragment"
+            app:destination="@id/dwellingLoadFragment" />
+        <action
+            android:id="@+id/action_calculatorListFragment_to_conduitFillFragment"
+            app:destination="@id/conduitFillFragment" />
+        <action
+            android:id="@+id/action_calculatorListFragment_to_boxFillFragment"
+            app:destination="@id/boxFillFragment" />
+    </fragment>
 
 </navigation>

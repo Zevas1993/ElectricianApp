@@ -112,6 +112,12 @@ class AddWireDialogFragment(
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        // Set dialog width to match parent
+        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
