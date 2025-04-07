@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+// Remove duplicate Appliance import
+import com.example.electricianapp.data.local.entity.DwellingLoadCalculationEntity // Import Entity
 import com.example.electricianapp.domain.model.dwellingload.Appliance // Corrected import
 import com.example.electricianapp.domain.model.dwellingload.DwellingLoadInput // Corrected import
 import com.example.electricianapp.domain.model.dwellingload.DwellingLoadResult // Corrected import
@@ -49,12 +51,12 @@ class DwellingLoadViewModel @Inject constructor(
     private val _calculationResult = MutableLiveData<DwellingLoadResult>()
     val calculationResult: LiveData<DwellingLoadResult> = _calculationResult
 
-    // Calculation history
-    private val _calculationHistory = MutableLiveData<List<Pair<DwellingLoadInput, DwellingLoadResult>>>()
-    val calculationHistory: LiveData<List<Pair<DwellingLoadInput, DwellingLoadResult>>> = _calculationHistory
+    // Calculation history - Now holds entities directly
+    private val _calculationHistory = MutableLiveData<List<DwellingLoadCalculationEntity>>()
+    val calculationHistory: LiveData<List<DwellingLoadCalculationEntity>> = _calculationHistory
 
     init {
-        loadCalculationHistory()
+        // loadCalculationHistory() // Load history on init if desired
     }
 
     /**
@@ -130,12 +132,12 @@ class DwellingLoadViewModel @Inject constructor(
                 )
 
                 val result = calculateDwellingLoadUseCase(input)
-                _calculationResult.value = result
+                _calculationResult.value = result // Keep updating the current result LiveData
                 _uiState.value = DwellingLoadUiState.Success(result)
 
-                // Save calculation to history
-                dwellingLoadRepository.saveCalculation(input, result)
-                loadCalculationHistory()
+                // Don't save automatically here anymore
+                // dwellingLoadRepository.saveCalculation(input, result)
+                // loadCalculationHistory()
             } catch (e: Exception) {
                 _uiState.value = DwellingLoadUiState.Error(e.message ?: "Unknown error occurred")
             }
@@ -143,12 +145,13 @@ class DwellingLoadViewModel @Inject constructor(
     }
 
     /**
-     * Load calculation history from repository
+     * Load saved calculation history from repository
      */
-    private fun loadCalculationHistory() {
+    fun loadCalculationHistory() { // Make public if needed to refresh manually
         viewModelScope.launch {
-            dwellingLoadRepository.getCalculationHistory().collect { history ->
-                _calculationHistory.value = history
+            // dwellingLoadRepository.getCalculationHistory().collect { history -> // Old method call
+            dwellingLoadRepository.getSavedCalculations().collect { history -> // Use updated repo method name
+                _calculationHistory.value = history // Update LiveData with entities
             }
         }
     }
@@ -168,25 +171,71 @@ class DwellingLoadViewModel @Inject constructor(
      */
     fun deleteCalculation(id: Long) {
         viewModelScope.launch {
-            dwellingLoadRepository.deleteCalculation(id)
-            loadCalculationHistory()
+            // Fetch the entity first, then delete if found
+            dwellingLoadRepository.getCalculationById(id)?.let { entityToDelete ->
+                dwellingLoadRepository.deleteCalculation(entityToDelete) // Pass the entity to delete
+                loadCalculationHistory() // Refresh history
+            }
         }
     }
 
     /**
-     * Load a saved calculation
+     * Load a saved calculation into the current input fields and result state
      */
     fun loadCalculation(id: Long) {
         viewModelScope.launch {
-            val calculation = dwellingLoadRepository.getCalculationById(id)
-            calculation?.let { (input, result) ->
-                _dwellingType.value = input.dwellingType
-                _squareFootage.value = input.squareFootage
-                _smallApplianceCircuits.value = input.smallApplianceCircuits
-                _laundryCircuits.value = input.laundryCircuits
-                _appliances.value = input.appliances
-                _calculationResult.value = result
-                _uiState.value = DwellingLoadUiState.Success(result)
+            val entity = dwellingLoadRepository.getCalculationById(id) // Get entity
+            entity?.let {
+                // Map entity fields back to LiveData for UI update
+                _dwellingType.value = it.dwellingType
+                _squareFootage.value = it.squareFootage
+                _smallApplianceCircuits.value = it.smallApplianceCircuits
+                _laundryCircuits.value = it.laundryCircuits
+                _appliances.value = it.appliances // This is already List<Appliance>
+
+                // Reconstruct the DwellingLoadResult from the entity
+                val result = DwellingLoadResult(
+                    totalConnectedLoad = it.totalConnectedLoad,
+                    totalDemandLoad = it.totalDemandLoad,
+                    serviceSize = it.serviceSize,
+                    generalLightingLoad = it.generalLightingLoad,
+                    smallApplianceLoad = it.smallApplianceLoad,
+                    laundryLoad = it.laundryLoad,
+                    applianceLoads = it.applianceLoads,
+                    demandFactors = it.demandFactors
+                )
+                _calculationResult.value = result // Update the result LiveData
+                _uiState.value = DwellingLoadUiState.Success(result) // Update UI state
+            }
+        }
+    }
+
+    /**
+     * Save the current calculation state with a given name.
+     */
+    fun saveCurrentCalculation(name: String) {
+        viewModelScope.launch {
+            val currentInput = DwellingLoadInput(
+                dwellingType = _dwellingType.value ?: DwellingType.RESIDENTIAL,
+                squareFootage = _squareFootage.value ?: 0.0,
+                smallApplianceCircuits = _smallApplianceCircuits.value ?: 2,
+                laundryCircuits = _laundryCircuits.value ?: 1,
+                appliances = _appliances.value ?: emptyList()
+            )
+            val currentResult = _calculationResult.value
+
+            if (currentResult != null) {
+                try {
+                    dwellingLoadRepository.saveCalculation(currentInput, currentResult, name)
+                    // Optionally refresh history or show success message
+                    loadCalculationHistory() // Refresh history list
+                } catch (e: Exception) {
+                    // Handle save error (e.g., show a Toast)
+                     _uiState.value = DwellingLoadUiState.Error("Failed to save calculation: ${e.message}")
+                }
+            } else {
+                // Handle case where there is no result to save
+                 _uiState.value = DwellingLoadUiState.Error("No calculation result available to save.")
             }
         }
     }

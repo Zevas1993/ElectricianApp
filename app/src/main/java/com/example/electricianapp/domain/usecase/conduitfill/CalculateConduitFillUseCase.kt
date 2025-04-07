@@ -149,8 +149,7 @@ class CalculateConduitFillUseCase @Inject constructor() {
             numberOfConductors <= 0 -> 0.0 // No conductors, 0% fill allowed conceptually
             numberOfConductors == 1 -> 53.0  // Over 2 wires note 1: "Use 53 percent for 1 conductor"
             numberOfConductors == 2 -> 31.0  // Over 2 wires note 2: "Use 31 percent for 2 conductors"
-            numberOfConductors >= 3 -> 40.0  // Over 2 wires: 40% fill
-            else -> 40.0 // Default case to make when exhaustive
+            else -> 40.0 // Covers >= 3 and any other theoretical case
         }
     }
 }

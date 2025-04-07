@@ -1,25 +1,20 @@
 package com.example.electricianapp.presentation.adapter // Corrected package
 
-import android.view.LayoutInflater
-import android.view.View
+import android.view.LayoutInflater // Keep only one import
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.electricianapp.R // Corrected import
+import com.example.electricianapp.databinding.ItemApplianceResultBinding // Import ViewBinding
 import com.example.electricianapp.presentation.fragment.dwellingload.DwellingLoadResultsFragment // Corrected import
 import java.text.NumberFormat
 
 class ApplianceResultAdapter : ListAdapter<DwellingLoadResultsFragment.ApplianceResult, ApplianceResultAdapter.ApplianceResultViewHolder>(ApplianceResultDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ApplianceResultViewHolder {
-        // TODO: Replace R.layout.item_appliance_result with the actual layout file name if different
-        // TODO: Fix layout inflation and view finding
-        val view = View(parent.context) // Placeholder View
-        // val view = LayoutInflater.from(parent.context)
-        //     .inflate(R.layout.item_appliance_result, parent, false)
-        return ApplianceResultViewHolder(view)
+        // Inflate using ViewBinding
+        val binding = ItemApplianceResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ApplianceResultViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ApplianceResultViewHolder, position: Int) {
@@ -27,23 +22,19 @@ class ApplianceResultAdapter : ListAdapter<DwellingLoadResultsFragment.Appliance
         holder.bind(applianceResult)
     }
 
-    class ApplianceResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-         // TODO: Replace R.id.* with actual IDs from your item_appliance_result.xml layout
-         // TODO: Fix findViewById calls
-        // private val applianceNameTextView: TextView = itemView.findViewById(R.id.applianceNameTextView)
-        // private val connectedLoadTextView: TextView = itemView.findViewById(R.id.connectedLoadTextView)
-        // private val demandFactorTextView: TextView = itemView.findViewById(R.id.demandFactorTextView)
-        // private val demandLoadTextView: TextView = itemView.findViewById(R.id.demandLoadTextView)
+    // Update ViewHolder to use ViewBinding
+    class ApplianceResultViewHolder(private val binding: ItemApplianceResultBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(applianceResult: DwellingLoadResultsFragment.ApplianceResult) {
             val numberFormat = NumberFormat.getNumberInstance().apply {
                 maximumFractionDigits = 1
             }
+            val vaFormat = { value: Double -> "${numberFormat.format(value)} VA" }
 
-            // applianceNameTextView.text = applianceResult.name
-            // connectedLoadTextView.text = "${numberFormat.format(applianceResult.connectedLoad)} VA"
-            // demandFactorTextView.text = "${(applianceResult.demandFactor * 100).toInt()}%"
-            // demandLoadTextView.text = "${numberFormat.format(applianceResult.demandLoad)} VA"
+            binding.applianceNameTextView.text = applianceResult.name
+            binding.connectedLoadTextView.text = "Connected: ${vaFormat(applianceResult.connectedLoad)}"
+            binding.demandFactorTextView.text = "Demand Factor: ${(applianceResult.demandFactor * 100).toInt()}%"
+            binding.demandLoadTextView.text = vaFormat(applianceResult.demandLoad)
         }
     }
 

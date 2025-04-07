@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "26625cd1ad748dc470926f019d6205e8",
+    "identityHash": "1e60ad198e3665ea79f51a4dd04b2129",
     "entities": [
       {
         "tableName": "box_fill_inputs",
@@ -231,13 +231,19 @@
         "foreignKeys": []
       },
       {
-        "tableName": "dwelling_load_history",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `dwellingType` TEXT NOT NULL, `squareFootage` REAL NOT NULL, `smallApplianceCircuits` INTEGER NOT NULL, `laundryCircuits` INTEGER NOT NULL, `appliancesJson` TEXT NOT NULL, `totalConnectedLoad` REAL NOT NULL, `totalDemandLoad` REAL NOT NULL, `serviceSize` INTEGER NOT NULL, `generalLightingLoad` REAL NOT NULL, `smallApplianceLoad` REAL NOT NULL, `laundryLoad` REAL NOT NULL, `applianceLoadsJson` TEXT NOT NULL, `demandFactorsJson` TEXT NOT NULL)",
+        "tableName": "dwelling_load_calculations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `calculationName` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `dwellingType` TEXT NOT NULL, `squareFootage` REAL NOT NULL, `smallApplianceCircuits` INTEGER NOT NULL, `laundryCircuits` INTEGER NOT NULL, `appliances` TEXT NOT NULL, `totalConnectedLoad` REAL NOT NULL, `totalDemandLoad` REAL NOT NULL, `serviceSize` INTEGER NOT NULL, `generalLightingLoad` REAL NOT NULL, `smallApplianceLoad` REAL NOT NULL, `laundryLoad` REAL NOT NULL, `applianceLoads` TEXT NOT NULL, `demandFactors` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "calculationName",
+            "columnName": "calculationName",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -271,8 +277,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "appliancesJson",
-            "columnName": "appliancesJson",
+            "fieldPath": "appliances",
+            "columnName": "appliances",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -313,14 +319,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "applianceLoadsJson",
-            "columnName": "applianceLoadsJson",
+            "fieldPath": "applianceLoads",
+            "columnName": "applianceLoads",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "demandFactorsJson",
-            "columnName": "demandFactorsJson",
+            "fieldPath": "demandFactors",
+            "columnName": "demandFactors",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -338,7 +344,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '26625cd1ad748dc470926f019d6205e8')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1e60ad198e3665ea79f51a4dd04b2129')"
     ]
   }
 }

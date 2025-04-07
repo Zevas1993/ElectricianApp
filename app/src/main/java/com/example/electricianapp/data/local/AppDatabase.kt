@@ -13,7 +13,7 @@ import com.example.electricianapp.data.local.dao.DwellingLoadDao // Corrected im
 import com.example.electricianapp.data.local.entity.BoxFillInputEntity // Corrected import path
 import com.example.electricianapp.data.local.entity.BoxFillResultEntity // Corrected import path
 import com.example.electricianapp.data.local.entity.ConduitFillEntity // Corrected import path
-import com.example.electricianapp.data.local.entity.DwellingLoadEntity // Corrected import path
+import com.example.electricianapp.data.local.entity.DwellingLoadCalculationEntity // Import the new entity
 // TODO: Add Entities for Job/Task/User if merging functionality later
 // import com.example.electricianapp.data.model.JobEntity
 // import com.example.electricianapp.data.model.TaskEntity
@@ -26,7 +26,7 @@ import com.example.electricianapp.data.local.converter.Converters // Corrected i
         BoxFillInputEntity::class, // Assuming these exist or will be created
         BoxFillResultEntity::class, // Assuming these exist or will be created
         ConduitFillEntity::class, // Assuming these exist or will be created
-        DwellingLoadEntity::class, // Assuming these exist or will be created
+        DwellingLoadCalculationEntity::class, // Replace with the new entity
 
         // Entities from Job/Task App (Comment out if replacing functionality)
         // com.example.electricianapp.data.model.UserEntity::class,

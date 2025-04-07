@@ -5,6 +5,10 @@ import androidx.room.TypeConverter
 // import com.example.electricianapp.domain.model.ApplianceType
 // import com.example.electricianapp.domain.model.PhaseType
 import java.util.Date // Import Date for potential future use
+import com.example.electricianapp.domain.model.dwellingload.Appliance // Import Appliance
+import com.example.electricianapp.domain.model.dwellingload.DwellingType // Import DwellingType
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 /**
  * Type converters for Room database.
@@ -114,5 +118,39 @@ class Converters {
     @TypeConverter
     fun toDoubleList(value: String?): List<Double>? {
         return value?.takeIf { it.isNotBlank() }?.split(",")?.mapNotNull { it.toDoubleOrNull() }
+    }
+
+    // --- Converters for DwellingLoadCalculationEntity ---
+
+    @TypeConverter
+    fun fromDwellingType(type: DwellingType?): String? {
+        return type?.name
+    }
+
+    @TypeConverter
+    fun toDwellingType(value: String?): DwellingType? {
+        return value?.let { enumValueOf<DwellingType>(it) }
+    }
+
+    @TypeConverter
+    fun fromApplianceList(list: List<Appliance>?): String? {
+        return Gson().toJson(list)
+    }
+
+    @TypeConverter
+    fun toApplianceList(value: String?): List<Appliance>? {
+        val listType = object : TypeToken<List<Appliance>>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromStringDoubleMap(map: Map<String, Double>?): String? {
+        return Gson().toJson(map)
+    }
+
+    @TypeConverter
+    fun toStringDoubleMap(value: String?): Map<String, Double>? {
+        val mapType = object : TypeToken<Map<String, Double>>() {}.type
+        return Gson().fromJson(value, mapType)
     }
 }

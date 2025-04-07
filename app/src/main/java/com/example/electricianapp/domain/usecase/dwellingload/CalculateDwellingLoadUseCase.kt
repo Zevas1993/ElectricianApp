@@ -36,7 +36,7 @@ class CalculateDwellingLoadUseCase @Inject constructor() { // Added @Inject cons
 
         // Calculate appliance loads and apply demand factors (NEC 220.53, 220.54, 220.55)
         val (applianceLoads, applianceDemandFactors) = calculateApplianceDemandLoads(input.appliances)
-        val totalApplianceDemandLoad = applianceLoads.entries.sumByDouble { (name, load) ->
+        val totalApplianceDemandLoad = applianceLoads.entries.sumOf { (name, load) -> // Replace sumByDouble with sumOf
             load * (applianceDemandFactors[name] ?: 1.0)
         }
 

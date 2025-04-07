@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.fragment.dwellingload.DwellingLoadResultsFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dwelling Load Calculation Results"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- General Lighting Load -->
+        <TextView
+            android:id="@+id/generalLightingLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="General Lighting Load:"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleTextView" />
+
+        <TextView
+            android:id="@+id/generalLightingValueTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintBaseline_toBaselineOf="@id/generalLightingLabel"
+            app:layout_constraintStart_toEndOf="@id/generalLightingLabel"
+            tools:text="3000 VA" />
+
+        <!-- Small Appliance Load -->
+        <TextView
+            android:id="@+id/smallApplianceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Small Appliance Load:"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generalLightingLabel" />
+
+        <TextView
+            android:id="@+id/smallApplianceValueTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintBaseline_toBaselineOf="@id/smallApplianceLabel"
+            app:layout_constraintStart_toEndOf="@id/smallApplianceLabel"
+            tools:text="3000 VA" />
+
+        <!-- Laundry Load -->
+        <TextView
+            android:id="@+id/laundryLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Laundry Load:"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/smallApplianceLabel" />
+
+        <TextView
+            android:id="@+id/laundryValueTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintBaseline_toBaselineOf="@id/laundryLabel"
+            app:layout_constraintStart_toEndOf="@id/laundryLabel"
+            tools:text="1500 VA" />
+
+        <!-- Appliance Breakdown Title -->
+        <TextView
+            android:id="@+id/applianceBreakdownTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Appliance Breakdown"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/laundryLabel" />
+
+        <!-- Appliance Results RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/applianceResultsRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:nestedScrollingEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/applianceBreakdownTitle"
+            tools:itemCount="3"
+            tools:listitem="@layout/item_appliance_result" /> <!-- Assuming item_appliance_result.xml exists -->
+
+        <!-- Total Connected Load -->
+        <TextView
+            android:id="@+id/totalConnectedLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Total Connected Load:"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/applianceResultsRecyclerView" />
+
+        <TextView
+            android:id="@+id/totalConnectedValueTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@id/totalConnectedLabel"
+            app:layout_constraintStart_toEndOf="@id/totalConnectedLabel"
+            tools:text="15000 VA" />
+
+        <!-- Total Demand Load -->
+        <TextView
+            android:id="@+id/totalDemandLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Total Demand Load:"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/totalConnectedLabel" />
+
+        <TextView
+            android:id="@+id/totalDemandValueTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            app:layout_constraintBaseline_toBaselineOf="@id/totalDemandLabel"
+            app:layout_constraintStart_toEndOf="@id/totalDemandLabel"
+            tools:text="12500 VA" />
+
+        <!-- Optional: Add buttons for saving, sharing, etc. -->
+        <Button
+            android:id="@+id/saveCalculationButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Save Calculation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/totalDemandLabel"
+            style="@style/Widget.MaterialComponents.Button.TextButton" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

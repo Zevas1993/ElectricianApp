@@ -1,14 +1,11 @@
 package com.example.electricianapp.presentation.adapter // Corrected package
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.electricianapp.R // Corrected import
+import com.example.electricianapp.databinding.ItemWireBinding // Import ViewBinding
 import com.example.electricianapp.domain.model.conduitfill.Wire // Corrected import
 
 class WireAdapter(
@@ -21,40 +18,38 @@ class WireAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WireViewHolder {
-        // TODO: Replace R.layout.item_wire with the actual layout file name if different
-        // TODO: Fix layout inflation and view finding
-        val view = View(parent.context) // Placeholder View
-        // val view = LayoutInflater.from(parent.context)
-        //     .inflate(R.layout.item_wire, parent, false)
-        return WireViewHolder(view)
+        // Inflate using ViewBinding
+        val binding = ItemWireBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return WireViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: WireViewHolder, position: Int) {
         val wire = getItem(position)
-        holder.bind(wire, position, listener)
+        // Pass adapterPosition to listener methods if needed, otherwise it's not required in bind
+        holder.bind(wire, listener)
     }
 
-    class WireViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // TODO: Replace R.id.* with actual IDs from your item_wire.xml layout
-        // TODO: Fix findViewById calls
-        // private val wireTypeTextView: TextView = itemView.findViewById(R.id.wireTypeTextView)
-        // private val wireSizeTextView: TextView = itemView.findViewById(R.id.wireSizeTextView)
-        // private val quantityTextView: TextView = itemView.findViewById(R.id.quantityTextView)
-        // private val editButton: Button = itemView.findViewById(R.id.editButton)
-        // private val removeButton: Button = itemView.findViewById(R.id.removeButton)
+    // Update ViewHolder to use ViewBinding
+    class WireViewHolder(private val binding: ItemWireBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(wire: Wire, position: Int, listener: WireItemListener) {
-            // wireTypeTextView.text = wire.type.name
-            // wireSizeTextView.text = wire.size
-            // quantityTextView.text = "Qty: ${wire.quantity}"
+        fun bind(wire: Wire, listener: WireItemListener) {
+            binding.wireTypeTextView.text = wire.type.name // Assuming WireType is an enum with a name property
+            binding.wireSizeTextView.text = wire.size
+            binding.quantityTextView.text = "Qty: ${wire.quantity}"
 
-            // editButton.setOnClickListener {
-            //     listener.onEditWire(position, wire)
-            // }
+            binding.editButton.setOnClickListener {
+                // Use adapterPosition for accurate item position
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    listener.onEditWire(adapterPosition, wire)
+                }
+            }
 
-            // removeButton.setOnClickListener {
-            //     listener.onRemoveWire(position)
-            // }
+            binding.removeButton.setOnClickListener {
+                // Use adapterPosition for accurate item position
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    listener.onRemoveWire(adapterPosition)
+                }
+            }
         }
     }
 

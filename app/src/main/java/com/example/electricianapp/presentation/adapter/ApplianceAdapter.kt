@@ -1,14 +1,11 @@
 package com.example.electricianapp.presentation.adapter // Corrected package
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.electricianapp.R // Corrected import
+import com.example.electricianapp.databinding.ItemApplianceBinding // Import ViewBinding
 import com.example.electricianapp.domain.model.dwellingload.Appliance // Corrected import
 
 class ApplianceAdapter(
@@ -21,29 +18,22 @@ class ApplianceAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ApplianceViewHolder {
-         // TODO: Replace R.layout.item_appliance with the actual layout file name if different
-         // TODO: Fix layout inflation and view finding
-         val view = View(parent.context) // Placeholder View
-        // val view = LayoutInflater.from(parent.context)
-        //     .inflate(R.layout.item_appliance, parent, false)
-        return ApplianceViewHolder(view)
+        // Inflate using ViewBinding
+        val binding = ItemApplianceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ApplianceViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ApplianceViewHolder, position: Int) {
         val appliance = getItem(position)
-        holder.bind(appliance, position, listener)
+        // Pass adapterPosition to listener methods if needed, otherwise it's not required in bind
+        holder.bind(appliance, listener)
     }
 
-    class ApplianceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // TODO: Replace R.id.* with actual IDs from your item_appliance.xml layout
-        // TODO: Fix findViewById calls
-        // private val applianceNameTextView: TextView = itemView.findViewById(R.id.applianceNameTextView)
-        // private val applianceDetailsTextView: TextView = itemView.findViewById(R.id.applianceDetailsTextView)
-        // private val editButton: Button = itemView.findViewById(R.id.editButton)
-        // private val removeButton: Button = itemView.findViewById(R.id.removeButton)
+    // Update ViewHolder to use ViewBinding
+    class ApplianceViewHolder(private val binding: ItemApplianceBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(appliance: Appliance, position: Int, listener: ApplianceItemListener) {
-            // applianceNameTextView.text = appliance.name
+        fun bind(appliance: Appliance, listener: ApplianceItemListener) {
+            binding.applianceNameTextView.text = appliance.name
 
             val details = buildString {
                 append("${appliance.wattage}W")
@@ -55,16 +45,21 @@ class ApplianceAdapter(
                     append(" (${(appliance.demandFactor * 100).toInt()}% demand factor)")
                 }
             }
+            binding.applianceDetailsTextView.text = details // Assign details string
 
-            // applianceDetailsTextView.text = details
+            binding.editButton.setOnClickListener {
+                // Use adapterPosition for accurate item position
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    listener.onEditAppliance(adapterPosition, appliance)
+                }
+            }
 
-            // editButton.setOnClickListener {
-            //     listener.onEditAppliance(position, appliance)
-            // }
-
-            // removeButton.setOnClickListener {
-            //     listener.onRemoveAppliance(position)
-            // }
+            binding.removeButton.setOnClickListener {
+                // Use adapterPosition for accurate item position
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    listener.onRemoveAppliance(adapterPosition)
+                }
+            }
         }
     }
 
