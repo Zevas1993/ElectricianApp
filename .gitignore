@@ -74,3 +74,4 @@ ehthumbs.db
 *.ipr
 *.iws
 .DS_Store
+.qodo

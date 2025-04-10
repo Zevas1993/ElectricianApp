@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/arViewLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="?android:attr/colorBackground">
+    tools:context=".presentation.fragment.arview.ArViewFragment">
 
-    <TextView
-        android:id="@+id/arViewText"
+    <!-- Container for the AR Fragment -->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/arFragmentContainer"
+        android:name="com.google.ar.sceneform.ux.ArFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- You could overlay other UI elements here if needed -->
+    <!-- e.g., a button to place an object -->
+    <!-- <Button
+        android:id="@+id/placeObjectButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="AR View Feature – Under Construction"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="Place Object"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="24dp"/> -->
+
 </FrameLayout>

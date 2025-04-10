@@ -7,12 +7,20 @@ import com.example.electricianapp.data.repository.boxfill.BoxFillRepositoryImpl 
 import com.example.electricianapp.data.repository.conduitfill.ConduitFillRepositoryImpl // Specific import
 import com.example.electricianapp.data.repository.dwellingload.DwellingLoadRepositoryImpl // Specific import
 import com.example.electricianapp.data.repository.jobs.JobRepositoryImpl // Explicit import for new Job Repo Impl
+import com.example.electricianapp.data.repository.MaterialRepositoryImpl // Import for Material repo impl
+import com.example.electricianapp.data.repository.neccodes.NecCodeRepositoryImpl // Import for NEC code repo
+import com.example.electricianapp.data.repository.photodoc.PhotoDocRepositoryImpl // Import for photo documentation repo
+import com.example.electricianapp.data.repository.voltagedrop.VoltageDropRepositoryImpl // Import for voltage drop repo
 // import com.example.electricianapp.domain.repository.TaskRepository // Commented out as file is missing or incorrect
 // import com.example.electricianapp.domain.repository.UserRepository // Commented out as file is missing
 import com.example.electricianapp.domain.repository.boxfill.BoxFillRepository // Specific import
 import com.example.electricianapp.domain.repository.conduitfill.ConduitFillRepository // Specific import
 import com.example.electricianapp.domain.repository.dwellingload.DwellingLoadRepository // Specific import
 import com.example.electricianapp.domain.repository.jobs.JobRepository // Explicit import for new Job Repo Interface
+import com.example.electricianapp.domain.repository.materials.MaterialRepository // Import for Material repo interface
+import com.example.electricianapp.domain.repository.neccodes.NecCodeRepository // Import for NEC code repo interface
+import com.example.electricianapp.domain.repository.photodoc.PhotoDocRepository // Import for photo documentation repo interface
+import com.example.electricianapp.domain.repository.voltagedrop.VoltageDropRepository // Import for voltage drop repo interface
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -99,4 +107,40 @@ abstract class RepositoryModule {
     abstract fun bindBoxFillRepository(
         boxFillRepositoryImpl: BoxFillRepositoryImpl
     ): BoxFillRepository
+
+    /**
+     * Binds the VoltageDropRepository interface to its concrete implementation VoltageDropRepositoryImpl.
+     */
+    @Binds
+    @Singleton
+    abstract fun bindVoltageDropRepository(
+        voltageDropRepositoryImpl: VoltageDropRepositoryImpl
+    ): VoltageDropRepository
+
+    /**
+     * Binds the NecCodeRepository interface to its concrete implementation NecCodeRepositoryImpl.
+     */
+    @Binds
+    @Singleton
+    abstract fun bindNecCodeRepository(
+        necCodeRepositoryImpl: NecCodeRepositoryImpl
+    ): NecCodeRepository
+
+    /**
+     * Binds the PhotoDocRepository interface to its concrete implementation PhotoDocRepositoryImpl.
+     */
+    @Binds
+    @Singleton
+    abstract fun bindPhotoDocRepository(
+        photoDocRepositoryImpl: PhotoDocRepositoryImpl
+    ): PhotoDocRepository
+
+    /**
+     * Binds the MaterialRepository interface to its concrete implementation MaterialRepositoryImpl.
+     */
+    @Binds
+    @Singleton
+    abstract fun bindMaterialRepository(
+        materialRepositoryImpl: MaterialRepositoryImpl
+    ): MaterialRepository
 }

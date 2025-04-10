@@ -50,23 +50,29 @@ class HomeViewModel @Inject constructor(
             QuickAccessItem(
                 id = "jobs",
                 label = "Jobs",
-                iconResId = R.drawable.ic_launcher_foreground, // Placeholder
+                iconResId = R.drawable.ic_job,
                 navigationActionId = R.id.action_homeFragment_to_jobListFragment
             ),
             QuickAccessItem(
                 id = "add_job",
                 label = "Add Job",
-                iconResId = R.drawable.ic_launcher_foreground, // Placeholder
+                iconResId = R.drawable.ic_add_job,
                 navigationActionId = R.id.action_homeFragment_to_addEditJobFragment
                 // TODO: Need to pass arguments for Add Job (userId, jobId=-1)
             ),
             QuickAccessItem(
                 id = "calculators",
                 label = "Calculators",
-                iconResId = R.drawable.ic_launcher_foreground, // Placeholder
+                iconResId = R.drawable.ic_calculator,
                 navigationActionId = R.id.action_homeFragment_to_calculatorListFragment
+            ),
+            QuickAccessItem(
+                id = "inventory",
+                label = "Material Inventory",
+                iconResId = R.drawable.ic_inventory,
+                navigationActionId = R.id.materialInventoryFragment
             )
-            // Add future items like "Inventory", "Tools", "Settings" here
+            // Add future items like "Tools", "Settings" here
         )
         _quickAccessItems.value = items
     }

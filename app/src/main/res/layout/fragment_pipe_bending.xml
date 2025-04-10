@@ -1,15 +1,279 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pipeBendingLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="?android:attr/colorBackground">
+    tools:context=".presentation.fragment.pipebending.PipeBendingFragment">
 
     <TextView
-        android:id="@+id/pipeBendingText"
+        android:id="@+id/textViewTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Pipe Bending Calculator"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupBendType"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/textViewTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <RadioButton
+            android:id="@+id/radioButtonOffset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Offset"
+            android:checked="true"/>
+
+        <RadioButton
+            android:id="@+id/radioButtonSaddle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="3-Point Saddle"/>
+    </RadioGroup>
+
+    <!-- Offset Input Fields (Initially Visible) -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldOffsetAmount"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Offset Amount (inches)"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/radioGroupBendType">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextOffsetAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Saddle Input Fields (Initially Gone) -->
+     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldObstacleDiameter"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Obstacle Diameter/Height (inches)"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/radioGroupBendType"
+        tools:visibility="visible">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextObstacleDiameter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldAngle"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Bend Angle (degrees)"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textFieldOffsetAmount">
+        <!-- Note: This angle field is reused for both Offset and Saddle (center angle) -->
+        <!-- Consider adding separate angle inputs if saddle side angles need to be different -->
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextAngle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/buttonCalculate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pipe Bending Feature – Under Construction"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-</FrameLayout>
+        android:layout_marginTop="16dp"
+        android:text="Calculate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textFieldAngle" />
+
+    <TextView
+        android:id="@+id/textViewResultTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Results:"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonCalculate" />
+
+    <!-- Offset Results (Initially Visible) -->
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupOffsetResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="textViewMultiplierLabel,textViewMultiplierValue,textViewShrinkLabel,textViewShrinkValue,textViewTravelLabel,textViewTravelValue,textViewDistanceLabel,textViewDistanceValue"
+        />
+
+    <TextView
+        android:id="@+id/textViewMultiplierLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Multiplier:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewResultTitle" />
+
+    <TextView
+        android:id="@+id/textViewMultiplierValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAppearance="?attr/textAppearanceBody1"
+        app:layout_constraintBaseline_toBaselineOf="@id/textViewMultiplierLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textViewMultiplierLabel"
+        tools:text="1.414" />
+
+    <TextView
+        android:id="@+id/textViewShrinkLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Shrink:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewMultiplierLabel" />
+
+    <TextView
+        android:id="@+id/textViewShrinkValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAppearance="?attr/textAppearanceBody1"
+        app:layout_constraintBaseline_toBaselineOf="@id/textViewShrinkLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textViewShrinkLabel"
+        tools:text="0.25 inches" />
+
+    <TextView
+        android:id="@+id/textViewTravelLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Travel:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewShrinkLabel" />
+
+    <TextView
+        android:id="@+id/textViewTravelValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAppearance="?attr/textAppearanceBody1"
+        app:layout_constraintBaseline_toBaselineOf="@id/textViewTravelLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textViewTravelLabel"
+        tools:text="14.14 inches" />
+
+    <TextView
+        android:id="@+id/textViewDistanceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Distance Between Bends:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewTravelLabel" />
+
+    <TextView
+        android:id="@+id/textViewDistanceValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAppearance="?attr/textAppearanceBody1"
+        app:layout_constraintBaseline_toBaselineOf="@id/textViewDistanceLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textViewDistanceLabel"
+        tools:text="14.14 inches" />
+
+    <!-- Saddle Results (Initially Gone) -->
+     <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupSaddleResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="textViewCenterMarkLabel,textViewCenterMarkValue,textViewSideMarkLabel,textViewSideMarkValue"
+        tools:visibility="visible"
+        />
+
+    <TextView
+        android:id="@+id/textViewCenterMarkLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Center Mark Distance:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewResultTitle" />
+
+    <TextView
+        android:id="@+id/textViewCenterMarkValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAppearance="?attr/textAppearanceBody1"
+        app:layout_constraintBaseline_toBaselineOf="@id/textViewCenterMarkLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textViewCenterMarkLabel"
+        tools:text="10.0 inches" />
+
+    <TextView
+        android:id="@+id/textViewSideMarkLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Side Mark Distance:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewCenterMarkLabel" />
+
+    <TextView
+        android:id="@+id/textViewSideMarkValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAppearance="?attr/textAppearanceBody1"
+        app:layout_constraintBaseline_toBaselineOf="@id/textViewSideMarkLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textViewSideMarkLabel"
+        tools:text="5.0 inches" />
+
+
+    <TextView
+        android:id="@+id/textViewError"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColor="@android:color/holo_red_dark"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewDistanceLabel"  />
+        <!-- Constraint adjusted, might need further refinement based on which group is visible -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

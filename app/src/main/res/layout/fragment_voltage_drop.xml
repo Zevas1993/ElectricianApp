@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".presentation.fragment.calculators.VoltageDropFragment">
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Voltage Drop Calculator"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Voltage Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldVoltage"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:hint="Voltage (V)"
+        app:layout_constraintEnd_toStartOf="@id/textFieldPhase"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewTitle">
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteVoltage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            tools:ignore="LabelFor" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Phase Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldPhase"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:hint="Phase"
+        app:layout_constraintBaseline_toBaselineOf="@id/textFieldVoltage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textFieldVoltage">
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompletePhase"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            tools:ignore="LabelFor" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Material Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldMaterial"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:hint="Conductor Material"
+        app:layout_constraintEnd_toStartOf="@id/textFieldWireSize"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textFieldVoltage">
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteMaterial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            tools:ignore="LabelFor" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Wire Size Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldWireSize"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:hint="Wire Size (AWG)"
+        app:layout_constraintBaseline_toBaselineOf="@id/textFieldMaterial"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textFieldMaterial">
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteWireSize"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            tools:ignore="LabelFor" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Load Current Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldLoadCurrent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:hint="Load Current (A)"
+        app:layout_constraintEnd_toStartOf="@id/textFieldDistance"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textFieldMaterial">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextLoadCurrent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Distance Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldDistance"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:hint="Distance (ft)"
+        app:layout_constraintBaseline_toBaselineOf="@id/textFieldLoadCurrent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textFieldLoadCurrent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/buttonCalculate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Calculate Voltage Drop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textFieldLoadCurrent" />
+
+    <TextView
+        android:id="@+id/textViewResultTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Results:"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonCalculate" />
+
+    <TextView
+        android:id="@+id/textViewVoltageDropLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Voltage Drop:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewResultTitle" />
+
+    <TextView
+        android:id="@+id/textViewVoltageDropValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAppearance="?attr/textAppearanceBody1"
+        app:layout_constraintBaseline_toBaselineOf="@id/textViewVoltageDropLabel"
+        app:layout_constraintStart_toEndOf="@id/textViewVoltageDropLabel"
+        tools:text="3.5 V" />
+
+    <TextView
+        android:id="@+id/textViewVoltageDropPercentLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Percentage:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewVoltageDropLabel" />
+
+    <TextView
+        android:id="@+id/textViewVoltageDropPercentValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAppearance="?attr/textAppearanceBody1"
+        app:layout_constraintBaseline_toBaselineOf="@id/textViewVoltageDropPercentLabel"
+        app:layout_constraintStart_toEndOf="@id/textViewVoltageDropPercentLabel"
+        tools:text="2.9 %" />
+
+     <TextView
+        android:id="@+id/textViewEndVoltageLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="End Voltage:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewVoltageDropPercentLabel" />
+
+    <TextView
+        android:id="@+id/textViewEndVoltageValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAppearance="?attr/textAppearanceBody1"
+        app:layout_constraintBaseline_toBaselineOf="@id/textViewEndVoltageLabel"
+        app:layout_constraintStart_toEndOf="@id/textViewEndVoltageLabel"
+        tools:text="116.5 V" />
+
+    <TextView
+        android:id="@+id/textViewRecommendationLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Recommendation:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewEndVoltageLabel" />
+
+    <TextView
+        android:id="@+id/textViewRecommendationValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAppearance="?attr/textAppearanceBody1"
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@id/textViewRecommendationLabel"
+        app:layout_constraintStart_toEndOf="@id/textViewRecommendationLabel"
+        tools:text="Within NEC recommended limits"
+        tools:textColor="@android:color/holo_green_dark" />
+
+    <TextView
+        android:id="@+id/textViewErrorMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColor="@android:color/holo_red_dark"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewRecommendationLabel"
+        tools:text="Error message here"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

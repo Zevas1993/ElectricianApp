@@ -25,6 +25,14 @@
         </menu>
     </item>
 
+    <item android:title="Materials">
+        <menu>
+            <item
+                android:id="@+id/materialListFragment"
+                android:title="Material Management" />
+        </menu>
+    </item>
+
     <!-- Add other groups like Tools, Inventory, Settings, Logout later -->
 
 </menu>

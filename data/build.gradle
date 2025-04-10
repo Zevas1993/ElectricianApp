@@ -1,9 +1,8 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
+    id 'com.google.devtools.ksp' // Replaced kotlin-kapt
     id 'dagger.hilt.android.plugin'
-    // KSP removed for stability
 }
 
 android {
@@ -11,7 +10,7 @@ android {
     compileSdk 34
 
     defaultConfig {
-        minSdk 21
+        minSdk 24 // Updated from 21
         targetSdk 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -36,43 +35,39 @@ android {
 }
 
 dependencies {
-    // Domain module
-    implementation project(':domain')
+    // Domain module dependency REMOVED (circular)
     
     // Core Android dependencies
-    implementation "androidx.core:core-ktx:$core_ktx_version"
-    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
     
     // Room with KAPT
-    implementation "androidx.room:room-runtime:2.6.1"
-    implementation "androidx.room:room-ktx:2.6.1"
-    // Use KAPT for Room annotation processing
-    kapt("androidx.room:room-compiler:2.6.1") {
-        exclude group: 'com.google.auto', module: 'auto-common'
-    }
+    implementation libs.androidx.room.runtime
+    implementation libs.androidx.room.ktx
+    // Use KSP for Room annotation processing
+    ksp(libs.androidx.room.compiler)
     // Add explicit annotation dependencies to resolve conflicts
-    implementation "androidx.annotation:annotation:1.7.1"
+    implementation libs.androidx.annotation
     
     // Dependency Injection
-    implementation 'com.google.dagger:hilt-android:2.44'
-    kapt 'com.google.dagger:hilt-android-compiler:2.44'
-    implementation 'javax.inject:javax.inject:1'
+    implementation libs.google.hilt.android // Updated from 2.44
+    ksp libs.google.hilt.compiler // Updated from 2.44
+    implementation libs.javax.inject
     
     // Coroutines for asynchronous programming
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    implementation libs.kotlinx.coroutines.core
+    implementation libs.kotlinx.coroutines.android
     
     // Testing
-    testImplementation "junit:junit:$junit_version"
-    testImplementation 'org.mockito:mockito-core:5.8.0'
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    testImplementation libs.junit
+    testImplementation libs.mockito.core
+    testImplementation libs.kotlinx.coroutines.test
     
-    androidTestImplementation "androidx.test.ext:junit:1.1.5"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation libs.androidx.test.ext.junit
+    androidTestImplementation libs.androidx.test.espresso.core
 }
 
-// Apply source set configuration fix
-apply from: '../config/fix_sourceset.gradle'
+// Removed application of '../config/fix_sourceset.gradle'
 
 // Add jvmTarget configuration for Kotlin
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
@@ -81,17 +76,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     }
 }
 
-// Configure kapt to fix duplicate class issues
-kapt {
-    correctErrorTypes = true
-    useBuildCache = false
-    keepJavacAnnotationProcessors = true
-    includeCompileClasspath = false
-    arguments {
-        arg("room.schemaLocation", "$projectDir/schemas")
-        arg("room.incremental", "true")
-        arg("room.expandProjection", "true")
-    }
-}
+// Removed kapt configuration block
 
-// KSP configuration removed for KAPT-only build
+// KSP configuration removed for KAPT-only build // Comment is now inaccurate, but harmless

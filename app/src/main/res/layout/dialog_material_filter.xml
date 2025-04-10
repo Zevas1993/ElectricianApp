@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Filter Materials"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewCategoryLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Material Category"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupCategories"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCategoryLabel">
+
+        <RadioButton
+            android:id="@+id/radioButtonWireAndCable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="WIRE AND CABLE" />
+
+        <RadioButton
+            android:id="@+id/radioButtonConduitAndFittings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CONDUIT AND FITTINGS" />
+
+        <RadioButton
+            android:id="@+id/radioButtonBoxesAndEnclosures"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="BOXES AND ENCLOSURES" />
+
+        <RadioButton
+            android:id="@+id/radioButtonDevicesAndReceptacles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DEVICES AND RECEPTACLES" />
+
+        <RadioButton
+            android:id="@+id/radioButtonLightingFixtures"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="LIGHTING FIXTURES" />
+
+        <RadioButton
+            android:id="@+id/radioButtonCircuitBreakers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CIRCUIT BREAKERS" />
+
+        <RadioButton
+            android:id="@+id/radioButtonPanelsAndLoadcenters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PANELS AND LOADCENTERS" />
+
+        <RadioButton
+            android:id="@+id/radioButtonTransformers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TRANSFORMERS" />
+
+        <RadioButton
+            android:id="@+id/radioButtonGroundingEquipment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GROUNDING EQUIPMENT" />
+
+        <RadioButton
+            android:id="@+id/radioButtonTools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TOOLS" />
+
+        <RadioButton
+            android:id="@+id/radioButtonSafetyEquipment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SAFETY EQUIPMENT" />
+
+        <RadioButton
+            android:id="@+id/radioButtonMiscellaneous"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MISCELLANEOUS" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/buttonApplyFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Apply"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupCategories" />
+
+    <Button
+        android:id="@+id/buttonClearFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Clear"
+        app:layout_constraintEnd_toStartOf="@+id/buttonApplyFilter"
+        app:layout_constraintTop_toTopOf="@+id/buttonApplyFilter" />
+
+    <Button
+        android:id="@+id/buttonCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Cancel"
+        app:layout_constraintEnd_toStartOf="@+id/buttonClearFilter"
+        app:layout_constraintTop_toTopOf="@+id/buttonClearFilter" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

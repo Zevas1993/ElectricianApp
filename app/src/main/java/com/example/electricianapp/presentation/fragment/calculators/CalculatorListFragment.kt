@@ -60,10 +60,18 @@ class CalculatorListFragment : Fragment() {
         // Define the list of available calculators
         // TODO: Get these from a more dynamic source or constants file if needed
         val calculators = listOf(
-            CalculatorListItem("dwelling_load", "Dwelling Load Calculator", R.id.action_calculatorListFragment_to_dwellingLoadFragment), // Action ID needs to be created
-            CalculatorListItem("conduit_fill", "Conduit Fill Calculator", R.id.action_calculatorListFragment_to_conduitFillFragment), // Action ID needs to be created
-            CalculatorListItem("box_fill", "Box Fill Calculator", R.id.action_calculatorListFragment_to_boxFillFragment) // Action ID needs to be created
-            // Add more calculators here as they are implemented
+            CalculatorListItem("dwelling_load", "Dwelling Load Calculator", R.id.action_calculatorListFragment_to_dwellingLoadFragment),
+            CalculatorListItem("conduit_fill", "Conduit Fill Calculator", R.id.action_calculatorListFragment_to_conduitFillFragment),
+            CalculatorListItem("box_fill", "Box Fill Calculator", R.id.action_calculatorListFragment_to_boxFillFragment),
+            CalculatorListItem("luminaire", "Luminaire Calculator", R.id.action_calculatorListFragment_to_luminaireCalculatorFragment),
+            CalculatorListItem("pipe_bending", "Pipe Bending Calculator", R.id.action_calculatorListFragment_to_pipeBendingFragment),
+            CalculatorListItem("voltage_drop", "Voltage Drop Calculator", R.id.action_calculatorListFragment_to_voltageDropFragment),
+            CalculatorListItem("nec_code", "NEC Code Lookup", R.id.action_calculatorListFragment_to_necCodeLookupFragment),
+            CalculatorListItem("lighting_layout", "Lighting Layout", R.id.action_calculatorListFragment_to_lightingLayoutFragment),
+            CalculatorListItem("ar_view", "AR View", R.id.action_calculatorListFragment_to_arViewFragment),
+            CalculatorListItem("photo_doc", "Photo Documentation", R.id.action_calculatorListFragment_to_photoDocListFragment),
+            CalculatorListItem("material_management", "Material Management", R.id.action_calculatorListFragment_to_materialListFragment)
+            // Add more calculators/tools here as they are implemented
         )
         calculatorListAdapter.submitList(calculators)
     }

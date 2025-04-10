@@ -108,17 +108,31 @@ class BoxFillViewModel @Inject constructor(
         }
     }
 
-    // Placeholder - Needs actual implementation based on NEC tables or user input handling
-    private fun parseBoxVolume(type: BoxType?, dimensionsOrVolume: String?): Double? {
+    // Parses box volume from direct input or looks up standard dimensions
+    private fun parseBoxVolume(type: BoxType?, dimensionsOrVolumeString: String?): Double? {
+        if (dimensionsOrVolumeString.isNullOrBlank()) return null
+
         // Try parsing as direct volume first
-        val directVolume = dimensionsOrVolume?.toDoubleOrNull()
+        val directVolume = dimensionsOrVolumeString.toDoubleOrNull()
         if (directVolume != null && directVolume > 0) {
             return directVolume
         }
-        // TODO: Implement lookup based on type and dimensions string (e.g., "4x4x1.5")
-        // This requires a data source mapping dimensions to standard volumes from NEC Table 314.16(A)
-        println("Warning: Box volume lookup not implemented. Using placeholder volume 20.0")
-        return 20.0 // Placeholder
+
+        // If not direct volume, try looking up standard size (requires data in UseCase or here)
+        // For now, we access the map defined in the UseCase (consider moving data source later)
+        // This assumes the UseCase instance is available or the map is accessible statically/via injection
+        // Note: Direct access to UseCase's private map isn't ideal.
+        // A better approach would be a dedicated BoxVolumeRepository or data source.
+        // As a temporary measure, we'll replicate a small part of the map here.
+        // TODO: Refactor to use a proper data source for box volumes.
+        val standardVolumes = mapOf(
+            // Example entries - mirror or expand from UseCase map
+            "DEVICE:4x2.125x1.5" to 10.5,
+            "SQUARE:4x4x1.5" to 21.0,
+            "ROUND_OCT:4x1.5" to 15.5
+        )
+        val key = "${type?.name ?: ""}:${dimensionsOrVolumeString}"
+        return standardVolumes[key] // Returns null if not found
     }
 
     // TODO: Expose necessary data for dropdowns (Box Types, Component Types, Wire Sizes)

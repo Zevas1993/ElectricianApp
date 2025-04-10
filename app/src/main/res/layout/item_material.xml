@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/imageViewMaterial"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:contentDescription="Material image"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@android:drawable/ic_menu_gallery" />
+
+        <TextView
+            android:id="@+id/textViewMaterialName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/textViewMaterialPrice"
+            app:layout_constraintStart_toEndOf="@+id/imageViewMaterial"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Romex 12/2 NM-B Wire" />
+
+        <TextView
+            android:id="@+id/textViewMaterialDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageViewMaterial"
+            app:layout_constraintTop_toBottomOf="@+id/textViewMaterialName"
+            tools:text="12 AWG copper wire with ground, 600V, for residential wiring" />
+
+        <TextView
+            android:id="@+id/textViewMaterialCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:background="@android:color/darker_gray"
+            android:paddingStart="6dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="6dp"
+            android:paddingBottom="2dp"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/imageViewMaterial"
+            app:layout_constraintTop_toBottomOf="@+id/textViewMaterialDescription"
+            tools:text="WIRE AND CABLE" />
+
+        <TextView
+            android:id="@+id/textViewMaterialPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_green_dark"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="$45.99" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

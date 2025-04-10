@@ -1,144 +1,97 @@
-package com.example.electricianapp.domain.usecase.boxfill // Corrected package
+package com.example.electricianapp.domain.usecase.boxfill
 
-import com.example.electricianapp.domain.model.boxfill.BoxComponent // Corrected import
-import com.example.electricianapp.domain.model.boxfill.BoxFillInput // Corrected import
-import com.example.electricianapp.domain.model.boxfill.BoxFillResult // Corrected import
-import com.example.electricianapp.domain.model.boxfill.ComponentDetail // Corrected import
-import com.example.electricianapp.domain.model.boxfill.ComponentType // Corrected import
+import com.example.electricianapp.domain.model.boxfill.* // Import all box fill models including BoxType
 import javax.inject.Inject
+import kotlin.math.ceil // Import ceil
 
 /**
  * Use case for calculating box fill based on NEC standards
  */
 class CalculateBoxFillUseCase @Inject constructor() {
 
-    /**
-     * Calculate box fill based on input parameters
-     * @param input The box fill calculation input parameters
-     * @return The box fill calculation result
-     */
-    operator fun invoke(input: BoxFillInput): BoxFillResult {
-        // Group components by type and wire size
-        val componentDetails = mutableListOf<ComponentDetail>()
+    // NEC Table 314.16(A) - Metal Box Volumes (subset)
+    private val standardMetalBoxVolumes = mapOf(
+        "DEVICE:4x2.125x1.5" to 10.5, "DEVICE:4x2.125x1.875" to 13.0, "DEVICE:4x2.125x2.125" to 14.5,
+        "MASONRY:3.75x2x2.5" to 14.0, "MASONRY:3.75x2x3.5" to 21.0,
+        "SQUARE:4x4x1.25" to 18.0, "SQUARE:4x4x1.5" to 21.0, "SQUARE:4x4x2.125" to 30.3,
+        "SQUARE:4.6875x4.6875x1.5" to 32.0, "SQUARE:4.6875x4.6875x2.125" to 42.0,
+        "ROUND_OCT:4x1.5" to 15.5, "ROUND_OCT:4x2.125" to 21.5
+    )
 
-        // Process conductors by size
+    // NEC Table 314.16(B) - Conductor Volumes
+    private val conductorVolumes = mapOf(
+        "18" to 1.50, "16" to 1.75, "14" to 2.00,
+        "12" to 2.25, "10" to 2.50, "8" to 3.00, "6" to 5.00
+    )
+
+    operator fun invoke(input: BoxFillInput): BoxFillResult {
+        val actualBoxVolume = getActualBoxVolume(input.boxType, input.boxDimensions, input.boxVolumeInCubicInches)
+            ?: throw IllegalArgumentException("Invalid or unknown box volume/dimensions.")
+
+        val allConductorsAndGrounds = input.components.filter { it.type == ComponentType.CONDUCTOR || it.type == ComponentType.EQUIPMENT_GROUNDING_CONDUCTOR }
+        val largestConductorSize = findLargestWireSize(allConductorsAndGrounds, defaultIfNone = "14")
+        val largestGroundingConductorSize = findLargestWireSize(
+            input.components.filter { it.type == ComponentType.EQUIPMENT_GROUNDING_CONDUCTOR },
+            defaultIfNone = largestConductorSize
+        )
+
+        val componentDetails = mutableListOf<ComponentDetail>()
+        var totalRequiredVolume = 0.0
+
+        // 1. Conductors
         input.components
             .filter { it.type == ComponentType.CONDUCTOR }
-            .groupBy { it.wireSize }
-            .forEach { (wireSize, components) ->
-                val totalQuantity = components.sumOf { it.quantity }
-                // Provide a default wire size if null, although wireSize should ideally not be null for CONDUCTOR type
-                val volumePerUnit = getVolumeForWireSize(wireSize ?: "14") // Default to "14" if null
-                val totalVolume = volumePerUnit * totalQuantity
-
-                componentDetails.add(
-                    ComponentDetail(
-                        type = ComponentType.CONDUCTOR,
-                        description = "$wireSize AWG Conductor",
-                        quantity = totalQuantity,
-                        volumePerUnitInCubicInches = volumePerUnit,
-                        totalVolumeInCubicInches = totalVolume
-                    )
-                )
+            .forEach { conductor ->
+                val volumePer = getVolumeForWireSize(conductor.wireSize ?: largestConductorSize)
+                val volume = volumePer * conductor.quantity
+                totalRequiredVolume += volume
+                componentDetails.add(ComponentDetail(ComponentType.CONDUCTOR, "${conductor.wireSize ?: "?"} AWG Conductor", conductor.quantity, volumePer, volume))
             }
 
-        // Process devices
-        val devices = input.components.filter { it.type == ComponentType.DEVICE }
-        if (devices.isNotEmpty()) {
-            // Per NEC 314.16(B)(4), count double volume allowance for each yoke or strap containing one or more devices
-            val largestWireSizeConnectedToDevice = findLargestWireSize(devices) // Find largest conductor connected *to these devices*
-            val volumePerDeviceAllowance = getVolumeForWireSize(largestWireSizeConnectedToDevice) * 2
-            val totalDeviceQuantity = devices.sumOf { it.quantity } // Assuming quantity on BoxComponent for device means number of yokes
-            val totalVolume = volumePerDeviceAllowance * totalDeviceQuantity
-
-            componentDetails.add(
-                ComponentDetail(
-                    type = ComponentType.DEVICE,
-                    description = "Device(s) / Yoke(s)",
-                    quantity = totalDeviceQuantity,
-                    volumePerUnitInCubicInches = volumePerDeviceAllowance, // Volume allowance per yoke
-                    totalVolumeInCubicInches = totalVolume
-                )
-            )
+        // 2. Clamps
+        val clampCount = input.components.count { it.type == ComponentType.CLAMP }
+        if (clampCount > 0) {
+            val volume = getVolumeForWireSize(largestConductorSize)
+            totalRequiredVolume += volume
+            componentDetails.add(ComponentDetail(ComponentType.CLAMP, "Internal Cable Clamp(s)", clampCount, 0.0, volume))
         }
 
-        // Process clamps
-        val clamps = input.components.filter { it.type == ComponentType.CLAMP }
-        if (clamps.isNotEmpty()) {
-            // Per NEC 314.16(B)(2), a single volume allowance based on the largest conductor *in the box*
-            val largestWireSizeInBox = findLargestWireSize(input.components) // Largest conductor overall
-            val totalVolume = getVolumeForWireSize(largestWireSizeInBox) // Single allowance for all internal clamps
+        // 3. Support Fittings
+        input.components
+            .filter { it.type == ComponentType.SUPPORT_FITTING }
+            .forEach { fitting ->
+                val volumePer = getVolumeForWireSize(largestConductorSize)
+                val volume = volumePer * fitting.quantity
+                totalRequiredVolume += volume
+                componentDetails.add(ComponentDetail(ComponentType.SUPPORT_FITTING, "Support Fitting(s) (e.g., Stud, Hickey)", fitting.quantity, volumePer, volume))
+            }
 
-            componentDetails.add(
-                ComponentDetail(
-                    type = ComponentType.CLAMP,
-                    description = "Internal Cable Clamp(s)",
-                    quantity = clamps.sumOf { it.quantity }, // Informational quantity
-                    volumePerUnitInCubicInches = 0.0, // Volume is a single allowance, not per clamp
-                    totalVolumeInCubicInches = totalVolume
-                )
-            )
+        // 4. Devices
+        val deviceCount = input.components.count { it.type == ComponentType.DEVICE }
+        if (deviceCount > 0) {
+            val volumePerDevice = getVolumeForWireSize(largestConductorSize) * 2.0 // Ensure double multiplication
+            val volume = volumePerDevice * deviceCount
+            totalRequiredVolume += volume
+            componentDetails.add(ComponentDetail(ComponentType.DEVICE, "Device(s) / Yoke(s)", deviceCount, volumePerDevice, volume))
         }
 
-        // Process support fittings
-        val supportFittings = input.components.filter { it.type == ComponentType.SUPPORT_FITTING }
-        if (supportFittings.isNotEmpty()) {
-            // Per NEC 314.16(B)(3), each fitting (like fixture studs or hickeys) counts as a single volume allowance based on largest conductor *in the box*
-            val largestWireSizeInBox = findLargestWireSize(input.components)
-            val volumePerFitting = getVolumeForWireSize(largestWireSizeInBox)
-            val totalQuantity = supportFittings.sumOf { it.quantity }
-            val totalVolume = volumePerFitting * totalQuantity
-
-            componentDetails.add(
-                ComponentDetail(
-                    type = ComponentType.SUPPORT_FITTING,
-                    description = "Support Fitting(s)",
-                    quantity = totalQuantity,
-                    volumePerUnitInCubicInches = volumePerFitting,
-                    totalVolumeInCubicInches = totalVolume
-                )
-            )
+        // 5. Equipment Grounding Conductors
+        val groundingConductorCount = input.components.count { it.type == ComponentType.EQUIPMENT_GROUNDING_CONDUCTOR }
+        if (groundingConductorCount > 0) {
+            val volume = getVolumeForWireSize(largestGroundingConductorSize)
+            totalRequiredVolume += volume
+            componentDetails.add(ComponentDetail(ComponentType.EQUIPMENT_GROUNDING_CONDUCTOR, "Equipment Grounding Conductor(s)", groundingConductorCount, 0.0, volume))
         }
 
-        // Process equipment grounding conductors
-        val groundingConductors = input.components.filter { it.type == ComponentType.EQUIPMENT_GROUNDING_CONDUCTOR }
-        if (groundingConductors.isNotEmpty()) {
-            // Per NEC 314.16(B)(5), a single volume allowance for all grounding conductors based on the largest grounding conductor *present*
-            val largestGroundingWireSize = findLargestWireSize(groundingConductors)
-            val totalVolume = getVolumeForWireSize(largestGroundingWireSize) // Single allowance for all grounds
-
-            componentDetails.add(
-                ComponentDetail(
-                    type = ComponentType.EQUIPMENT_GROUNDING_CONDUCTOR,
-                    description = "Equipment Grounding Conductor(s)",
-                    quantity = groundingConductors.sumOf { it.quantity }, // Informational quantity
-                    volumePerUnitInCubicInches = 0.0, // Volume is a single allowance
-                    totalVolumeInCubicInches = totalVolume
-                )
-            )
-        }
-
-        // Calculate total required volume
-        val totalRequiredVolume = componentDetails.sumOf { it.totalVolumeInCubicInches }
-
-        // Calculate remaining volume
-        val remainingVolume = input.boxVolumeInCubicInches - totalRequiredVolume
-
-        // Calculate fill percentage
-        val fillPercentage = if (input.boxVolumeInCubicInches > 0) {
-             (totalRequiredVolume / input.boxVolumeInCubicInches) * 100
-        } else {
-            Double.POSITIVE_INFINITY // Or handle as error if box volume is zero/invalid
-        }
-
-
-        // Check if within limits
-        val isWithinLimits = totalRequiredVolume <= input.boxVolumeInCubicInches
+        // Final Calculations
+        val remainingVolume = actualBoxVolume - totalRequiredVolume
+        val fillPercentage = if (actualBoxVolume > 0.0) (totalRequiredVolume / actualBoxVolume) * 100.0 else (if (totalRequiredVolume > 0.0) Double.POSITIVE_INFINITY else 0.0)
+        val isWithinLimits = totalRequiredVolume <= actualBoxVolume
 
         return BoxFillResult(
             boxType = input.boxType,
             boxDimensions = input.boxDimensions,
-            boxVolumeInCubicInches = input.boxVolumeInCubicInches,
+            boxVolumeInCubicInches = actualBoxVolume,
             totalRequiredVolumeInCubicInches = totalRequiredVolume,
             remainingVolumeInCubicInches = remainingVolume,
             fillPercentage = fillPercentage,
@@ -147,55 +100,32 @@ class CalculateBoxFillUseCase @Inject constructor() {
         )
     }
 
-    /**
-     * Get volume requirement for a wire size based on NEC Table 314.16(B)
-     * @param wireSize The wire size in AWG (e.g., "14", "12", "1/0")
-     * @return The volume requirement in cubic inches
-     */
     private fun getVolumeForWireSize(wireSize: String): Double {
-        return when (wireSize) {
-            "18" -> 1.50
-            "16" -> 1.75
-            "14" -> 2.00
-            "12" -> 2.25
-            "10" -> 2.50
-            "8" -> 3.00
-            "6" -> 5.00
-            // Note: NEC 314.16(B) stops at 6 AWG. Larger conductors aren't typically used in standard box fill calcs this way.
-            // If needed for specific scenarios, consult relevant NEC sections.
-            else -> throw IllegalArgumentException("Unsupported or invalid wire size for standard box fill calculation: $wireSize")
-        }
+        return conductorVolumes[wireSize]
+            ?: throw IllegalArgumentException("Unsupported wire size for box fill: $wireSize")
     }
 
-    /**
-     * Find the largest wire size (smallest AWG number) among a list of components.
-     * @param components List of box components to check.
-     * @return The largest wire size as a string (e.g., "12", "10", "8"). Defaults if no conductors found.
-     */
-    private fun findLargestWireSize(components: List<BoxComponent>): String {
-        // Filter for components that represent conductors and have a wire size
+    private fun getActualBoxVolume(boxType: BoxType, dimensionsOrVolumeString: String, directVolumeInput: Double?): Double? {
+        if (directVolumeInput != null && directVolumeInput > 0) return directVolumeInput
+        val parsedVolume = dimensionsOrVolumeString.toDoubleOrNull()
+        if (parsedVolume != null && parsedVolume > 0) return parsedVolume
+        val key = "${boxType.name}:${dimensionsOrVolumeString.replace(" ", "")}"
+        return standardMetalBoxVolumes[key]
+    }
+
+    private fun findLargestWireSize(components: List<BoxComponent>, defaultIfNone: String): String {
         val conductorSizes = components
-            .filter { it.type == ComponentType.CONDUCTOR || it.type == ComponentType.EQUIPMENT_GROUNDING_CONDUCTOR }
-            .mapNotNull { it.wireSize } // Get non-null wire sizes
+            .filter { (it.type == ComponentType.CONDUCTOR || it.type == ComponentType.EQUIPMENT_GROUNDING_CONDUCTOR) && it.wireSize != null }
+            .mapNotNull { it.wireSize }
 
-        if (conductorSizes.isEmpty()) {
-            // If no conductors are found in the provided list (e.g., only devices),
-            // we might need a default or context from the overall input.
-            // For simplicity here, default to a common small size. Adjust if needed.
-            return "14"
-        }
+        if (conductorSizes.isEmpty()) return defaultIfNone
 
-        // Map of wire sizes to their relative sizes (larger number = smaller wire, lower number = larger wire)
-        // Using Double to handle potential kcmil sizes later if needed, though not in 314.16(B) table directly.
         val wireSizeOrder = mapOf(
             "18" to 18.0, "16" to 16.0, "14" to 14.0, "12" to 12.0, "10" to 10.0, "8" to 8.0, "6" to 6.0
-            // Add larger sizes if necessary for other contexts, mapping them appropriately
-            // "4" to 4.0, "2" to 2.0, "1" to 1.0, "1/0" to 0.0, "2/0" to -1.0, etc.
         )
 
-        // Find the wire size string corresponding to the minimum value in the map
         return conductorSizes
-            .minByOrNull { wireSizeOrder[it] ?: Double.MAX_VALUE } // Find the smallest numerical representation (largest wire)
-            ?: "14" // Default if no valid sizes are found
+            .minByOrNull { wireSizeOrder[it] ?: Double.MAX_VALUE } // Use 'it' directly
+            ?: defaultIfNone
     }
 }

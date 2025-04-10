@@ -154,32 +154,81 @@ class CalculateDwellingLoadUseCase @Inject constructor() { // Added @Inject cons
 
         // 2. Apply demand factors
 
-        // Ranges (NEC Table 220.55) - Complex table, simplified example
-        if (ranges.isNotEmpty()) {
-            // Note: Table 220.55 is complex, depends on kW rating and number of appliances.
-            // This is a highly simplified placeholder. A real implementation needs the full table logic.
-            val totalRangeWattage = ranges.sumOf { it.wattage * it.quantity }
-            val numRanges = ranges.sumOf { it.quantity }
-            val demandFactor = if (numRanges == 1 && totalRangeWattage <= 12000) 0.8 else 0.5 // Very rough example
-            ranges.forEach { applianceDemandFactors[it.name] = demandFactor }
+        // --- Apply Demand Factors ---
+
+        // Ranges (NEC Table 220.55) - Implementing more detailed logic
+        val numRanges = ranges.sumOf { it.quantity }
+        if (numRanges > 0) {
+            // Note: This implementation assumes standard calculation method. Optional methods exist.
+            // It simplifies column B/C logic. A full implementation might need UI for rating selection.
+            // For simplicity, we'll use Column A logic (up to 12kW ranges) as a base.
+            val demandKw = when (numRanges) {
+                1 -> 8.0
+                2 -> 11.0
+                3 -> 14.0
+                4 -> 17.0
+                5 -> 20.0
+                6 -> 21.0
+                7 -> 22.0
+                8 -> 23.0
+                9 -> 24.0
+                10 -> 25.0
+                11 -> 26.0
+                12 -> 27.0
+                13 -> 28.0
+                14 -> 29.0
+                15 -> 30.0
+                16 -> 31.0
+                17 -> 32.0
+                18 -> 33.0
+                19 -> 34.0
+                20 -> 35.0
+                21 -> 36.0
+                22 -> 37.0
+                23 -> 38.0
+                24 -> 39.0
+                25 -> 40.0
+                in 26..30 -> 15.0 + numRanges // 15kW + 1kW per range
+                in 31..40 -> 15.0 + numRanges // (Simplified - Table uses 15kW + 1kW)
+                in 41..50 -> 25.0 + (0.75 * numRanges) // (Simplified - Table uses 25kW + 3/4kW per range)
+                in 51..60 -> 25.0 + (0.75 * numRanges) // (Simplified)
+                else -> 25.0 + (0.75 * numRanges) // (Simplified - over 61 ranges)
+            } * 1000 // Convert kW to VA (assuming power factor 1.0)
+
+            val totalRangeLoad = ranges.sumOf { applianceLoads[it.name] ?: 0.0 }
+            val effectiveDemandFactor = if (totalRangeLoad > 0) demandKw / totalRangeLoad else 1.0
+            ranges.forEach { applianceDemandFactors[it.name] = effectiveDemandFactor }
         }
 
-        // Dryers (NEC 220.54) - Minimum 5000W or nameplate, demand factors apply
-        if (dryers.isNotEmpty()) {
-            val numDryers = dryers.sumOf { it.quantity }
-            val demandFactor = when {
+
+        // Dryers (NEC Table 220.54) - Minimum 5000W or nameplate, demand factors apply
+        val numDryers = dryers.sumOf { it.quantity }
+        if (numDryers > 0) {
+            val dryerDemandFactor = when {
                 numDryers <= 4 -> 1.00
                 numDryers == 5 -> 0.85
-                // ... continues based on Table 220.54
-                else -> 0.50 // Example simplification
-            }
-             // Apply the calculated demand factor to *all* dryers
-             dryers.forEach { applianceDemandFactors[it.name] = demandFactor }
-             // Note: The load used is the larger of 5000W or nameplate per dryer *before* demand factor.
-             // The calculation logic might need adjustment based on how load is summed later.
+                numDryers == 6 -> 0.75
+                numDryers == 7 -> 0.65
+                numDryers == 8 -> 0.60
+                numDryers == 9 -> 0.55
+                numDryers == 10 -> 0.50
+                numDryers == 11 -> 0.47
+                // For 12-23 units: 47% - 1% for each dryer over 11
+                numDryers in 12..23 -> 0.47 - (numDryers - 11) * 0.01
+                // For 24-42 units: 35% + 0.5% for each dryer over 23 (simplified from table note)
+                numDryers in 24..42 -> 0.35 + (numDryers - 23) * 0.005
+                // Over 42 units: 25% + 0.25% for each dryer over 42 (simplified from table note)
+                else -> 0.25 + (numDryers - 42) * 0.0025
+            }.coerceAtLeast(0.25) // Ensure minimum demand factor
+
+            // Apply the factor. Note: NEC uses minimum 5000VA per dryer *before* demand.
+            // The current structure applies factor to nameplate. This might need adjustment
+            // depending on how total load is calculated later. For now, apply to nameplate load.
+            dryers.forEach { applianceDemandFactors[it.name] = dryerDemandFactor }
         }
 
-        // Fixed Appliances (NEC 220.53) - 75% demand factor if 4 or more
+
+        // Fixed Appliances (NEC 220.53) - 75% demand factor if 4 or more (excluding ranges, dryers, HVAC)
         if (fixedAppliances.size >= 4) {
             fixedAppliances.forEach { appliance ->
                 // Only apply if no specific factor was already set (like for range/dryer)

@@ -21,6 +21,9 @@
             android:id="@+id/action_homeFragment_to_addEditJobFragment"
             app:destination="@id/addEditJobFragment" />
             <!-- TODO: Need to figure out how to pass userId=-1L or current user ID here -->
+        <action
+            android:id="@+id/action_homeFragment_to_materialInventoryFragment"
+            app:destination="@id/materialInventoryFragment" />
     </fragment>
 
     <!-- Login Screen -->
@@ -188,6 +191,154 @@
         <action
             android:id="@+id/action_calculatorListFragment_to_boxFillFragment"
             app:destination="@id/boxFillFragment" />
+        <action
+            android:id="@+id/action_calculatorListFragment_to_pipeBendingFragment"
+            app:destination="@id/pipeBendingFragment" />
+        <action
+            android:id="@+id/action_calculatorListFragment_to_necCodeLookupFragment"
+            app:destination="@id/necCodeLookupFragment" />
+        <action
+            android:id="@+id/action_calculatorListFragment_to_arViewFragment"
+            app:destination="@id/arViewFragment" />
+        <action
+            android:id="@+id/action_calculatorListFragment_to_luminaireCalculatorFragment"
+            app:destination="@id/luminaireCalculatorFragment" />
+        <action
+            android:id="@+id/action_calculatorListFragment_to_lightingLayoutFragment"
+            app:destination="@id/lightingLayoutFragment" />
+        <action
+            android:id="@+id/action_calculatorListFragment_to_voltageDropFragment"
+            app:destination="@id/voltageDropFragment" />
+        <action
+            android:id="@+id/action_calculatorListFragment_to_photoDocListFragment"
+            app:destination="@id/photoDocListFragment" />
+        <action
+            android:id="@+id/action_calculatorListFragment_to_materialListFragment"
+            app:destination="@id/materialListFragment" />
+    </fragment>
+
+    <!-- Pipe Bending (New Destination) -->
+    <fragment
+        android:id="@+id/pipeBendingFragment"
+        android:name="com.example.electricianapp.presentation.fragment.pipebending.PipeBendingFragment"
+        android:label="Pipe Bending Calculator"
+        tools:layout="@layout/fragment_pipe_bending" /> <!-- Assuming layout exists -->
+
+    <!-- AR View (New Destination) -->
+    <fragment
+        android:id="@+id/arViewFragment"
+        android:name="com.example.electricianapp.presentation.fragment.arview.ArViewFragment"
+        android:label="AR View"
+        tools:layout="@layout/fragment_ar_view" /> <!-- Assuming layout exists -->
+
+    <!-- Material Inventory List Screen -->
+    <fragment
+        android:id="@+id/materialInventoryFragment"
+        android:name="com.example.electricianapp.presentation.fragment.materials.MaterialInventoryFragment"
+        android:label="Material Inventory"
+        tools:layout="@layout/fragment_material_inventory">
+        <action
+            android:id="@+id/action_materialInventoryFragment_to_materialInventoryDetailFragment"
+            app:destination="@id/materialInventoryDetailFragment" />
+        <action
+            android:id="@+id/action_materialInventoryFragment_to_addEditInventoryFragment"
+            app:destination="@id/addEditInventoryFragment" />
+    </fragment>
+
+    <!-- Material Inventory Detail Screen -->
+    <fragment
+        android:id="@+id/materialInventoryDetailFragment"
+        android:name="com.example.electricianapp.presentation.fragment.materials.MaterialInventoryDetailFragment"
+        android:label="Inventory Details"
+        tools:layout="@layout/fragment_material_inventory_detail">
+        <argument
+            android:name="inventoryId"
+            app:argType="string" />
+    </fragment>
+
+    <!-- Add/Edit Material Inventory Screen -->
+    <fragment
+        android:id="@+id/addEditInventoryFragment"
+        android:name="com.example.electricianapp.presentation.fragment.materials.AddEditInventoryFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_add_edit_inventory">
+        <argument
+            android:name="inventoryId"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            android:defaultValue="Add Inventory Item" />
+    </fragment>
+
+    <!-- Luminaire Calculator (New Destination) -->
+    <fragment
+        android:id="@+id/luminaireCalculatorFragment"
+        android:name="com.example.electricianapp.presentation.fragment.calculators.LuminaireCalculatorFragment"
+        android:label="Luminaire Calculator"
+        tools:layout="@layout/fragment_luminaire_calculator" />
+
+    <!-- Voltage Drop (New Destination) -->
+    <fragment
+        android:id="@+id/voltageDropFragment"
+        android:name="com.example.electricianapp.presentation.fragment.calculators.VoltageDropFragment"
+        android:label="Voltage Drop Calculator"
+        tools:layout="@layout/fragment_voltage_drop" />
+
+    <!-- NEC Code Lookup (New Destination) -->
+    <fragment
+        android:id="@+id/necCodeLookupFragment"
+        android:name="com.example.electricianapp.presentation.fragment.neccodes.NecCodeLookupFragment"
+        android:label="NEC Code Lookup"
+        tools:layout="@layout/fragment_nec_code_lookup" />
+
+    <!-- Photo Documentation (New Destination) -->
+    <fragment
+        android:id="@+id/photoDocListFragment"
+        android:name="com.example.electricianapp.presentation.fragment.photodoc.PhotoDocListFragment"
+        android:label="Photo Documentation"
+        tools:layout="@layout/fragment_photo_doc_list" />
+
+    <!-- Material Management (New Destination) -->
+    <fragment
+        android:id="@+id/materialListFragment"
+        android:name="com.example.electricianapp.presentation.fragment.materials.MaterialListFragment"
+        android:label="Material Management"
+        tools:layout="@layout/fragment_material_list">
+        <action
+            android:id="@+id/action_materialListFragment_to_materialDetailFragment"
+            app:destination="@id/materialDetailFragment" />
+        <action
+            android:id="@+id/action_materialListFragment_to_addEditMaterialFragment"
+            app:destination="@id/addEditMaterialFragment" />
+    </fragment>
+
+    <!-- Material Detail (New Destination) -->
+    <fragment
+        android:id="@+id/materialDetailFragment"
+        android:name="com.example.electricianapp.presentation.fragment.materials.MaterialDetailFragment"
+        android:label="Material Detail"
+        tools:layout="@layout/fragment_material_detail">
+        <argument
+            android:name="materialId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_materialDetailFragment_to_addEditMaterialFragment"
+            app:destination="@id/addEditMaterialFragment" />
+    </fragment>
+
+    <!-- Add/Edit Material (New Destination) -->
+    <fragment
+        android:id="@+id/addEditMaterialFragment"
+        android:name="com.example.electricianapp.presentation.fragment.materials.AddEditMaterialFragment"
+        android:label="Add/Edit Material"
+        tools:layout="@layout/fragment_add_edit_material">
+        <argument
+            android:name="materialId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 
 </navigation>

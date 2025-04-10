@@ -3,6 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Define necessary permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- Required for AR and Photo Documentation -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" /> <!-- For saving photos on older devices -->
+
+    <!-- Declare camera features used. -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" /> <!-- Make camera optional -->
+    <uses-feature android:name="android.hardware.camera.ar" android:required="false" /> <!-- ARCore is optional -->
+
 
     <!-- Application definition -->
     <application
@@ -27,7 +34,19 @@
             </intent-filter>
         </activity>
 
-        <!-- Add other activities, services, providers here if needed -->
+        <!-- File Provider for Photo Documentation -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- Metadata to indicate ARCore is optional -->
+        <meta-data android:name="com.google.ar.core" android:value="optional" />
 
     </application>
 

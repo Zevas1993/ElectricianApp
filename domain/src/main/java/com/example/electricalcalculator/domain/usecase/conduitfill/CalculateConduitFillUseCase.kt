@@ -23,17 +23,20 @@ class CalculateConduitFillUseCase @Inject constructor() {
         // Calculate total wire area
         val wireDetails = input.wires.groupBy { "${it.type}-${it.size}" }
             .map { (_, wires) ->
-                val wire = wires.first()
+                val wire = wires.first() // Get a representative wire for type, size, area
+                val totalQuantity = wires.sumOf { it.quantity }
+                val areaPerWire = wire.areaPerWireInSqInches // Use the correct property name from input
+                val totalArea = areaPerWire * totalQuantity
                 WireDetail(
                     type = wire.type,
                     size = wire.size,
-                    quantity = wires.sumOf { it.quantity },
-                    areaPerWireInSqInches = wire.areaInSqInches,
-                    totalAreaInSqInches = wire.areaInSqInches * wires.sumOf { it.quantity }
+                    quantity = totalQuantity,
+                    areaPerWireInSqInches = areaPerWire, // Pass the correct value
+                    totalAreaInSqInches = totalArea // Pass the calculated total area
                 )
             }
         
-        val totalWireAreaInSqInches = wireDetails.sumOf { it.totalAreaInSqInches }
+        val totalWireAreaInSqInches = wireDetails.sumOf { it.totalAreaInSqInches } // Use the correct property name
         
         // Calculate fill percentage
         val fillPercentage = (totalWireAreaInSqInches / conduitAreaInSqInches) * 100

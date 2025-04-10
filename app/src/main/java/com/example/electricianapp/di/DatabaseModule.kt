@@ -3,13 +3,16 @@ package com.example.electricianapp.di // Corrected package
 import android.content.Context
 import androidx.room.Room
 import com.example.electricianapp.data.local.AppDatabase // Corrected import
-import com.example.electricianapp.data.local.dao.JobDao // Corrected import
-import com.example.electricianapp.data.local.dao.TaskDao // Corrected import
-import com.example.electricianapp.data.local.dao.UserDao // Corrected import
-// TODO: Import calculator DAOs when entities and AppDatabase are updated
-import com.example.electricianapp.data.local.dao.BoxFillDao // Uncomment import
-import com.example.electricianapp.data.local.dao.ConduitFillDao // Uncomment import
-import com.example.electricianapp.data.local.dao.DwellingLoadDao // Uncomment import
+import com.example.electricianapp.data.local.dao.JobDao
+import com.example.electricianapp.data.local.dao.TaskDao
+import com.example.electricianapp.data.local.dao.UserDao
+import com.example.electricianapp.data.local.dao.BoxFillDao
+import com.example.electricianapp.data.local.dao.ConduitFillDao
+import com.example.electricianapp.data.local.dao.DwellingLoadDao
+import com.example.electricianapp.data.local.dao.MaterialDao
+import com.example.electricianapp.data.local.dao.NecCodeDao
+import com.example.electricianapp.data.local.dao.PhotoDocDao
+import com.example.electricianapp.data.local.dao.VoltageDropDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -75,11 +78,30 @@ object DatabaseModule {
     }
 
 
-    @Provides // Uncomment this provider
+    @Provides
     fun provideDwellingLoadDao(database: AppDatabase): DwellingLoadDao {
         return database.dwellingLoadDao()
     }
 
+    @Provides
+    fun provideVoltageDropDao(database: AppDatabase): VoltageDropDao {
+        return database.voltageDropDao()
+    }
+
+    @Provides
+    fun provideNecCodeDao(database: AppDatabase): NecCodeDao {
+        return database.necCodeDao()
+    }
+
+    @Provides
+    fun providePhotoDocDao(database: AppDatabase): PhotoDocDao {
+        return database.photoDocDao()
+    }
+
+    @Provides
+    fun provideMaterialDao(database: AppDatabase): MaterialDao {
+        return database.materialDao()
+    }
 
     // --- Repositories (Moved to RepositoryModule) ---
     // Providing repositories here is possible, but binding interfaces to implementations

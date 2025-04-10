@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.homeFragment, R.id.jobListFragment, R.id.dwellingLoadFragment,
-                R.id.conduitFillFragment, R.id.boxFillFragment // Add other top-level IDs here
+                R.id.conduitFillFragment, R.id.boxFillFragment, R.id.materialListFragment // Add other top-level IDs here
                 // Add R.id.loginFragment here ONLY if you want the drawer on the login screen too
             ), drawerLayout
         )

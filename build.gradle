@@ -4,19 +4,20 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.9.1' // Or latest stable
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0" // Match Kotlin version if possible
-        classpath "com.google.dagger:hilt-android-gradle-plugin:2.48" // Or latest stable Hilt
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.7.5" // Or latest stable Nav
+        classpath libs.plugin.android.gradle // Changed to stable version & catalog reference
+        // classpath libs.plugin.kotlin.gradle // Removed, version defined in plugins block
+        classpath libs.plugin.hilt.gradle // Catalog reference
+        classpath libs.plugin.navigation.safeArgs // Catalog reference
         // Add the dependency for the Google services Gradle plugin (ensure version is appropriate, 4.4.1 is recent as of writing)
-        classpath 'com.google.gms:google-services:4.4.1'
+        classpath libs.plugin.google.services // Catalog reference
+        classpath libs.plugin.ksp // Added KSP plugin classpath
     }
 }
 
 plugins {
     id 'org.jetbrains.kotlin.android' version '1.9.22' apply false
-    id 'com.android.application' version '8.9.1' apply false // Match classpath version
-    // id 'org.jetbrains.kotlin.android' version '1.9.0' apply false // REMOVE duplicate plugin
+    id 'com.android.application' version '8.2.2' apply false // Changed to stable version
+    // id 'org.jetbrains.kotlin.android' version '1.9.0' apply false // Removed duplicate plugin
 }
 
 task clean(type: Delete) {

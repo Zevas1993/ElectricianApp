@@ -4,10 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import com.example.electricalcalculator.data.db.converter.Converters
-import com.example.electricalcalculator.data.db.dao.*
-import com.example.electricalcalculator.data.db.entity.*
+// import androidx.room.TypeConverters // Removed - Converters class missing
+// import com.example.electricalcalculator.data.db.converter.Converters // Removed - Converters class missing
+// import com.example.electricalcalculator.data.db.dao.* // Removed - DAOs missing
+import com.example.electricalcalculator.data.db.entity.BoxFillEntity
+import com.example.electricalcalculator.data.db.entity.BoxFillWireCrossRef
+import com.example.electricalcalculator.data.db.entity.WireEntity
 
 /**
  * Main database class for the Electrician App.
@@ -17,27 +19,16 @@ import com.example.electricalcalculator.data.db.entity.*
     entities = [
         WireEntity::class,
         BoxFillEntity::class, 
-        BoxFillWireCrossRef::class,
-        ConduitEntity::class,
-        ConduitFillEntity::class,
-        ConduitFillWireCrossRef::class,
-        ApplianceEntity::class,
-        DwellingUnitEntity::class,
-        DwellingUnitApplianceCrossRef::class
+        BoxFillWireCrossRef::class
     ],
     version = 1,
     exportSchema = false
 )
-@TypeConverters(Converters::class)
 abstract class ElectricianDatabase : RoomDatabase() {
     
-    // DAOs
-    abstract fun wireDao(): WireDao
-    abstract fun boxFillDao(): BoxFillDao
-    abstract fun conduitDao(): ConduitDao
-    abstract fun conduitFillDao(): ConduitFillDao
-    abstract fun applianceDao(): ApplianceDao
-    abstract fun dwellingUnitDao(): DwellingUnitDao
+    // DAOs removed - Interfaces missing
+    // abstract fun wireDao(): WireDao
+    // abstract fun boxFillDao(): BoxFillDao
     
     companion object {
         @Volatile

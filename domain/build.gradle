@@ -1,9 +1,8 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
+    id 'kotlin-kapt' // Use KAPT consistently with app module
     id 'dagger.hilt.android.plugin'
-    // KSP removed for stability
 }
 
 android {
@@ -11,7 +10,7 @@ android {
     compileSdk 34
 
     defaultConfig {
-        minSdk 21
+        minSdk 24 // Updated from 21
         targetSdk 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -37,26 +36,28 @@ android {
 
 dependencies {
     // Core Android dependencies
-    implementation "androidx.core:core-ktx:$core_ktx_version"
-    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+
+    // Data Module Dependency
+    implementation project(':data')
     
     // Coroutines for asynchronous programming
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    implementation libs.kotlinx.coroutines.core
+    implementation libs.kotlinx.coroutines.android
     
     // Dependency Injection
-    implementation 'com.google.dagger:hilt-android:2.44'
-    kapt 'com.google.dagger:hilt-android-compiler:2.44'
-    implementation 'javax.inject:javax.inject:1'
+    implementation libs.google.hilt.android // Updated from 2.44
+    kapt libs.google.hilt.compiler // Use KAPT consistently with app module
+    implementation libs.javax.inject
     
     // Testing
-    testImplementation "junit:junit:$junit_version"
-    testImplementation 'org.mockito:mockito-core:5.8.0'
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    testImplementation libs.junit
+    testImplementation libs.mockito.core
+    testImplementation libs.kotlinx.coroutines.test
 }
 
-// Apply source set configuration fix
-apply from: '../config/fix_sourceset.gradle'
+// Removed application of '../config/fix_sourceset.gradle'
 
 // Add jvmTarget configuration for Kotlin
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
