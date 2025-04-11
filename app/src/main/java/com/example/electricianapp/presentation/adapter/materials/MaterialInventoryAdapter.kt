@@ -40,14 +40,14 @@ class MaterialInventoryAdapter(
         
         init {
             binding.root.setOnClickListener {
-                val position = bindingAdapterPosition
+                val position = adapterPosition // Use adapterPosition as workaround
                 if (position != RecyclerView.NO_POSITION) {
                     onItemClick(getItem(position))
                 }
             }
             
             binding.buttonAdjust.setOnClickListener {
-                val position = bindingAdapterPosition
+                val position = adapterPosition // Use adapterPosition as workaround
                 if (position != RecyclerView.NO_POSITION) {
                     onAdjustClick(getItem(position))
                 }

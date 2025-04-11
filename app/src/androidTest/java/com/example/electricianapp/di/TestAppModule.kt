@@ -1,9 +1,6 @@
 package com.example.electricianapp.di
 
-import com.example.electricianapp.domain.model.materials.Material
-import com.example.electricianapp.domain.model.materials.MaterialInventory
-import com.example.electricianapp.domain.model.materials.MaterialTransaction
-import com.example.electricianapp.domain.model.materials.UnitOfMeasure
+import com.example.electricianapp.domain.model.materials.* // Use wildcard for materials
 import com.example.electricianapp.domain.usecase.materials.GetAllInventoryItemsUseCase
 import com.example.electricianapp.domain.usecase.materials.GetInventoryItemByIdUseCase
 import com.example.electricianapp.domain.usecase.materials.GetLowStockInventoryItemsUseCase
@@ -36,7 +33,8 @@ object TestAppModule {
         id = "material1",
         name = "Test Material",
         description = "Test Description",
-        code = "TM001",
+        // code = "TM001", // Removed non-existent parameter
+        category = MaterialCategory.MISCELLANEOUS, // Added required parameter
         unitOfMeasure = UnitOfMeasure.EACH
     )
 
@@ -66,79 +64,7 @@ object TestAppModule {
         return CalculateVoltageDropUseCase()
     }
 
-    @Provides
-    @Singleton
-    fun provideGetAllInventoryItemsUseCase(): GetAllInventoryItemsUseCase {
-        return object : GetAllInventoryItemsUseCase {
-            override fun invoke(): Flow<List<MaterialInventory>> {
-                return flowOf(listOf(testInventory))
-            }
-        }
-    }
-
-    @Provides
-    @Singleton
-    fun provideGetLowStockInventoryItemsUseCase(): GetLowStockInventoryItemsUseCase {
-        return object : GetLowStockInventoryItemsUseCase {
-            override fun invoke(): Flow<List<MaterialInventory>> {
-                return flowOf(listOf(testInventory.copy(quantity = 10.0))) // Below minimum
-            }
-        }
-    }
-
-    @Provides
-    @Singleton
-    fun provideGetInventoryItemByIdUseCase(): GetInventoryItemByIdUseCase {
-        return object : GetInventoryItemByIdUseCase {
-            override suspend fun invoke(id: String): MaterialInventory? {
-                return if (id == "inventory1") testInventory else null
-            }
-        }
-    }
-
-    @Provides
-    @Singleton
-    fun provideGetTransactionHistoryUseCase(): GetTransactionHistoryUseCase {
-        return object : GetTransactionHistoryUseCase {
-            override fun invoke(materialId: String): Flow<List<MaterialTransaction>> {
-                return flowOf(listOf(testTransaction))
-            }
-        }
-    }
-
-    @Provides
-    @Singleton
-    fun provideSaveInventoryItemUseCase(): SaveInventoryItemUseCase {
-        return object : SaveInventoryItemUseCase {
-            override suspend fun invoke(inventory: MaterialInventory) {
-                // Do nothing in test
-            }
-        }
-    }
-
-    @Provides
-    @Singleton
-    fun provideSaveTransactionUseCase(): SaveTransactionUseCase {
-        return object : SaveTransactionUseCase {
-            override suspend fun invoke(transaction: MaterialTransaction) {
-                // Do nothing in test
-            }
-        }
-    }
-
-    @Provides
-    @Singleton
-    fun provideSearchInventoryItemsUseCase(): SearchInventoryItemsUseCase {
-        return object : SearchInventoryItemsUseCase {
-            override fun invoke(query: String): Flow<List<MaterialInventory>> {
-                return flowOf(
-                    if (query.contains("test", ignoreCase = true)) {
-                        listOf(testInventory)
-                    } else {
-                        emptyList()
-                    }
-                )
-            }
-        }
-    }
+    // Removed fake UseCase providers causing compilation errors.
+    // Real UseCases will be injected by default in @AndroidTest.
+    // Use @BindValue in specific test classes if fakes are needed.
 }

@@ -146,9 +146,12 @@ class AddBoxComponentDialogFragment(
             }
 
 
+            // Use wireSize!! because the requiresWireSize check ensures it's non-null here
+            // Or use wireSize ?: "" if a default empty string is acceptable when not required,
+            // but the domain model expects a non-null String.
             val component = BoxComponent(
                 type = componentType,
-                wireSize = wireSize,
+                wireSize = wireSize!!,
                 quantity = quantity
             )
 

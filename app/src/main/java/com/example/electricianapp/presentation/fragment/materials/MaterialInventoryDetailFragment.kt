@@ -71,7 +71,7 @@ class MaterialInventoryDetailFragment : Fragment() {
                 // Material info
                 binding.textViewMaterialName.text = it.material?.name ?: "Unknown Material"
                 binding.textViewMaterialDescription.text = it.material?.description ?: ""
-                binding.textViewMaterialCode.text = "Code: ${it.material?.code ?: "N/A"}"
+                binding.textViewMaterialCode.text = "Part #: ${it.material?.partNumber ?: "N/A"}" // Use partNumber instead of code
                 
                 // Quantity info
                 binding.textViewQuantity.text = "${it.quantity} ${it.material?.unitOfMeasure?.name ?: ""}"

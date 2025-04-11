@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.electricianapp.R
 import com.example.electricianapp.databinding.FragmentMaterialInventoryBinding
+import com.example.electricianapp.domain.model.materials.MaterialInventory // Added correct import
 import com.example.electricianapp.presentation.adapter.materials.MaterialInventoryAdapter
 import com.example.electricianapp.presentation.viewmodel.materials.MaterialInventoryViewModel
 import dagger.hilt.android.AndroidEntryPoint

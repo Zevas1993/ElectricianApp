@@ -28,11 +28,12 @@ import java.util.Date
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
+import dagger.hilt.android.qualifiers.ApplicationContext // Import qualifier
 
 @Singleton
 class PhotoDocRepositoryImpl @Inject constructor(
     private val photoDocDao: PhotoDocDao,
-    private val context: Context,
+    @ApplicationContext private val context: Context, // Add qualifier
     private val gson: Gson
 ) : PhotoDocRepository {
 

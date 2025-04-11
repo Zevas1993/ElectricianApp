@@ -1,9 +1,11 @@
 package com.example.electricianapp.presentation.fragment.calculators
 
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup // Added import
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.electricianapp.R
@@ -36,13 +38,14 @@ class VoltageDropFragmentTest {
         launchFragmentInContainer<VoltageDropFragment>(themeResId = R.style.Theme_ElectricianApp)
 
         // Input test values
-        onView(withId(R.id.editTextVoltage)).perform(clearText(), typeText("120"), closeSoftKeyboard())
-        onView(withId(R.id.spinnerPhase)).perform(click())
-        onView(withText("Single Phase")).perform(click())
-        onView(withId(R.id.spinnerMaterial)).perform(click())
-        onView(withText("Copper")).perform(click())
-        onView(withId(R.id.spinnerWireSize)).perform(click())
-        onView(withText("12 AWG")).perform(click())
+        // Note: Interacting with AutoCompleteTextView within TextInputLayout requires targeting the child EditText
+        onView(withId(R.id.autoCompleteVoltage)).perform(clearText(), typeText("120"), closeSoftKeyboard())
+        onView(withId(R.id.autoCompletePhase)).perform(click()) // Click the AutoCompleteTextView to show dropdown
+        onView(withText("Single Phase")).inRoot(isPlatformPopup()).perform(click()) // Select item from dropdown popup
+        onView(withId(R.id.autoCompleteMaterial)).perform(click())
+        onView(withText("Copper")).inRoot(isPlatformPopup()).perform(click())
+        onView(withId(R.id.autoCompleteWireSize)).perform(click())
+        onView(withText("12 AWG")).inRoot(isPlatformPopup()).perform(click())
         onView(withId(R.id.editTextLoadCurrent)).perform(clearText(), typeText("20"), closeSoftKeyboard())
         onView(withId(R.id.editTextDistance)).perform(clearText(), typeText("100"), closeSoftKeyboard())
 
@@ -64,7 +67,7 @@ class VoltageDropFragmentTest {
         launchFragmentInContainer<VoltageDropFragment>(themeResId = R.style.Theme_ElectricianApp)
 
         // Input invalid values (missing required fields)
-        onView(withId(R.id.editTextVoltage)).perform(clearText(), typeText("120"), closeSoftKeyboard())
+        onView(withId(R.id.autoCompleteVoltage)).perform(clearText(), typeText("120"), closeSoftKeyboard())
         // Don't fill in other fields
 
         // Perform calculation
@@ -80,13 +83,13 @@ class VoltageDropFragmentTest {
         launchFragmentInContainer<VoltageDropFragment>(themeResId = R.style.Theme_ElectricianApp)
 
         // Input test values
-        onView(withId(R.id.editTextVoltage)).perform(clearText(), typeText("240"), closeSoftKeyboard())
-        onView(withId(R.id.spinnerPhase)).perform(click())
-        onView(withText("Three Phase")).perform(click())
-        onView(withId(R.id.spinnerMaterial)).perform(click())
-        onView(withText("Aluminum")).perform(click())
-        onView(withId(R.id.spinnerWireSize)).perform(click())
-        onView(withText("2 AWG")).perform(click())
+        onView(withId(R.id.autoCompleteVoltage)).perform(clearText(), typeText("240"), closeSoftKeyboard())
+        onView(withId(R.id.autoCompletePhase)).perform(click())
+        onView(withText("Three Phase")).inRoot(isPlatformPopup()).perform(click())
+        onView(withId(R.id.autoCompleteMaterial)).perform(click())
+        onView(withText("Aluminum")).inRoot(isPlatformPopup()).perform(click())
+        onView(withId(R.id.autoCompleteWireSize)).perform(click())
+        onView(withText("2 AWG")).inRoot(isPlatformPopup()).perform(click())
         onView(withId(R.id.editTextLoadCurrent)).perform(clearText(), typeText("30"), closeSoftKeyboard())
         onView(withId(R.id.editTextDistance)).perform(clearText(), typeText("150"), closeSoftKeyboard())
 

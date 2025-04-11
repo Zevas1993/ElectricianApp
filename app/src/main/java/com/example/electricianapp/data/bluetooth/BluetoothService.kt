@@ -11,6 +11,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import com.example.electricianapp.domain.model.measurements.BluetoothDeviceInfo
 import kotlinx.coroutines.CoroutineScope
@@ -50,6 +51,7 @@ class BluetoothService @Inject constructor(
     
     // BroadcastReceiver for Bluetooth device discovery
     private val receiver = object : BroadcastReceiver() {
+        @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
                 BluetoothDevice.ACTION_FOUND -> {
@@ -109,6 +111,7 @@ class BluetoothService @Inject constructor(
     /**
      * Start scanning for Bluetooth devices
      */
+    @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     suspend fun startScan(): Boolean = withContext(Dispatchers.IO) {
         if (bluetoothAdapter == null) {
             return@withContext false
@@ -132,6 +135,7 @@ class BluetoothService @Inject constructor(
     /**
      * Stop scanning for Bluetooth devices
      */
+    @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     suspend fun stopScan() = withContext(Dispatchers.IO) {
         if (bluetoothAdapter == null) {
             return@withContext
@@ -147,6 +151,7 @@ class BluetoothService @Inject constructor(
     /**
      * Get a list of bonded (paired) Bluetooth devices
      */
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     suspend fun getBondedDevices(): List<BluetoothDeviceInfo> = withContext(Dispatchers.IO) {
         if (bluetoothAdapter == null) {
             return@withContext emptyList()
@@ -170,6 +175,7 @@ class BluetoothService @Inject constructor(
     /**
      * Connect to a Bluetooth device
      */
+    @RequiresPermission(allOf = [Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN])
     suspend fun connectToDevice(address: String): Boolean = withContext(Dispatchers.IO) {
         if (bluetoothAdapter == null) {
             return@withContext false

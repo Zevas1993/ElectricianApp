@@ -19,39 +19,34 @@ class CalculateConduitFillUseCase @Inject constructor() {
     operator fun invoke(input: ConduitFillInput): ConduitFillResult {
         // Get conduit area based on type and size
         val conduitAreaInSqInches = getConduitArea(input.conduitType, input.conduitSize)
-
+        
         // Calculate total wire area
-        // Group wires by type and size to correctly sum quantities and areas
         val wireDetails = input.wires.groupBy { "${it.type}-${it.size}" }
             .map { (_, wires) ->
-                val wire = wires.first() // Get a representative wire for type/size/area
+                val wire = wires.first() // Get a representative wire for type, size, area
                 val totalQuantity = wires.sumOf { it.quantity }
+                val areaPerWire = wire.areaPerWireInSqInches // Use the correct property name from input
+                val totalArea = areaPerWire * totalQuantity
                 WireDetail(
                     type = wire.type,
                     size = wire.size,
                     quantity = totalQuantity,
-                    areaPerWireInSqInches = wire.areaInSqInches, // Use area from the model
-                    totalAreaInSqInches = wire.areaInSqInches * totalQuantity
+                    areaPerWireInSqInches = areaPerWire, // Pass the correct value
+                    totalAreaInSqInches = totalArea // Pass the calculated total area
                 )
             }
-
-        val totalWireAreaInSqInches = wireDetails.sumOf { it.totalAreaInSqInches }
-
+        
+        val totalWireAreaInSqInches = wireDetails.sumOf { it.totalAreaInSqInches } // Use the correct property name
+        
         // Calculate fill percentage
-        val fillPercentage = if (conduitAreaInSqInches > 0) {
-            (totalWireAreaInSqInches / conduitAreaInSqInches) * 100
-        } else {
-            0.0 // Avoid division by zero if conduit area is invalid
-        }
-
-
-        // Determine maximum allowed fill percentage based on NEC Chapter 9, Table 1
-        val totalNumberOfConductors = input.wires.sumOf { it.quantity }
-        val maximumAllowedFillPercentage = getMaximumAllowedFillPercentage(totalNumberOfConductors)
-
+        val fillPercentage = (totalWireAreaInSqInches / conduitAreaInSqInches) * 100
+        
+        // Determine maximum allowed fill percentage based on NEC
+        val maximumAllowedFillPercentage = getMaximumAllowedFillPercentage(input.wires.size)
+        
         // Check if within limits
         val isWithinLimits = fillPercentage <= maximumAllowedFillPercentage
-
+        
         return ConduitFillResult(
             conduitType = input.conduitType,
             conduitSize = input.conduitSize,
@@ -63,7 +58,7 @@ class CalculateConduitFillUseCase @Inject constructor() {
             wireDetails = wireDetails
         )
     }
-
+    
     /**
      * Get conduit area in square inches based on type and size
      * @param conduitType The type of conduit
@@ -71,7 +66,7 @@ class CalculateConduitFillUseCase @Inject constructor() {
      * @return The internal cross-sectional area in square inches
      */
     private fun getConduitArea(conduitType: ConduitType, conduitSize: String): Double {
-        // Areas based on NEC Chapter 9, Table 4 (Total Area, sq. in.) - Using common values, verify against specific NEC edition if critical
+        // Areas based on NEC Chapter 9, Table 4
         return when (conduitType) {
             ConduitType.EMT -> when (conduitSize) {
                 "1/2" -> 0.304
@@ -80,88 +75,89 @@ class CalculateConduitFillUseCase @Inject constructor() {
                 "1-1/4" -> 1.496
                 "1-1/2" -> 2.036
                 "2" -> 3.356
-                "2-1/2" -> 5.783 // NEC 2020 value
-                "3" -> 8.898 // NEC 2020 value
-                "3-1/2" -> 11.770 // NEC 2020 value
-                "4" -> 14.786 // NEC 2020 value
-                else -> 0.0 // Return 0.0 for unsupported size, handle error upstream if needed
+                "2-1/2" -> 5.858
+                "3" -> 8.846
+                "3-1/2" -> 11.545
+                "4" -> 14.753
+                else -> throw IllegalArgumentException("Unsupported EMT conduit size: $conduitSize")
             }
             ConduitType.IMC -> when (conduitSize) {
-                "1/2" -> 0.368
-                "3/4" -> 0.616
-                "1" -> 0.983
-                "1-1/4" -> 1.698
-                "1-1/2" -> 2.290
-                "2" -> 3.716
-                "2-1/2" -> 5.980
-                "3" -> 8.898
-                "3-1/2" -> 11.770
-                "4" -> 14.790
-                else -> 0.0
-            }
-            ConduitType.RMC -> when (conduitSize) {
-                "1/2" -> 0.314
-                "3/4" -> 0.533
-                "1" -> 0.861
-                "1-1/4" -> 1.504
-                "1-1/2" -> 2.048
-                "2" -> 3.355
-                "2-1/2" -> 5.783
-                "3" -> 8.898
-                "3-1/2" -> 11.770
-                "4" -> 14.786
-                else -> 0.0
-            }
-            ConduitType.PVC_SCHEDULE_40 -> when (conduitSize) {
                 "1/2" -> 0.285
                 "3/4" -> 0.508
-                "1" -> 0.817
-                "1-1/4" -> 1.414
-                "1-1/2" -> 1.904
-                "2" -> 3.172
-                "2-1/2" -> 4.238
-                "3" -> 6.929
-                "3-1/2" -> 9.079
-                "4" -> 11.584
-                else -> 0.0
+                "1" -> 0.814
+                "1-1/4" -> 1.453
+                "1-1/2" -> 1.986
+                "2" -> 3.291
+                "2-1/2" -> 5.610
+                "3" -> 8.477
+                "3-1/2" -> 11.258
+                "4" -> 14.309
+                else -> throw IllegalArgumentException("Unsupported IMC conduit size: $conduitSize")
+            }
+            ConduitType.RMC -> when (conduitSize) {
+                "1/2" -> 0.249
+                "3/4" -> 0.445
+                "1" -> 0.788
+                "1-1/4" -> 1.405
+                "1-1/2" -> 1.828
+                "2" -> 3.269
+                "2-1/2" -> 5.172
+                "3" -> 8.085
+                "3-1/2" -> 10.684
+                "4" -> 13.631
+                else -> throw IllegalArgumentException("Unsupported RMC conduit size: $conduitSize")
+            }
+            // Updated PVC cases for Schedule 40 and 80
+            ConduitType.PVC_SCHEDULE_40 -> when (conduitSize) {
+                "1/2" -> 0.314 // NEC Ch9, T4 - PVC Sched 40
+                "3/4" -> 0.555
+                "1" -> 0.907
+                "1-1/4" -> 1.583
+                "1-1/2" -> 2.147
+                "2" -> 3.538
+                "2-1/2" -> 4.990 // Note: Values might differ slightly based on specific NEC edition
+                "3" -> 7.698
+                "3-1/2" -> 10.227
+                "4" -> 13.146
+                else -> throw IllegalArgumentException("Unsupported PVC Schedule 40 conduit size: $conduitSize")
             }
             ConduitType.PVC_SCHEDULE_80 -> when (conduitSize) {
-                "1/2" -> 0.235
+                "1/2" -> 0.235 // NEC Ch9, T4 - PVC Sched 80
                 "3/4" -> 0.433
                 "1" -> 0.710
                 "1-1/4" -> 1.282
                 "1-1/2" -> 1.738
-                "2" -> 2.908
-                "2-1/2" -> 3.801
-                "3" -> 6.086
-                "3-1/2" -> 8.043
-                "4" -> 10.367
-                else -> 0.0
+                "2" -> 2.907
+                "2-1/2" -> 4.236
+                "3" -> 6.677
+                "3-1/2" -> 8.833
+                "4" -> 11.596
+                else -> throw IllegalArgumentException("Unsupported PVC Schedule 80 conduit size: $conduitSize")
             }
+            // Removed duplicated/incorrect ENT block
             ConduitType.ENT -> when (conduitSize) {
                 "1/2" -> 0.285
                 "3/4" -> 0.508
-                "1" -> 0.817
-                "1-1/4" -> 1.414
-                "1-1/2" -> 1.904
-                "2" -> 3.172
-                // Larger sizes less common for ENT
-                else -> 0.0
+                "1" -> 0.814
+                "1-1/4" -> 1.453
+                "1-1/2" -> 1.986
+                "2" -> 3.291
+                else -> throw IllegalArgumentException("Unsupported ENT conduit size: $conduitSize")
             }
         }
     }
-
+    
     /**
-     * Get maximum allowed fill percentage based on NEC Chapter 9, Table 1
-     * @param numberOfConductors The total number of conductors in the conduit
+     * Get maximum allowed fill percentage based on NEC
+     * @param numberOfConductors The number of conductors in the conduit
      * @return The maximum allowed fill percentage
      */
     private fun getMaximumAllowedFillPercentage(numberOfConductors: Int): Double {
         return when {
-            numberOfConductors <= 0 -> 0.0  // No conductors, 0% fill allowed conceptually
-            numberOfConductors == 1 -> 53.0   // Over 2 wires note 1: "Use 53 percent for 1 conductor"
-            numberOfConductors == 2 -> 31.0   // Over 2 wires note 2: "Use 31 percent for 2 conductors"
-            else -> 40.0 // Covers >= 3 conductors (NEC Chapter 9, Table 1) and ensures exhaustiveness
+            numberOfConductors == 1 -> 53.0  // One conductor: 53% fill
+            numberOfConductors == 2 -> 31.0  // Two conductors: 31% fill
+            numberOfConductors >= 3 -> 40.0  // Three or more conductors: 40% fill
+            else -> 40.0  // Default to 40% if no conductors (shouldn't happen)
         }
     }
 }

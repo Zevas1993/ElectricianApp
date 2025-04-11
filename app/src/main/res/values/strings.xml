@@ -69,6 +69,11 @@
     <string name="title_pipe_bending">Pipe Bending</string>
     <string name="title_lighting_layout">Lighting Layout</string>
     <string name="title_ar_view">AR View</string>
+    <string name="title_home">Home</string>
+    <string name="title_calculators">Calculators</string>
+    <string name="title_voltage_drop">Voltage Drop</string>
+    <string name="title_luminaire_calculator">Luminaire Calculator</string>
+    <string name="title_material_inventory">Material Inventory</string>
 
     <!-- Additional strings likely needed based on guide layouts -->
     <string name="calculating">Calculating...</string>

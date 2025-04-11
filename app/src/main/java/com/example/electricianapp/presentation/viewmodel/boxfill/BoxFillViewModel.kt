@@ -31,7 +31,7 @@ class BoxFillViewModel @Inject constructor(
     val uiState: StateFlow<BoxFillUiState> = _uiState
 
     // Input parameters
-    private val _boxType = MutableLiveData<BoxType>(BoxType.DEVICE_BOX) // Default value
+    private val _boxType = MutableLiveData<BoxType>(BoxType.METALLIC) // Default value (Corrected from DEVICE_BOX)
     val boxType: LiveData<BoxType> = _boxType
 
     // Store dimensions/volume string for now, might need parsing later
@@ -85,7 +85,7 @@ class BoxFillViewModel @Inject constructor(
                 }
 
                 val input = BoxFillInput(
-                    boxType = _boxType.value ?: BoxType.DEVICE_BOX,
+                    boxType = _boxType.value ?: BoxType.METALLIC, // Corrected default
                     boxDimensions = _boxDimensionsOrVolume.value ?: "",
                     boxVolumeInCubicInches = boxVolume,
                     components = _components.value ?: emptyList()

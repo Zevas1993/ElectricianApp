@@ -14,5 +14,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "ElectricianApp"
 include ':app'
-include ':domain'
-include ':data'
+// include ':domain' // Removed
+// include ':data' // Removed

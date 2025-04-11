@@ -7,13 +7,11 @@ import com.example.electricianapp.domain.model.materials.UnitOfMeasure
 import com.example.electricianapp.domain.usecase.materials.GetAllMaterialsUseCase
 import com.example.electricianapp.domain.usecase.materials.GetInventoryItemByIdUseCase
 import com.example.electricianapp.domain.usecase.materials.SaveInventoryItemUseCase
+import com.example.electricianapp.domain.model.materials.MaterialCategory // Import Category
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.test.* // Use wildcard for coroutines test
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -36,7 +34,7 @@ class AddEditInventoryViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     // Test dispatcher for coroutines
-    private val testDispatcher = TestCoroutineDispatcher()
+    private val testDispatcher = StandardTestDispatcher() // Use StandardTestDispatcher
 
     // Mocks
     @Mock
@@ -56,7 +54,8 @@ class AddEditInventoryViewModelTest {
         id = "material1",
         name = "Test Material",
         description = "Test Description",
-        code = "TM001",
+        // code = "TM001", // Removed
+        category = MaterialCategory.MISCELLANEOUS, // Added
         unitOfMeasure = UnitOfMeasure.EACH
     )
 
@@ -71,14 +70,22 @@ class AddEditInventoryViewModelTest {
         lastUpdated = Date()
     )
 
+    // Use TestScope with the StandardTestDispatcher
+    private val testScope = TestScope(testDispatcher)
+
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)
         Dispatchers.setMain(testDispatcher)
 
         // Setup default mock responses
-        `when`(getAllMaterialsUseCase()).thenReturn(flowOf(listOf(testMaterial)))
-        `when`(getInventoryItemByIdUseCase("inventory1")).thenReturn(testInventory)
+        // Use runTest for setting up suspend function mocks
+        testScope.runTest {
+            `when`(getAllMaterialsUseCase()).thenReturn(flowOf(listOf(testMaterial)))
+            // Mock the suspend function correctly
+            `when`(getInventoryItemByIdUseCase.invoke("inventory1")).thenReturn(testInventory)
+            `when`(getInventoryItemByIdUseCase.invoke("invalid_id")).thenThrow(IllegalArgumentException("Inventory not found")) // Ensure error case is also mocked as suspend
+        }
 
         // Initialize the view model
         viewModel = AddEditInventoryViewModel(
@@ -91,11 +98,11 @@ class AddEditInventoryViewModelTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
+        // No cleanup needed for StandardTestDispatcher
     }
 
     @Test
-    fun `loadMaterials should update materials LiveData`() = testDispatcher.runBlockingTest {
+    fun `loadMaterials should update materials LiveData`() = testScope.runTest { // Use runTest
         // Arrange
         val expectedMaterials = listOf(testMaterial)
         `when`(getAllMaterialsUseCase()).thenReturn(flowOf(expectedMaterials))
@@ -110,7 +117,7 @@ class AddEditInventoryViewModelTest {
     }
 
     @Test
-    fun `loadInventoryItem should update selectedInventory LiveData`() = testDispatcher.runBlockingTest {
+    fun `loadInventoryItem should update selectedInventory LiveData`() = testScope.runTest { // Use runTest
         // Arrange
         `when`(getInventoryItemByIdUseCase("inventory1")).thenReturn(testInventory)
 
@@ -133,7 +140,7 @@ class AddEditInventoryViewModelTest {
     }
 
     @Test
-    fun `saveInventory should call saveInventoryItemUseCase`() = testDispatcher.runBlockingTest {
+    fun `saveInventory should call saveInventoryItemUseCase`() = testScope.runTest { // Use runTest
         // Act
         viewModel.saveInventory(testInventory)
 
@@ -144,7 +151,7 @@ class AddEditInventoryViewModelTest {
     }
 
     @Test
-    fun `updateInventory should call saveInventoryItemUseCase`() = testDispatcher.runBlockingTest {
+    fun `updateInventory should call saveInventoryItemUseCase`() = testScope.runTest { // Use runTest
         // Act
         viewModel.updateInventory(testInventory)
 
@@ -155,15 +162,14 @@ class AddEditInventoryViewModelTest {
     }
 
     @Test
-    fun `loadInventoryItem should handle error`() = testDispatcher.runBlockingTest {
-        // Arrange
-        val errorMessage = "Inventory not found"
-        `when`(getInventoryItemByIdUseCase("invalid_id")).thenThrow(IllegalArgumentException(errorMessage))
+    fun `loadInventoryItem should handle error`() = testScope.runTest { // Use runTest
+        // Arrange is now done in setUp
 
         // Act
         viewModel.loadInventoryItem("invalid_id")
 
         // Assert
+        val errorMessage = "Inventory not found" // Define the expected error message
         assertEquals(errorMessage, viewModel.error.value)
         assertFalse(viewModel.isLoading.value!!)
     }

@@ -144,7 +144,10 @@ class ConduitFillViewModel @Inject constructor(
             return // Stop execution if area not found
                    }
 
+        // Construct a name, e.g., "12 AWG THHN"
+        val wireName = "$wireSize ${wireType.name}"
         val wire = Wire(
+            name = wireName, // Add name parameter
             type = wireType,
             size = wireSize,
             quantity = quantity,
@@ -178,7 +181,10 @@ class ConduitFillViewModel @Inject constructor(
                 return
                        }
 
+            // Construct a name, e.g., "12 AWG THHN"
+            val wireName = "$wireSize ${wireType.name}"
             val updatedWire = Wire(
+                name = wireName, // Add name parameter
                 type = wireType,
                 size = wireSize,
                 quantity = quantity,

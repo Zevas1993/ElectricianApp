@@ -26,7 +26,7 @@ class BoxFillRepositoryImpl @Inject constructor(
 
     override suspend fun saveCalculation(input: BoxFillInput, result: BoxFillResult): Long {
         val inputEntity = BoxFillInputEntity(
-            boxType = input.boxType.name,
+            boxType = input.boxType.name, // Use .name to save enum as String
             boxDimensions = input.boxDimensions,
             boxVolumeInCubicInches = input.boxVolumeInCubicInches,
             componentsJson = gson.toJson(input.components, boxComponentListType)
@@ -35,7 +35,7 @@ class BoxFillRepositoryImpl @Inject constructor(
 
         val resultEntity = BoxFillResultEntity(
             inputId = inputId,
-            boxType = result.boxType.name,
+            boxType = result.boxType.name, // Use .name to save enum as String
             boxDimensions = result.boxDimensions,
             boxVolumeInCubicInches = result.boxVolumeInCubicInches,
             totalRequiredVolumeInCubicInches = result.totalRequiredVolumeInCubicInches,
@@ -92,8 +92,8 @@ class BoxFillRepositoryImpl @Inject constructor(
         }
 
         // Use try-catch for enum parsing
-        val boxTypeInput = try { BoxType.valueOf(inputEntity.boxType) } catch (e: IllegalArgumentException) { BoxType.DEVICE_BOX /* Default or handle error */ }
-        val boxTypeResult = try { BoxType.valueOf(resultEntity.boxType) } catch (e: IllegalArgumentException) { BoxType.DEVICE_BOX /* Default or handle error */ }
+        val boxTypeInput = try { BoxType.valueOf(inputEntity.boxType) } catch (e: IllegalArgumentException) { BoxType.METALLIC /* Default or handle error */ } // Corrected default
+        val boxTypeResult = try { BoxType.valueOf(resultEntity.boxType) } catch (e: IllegalArgumentException) { BoxType.METALLIC /* Default or handle error */ } // Corrected default
 
 
         val input = BoxFillInput(

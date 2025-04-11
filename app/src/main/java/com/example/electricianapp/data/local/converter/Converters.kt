@@ -1,9 +1,7 @@
 package com.example.electricianapp.data.local.converter // Corrected package
 
 import androidx.room.TypeConverter
-// TODO: Define these enums in the domain.model package if they are needed
-// import com.example.electricianapp.domain.model.ApplianceType
-// import com.example.electricianapp.domain.model.PhaseType
+// Commented imports removed
 import java.util.Date // Import Date for potential future use
 import com.example.electricianapp.domain.model.dwellingload.Appliance // Import Appliance
 import com.example.electricianapp.domain.model.dwellingload.DwellingType // Import DwellingType
@@ -43,55 +41,7 @@ class Converters {
         return value?.let { enumValueOf<com.example.electricianapp.data.model.JobStatus>(it) }
     }
 
-    // --- Converters from the Calculator App Report (Potentially adapt/remove if enums don't exist) ---
-
-    /**
-     * Convert ApplianceType enum to string for storage.
-     */
-    /* // Uncomment if ApplianceType enum is defined and needed
-    @TypeConverter
-    fun fromApplianceType(applianceType: ApplianceType): String {
-        return applianceType.name
-    }
-    */
-
-    /**
-     * Convert string to ApplianceType enum.
-     */
-    /* // Uncomment if ApplianceType enum is defined and needed
-    @TypeConverter
-    fun toApplianceType(value: String): ApplianceType {
-        return try {
-            ApplianceType.valueOf(value)
-        } catch (e: IllegalArgumentException) {
-            ApplianceType.OTHER // Default in case of invalid value
-        }
-    }
-    */
-
-    /**
-     * Convert PhaseType enum to string for storage.
-     */
-    /* // Uncomment if PhaseType enum is defined and needed
-    @TypeConverter
-    fun fromPhaseType(phaseType: PhaseType): String {
-        return phaseType.name
-    }
-    */
-
-    /**
-     * Convert string to PhaseType enum.
-     */
-    /* // Uncomment if PhaseType enum is defined and needed
-    @TypeConverter
-    fun toPhaseType(value: String): PhaseType {
-        return try {
-            PhaseType.valueOf(value)
-        } catch (e: IllegalArgumentException) {
-            PhaseType.SINGLE_PHASE // Default in case of invalid value
-        }
-    }
-    */
+    // Removed commented out converters for ApplianceType and PhaseType
 
     /**
      * Convert list of strings to a single string for storage.

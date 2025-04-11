@@ -1,11 +1,7 @@
 package com.example.electricianapp.presentation.viewmodel.materials
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.electricianapp.domain.model.materials.Material
-import com.example.electricianapp.domain.model.materials.MaterialInventory
-import com.example.electricianapp.domain.model.materials.MaterialTransaction
-import com.example.electricianapp.domain.model.materials.TransactionType
-import com.example.electricianapp.domain.model.materials.UnitOfMeasure
+import com.example.electricianapp.domain.model.materials.* // Use wildcard
 import com.example.electricianapp.domain.usecase.materials.GetAllInventoryItemsUseCase
 import com.example.electricianapp.domain.usecase.materials.GetInventoryItemByIdUseCase
 import com.example.electricianapp.domain.usecase.materials.GetLowStockInventoryItemsUseCase
@@ -16,10 +12,7 @@ import com.example.electricianapp.domain.usecase.materials.SearchInventoryItemsU
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.test.* // Use wildcard
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -42,7 +35,7 @@ class MaterialInventoryViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     // Test dispatcher for coroutines
-    private val testDispatcher = TestCoroutineDispatcher()
+    private val testDispatcher = StandardTestDispatcher() // Use StandardTestDispatcher
 
     // Mocks
     @Mock
@@ -74,7 +67,8 @@ class MaterialInventoryViewModelTest {
         id = "material1",
         name = "Test Material",
         description = "Test Description",
-        code = "TM001",
+        // code = "TM001", // Removed
+        category = MaterialCategory.MISCELLANEOUS, // Added
         unitOfMeasure = UnitOfMeasure.EACH
     )
 
@@ -98,16 +92,23 @@ class MaterialInventoryViewModelTest {
         notes = "Test Transaction"
     )
 
+    // Use TestScope with the StandardTestDispatcher
+    private val testScope = TestScope(testDispatcher)
+
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)
         Dispatchers.setMain(testDispatcher)
 
         // Setup default mock responses
-        `when`(getAllInventoryItemsUseCase()).thenReturn(flowOf(listOf(testInventory)))
-        `when`(getLowStockInventoryItemsUseCase()).thenReturn(flowOf(emptyList()))
-        `when`(getInventoryItemByIdUseCase("inventory1")).thenReturn(testInventory)
-        `when`(getTransactionHistoryUseCase("material1")).thenReturn(flowOf(listOf(testTransaction)))
+        // Use runTest for setting up suspend function mocks
+        testScope.runTest {
+            `when`(getAllInventoryItemsUseCase()).thenReturn(flowOf(listOf(testInventory)))
+            `when`(getLowStockInventoryItemsUseCase()).thenReturn(flowOf(emptyList()))
+            // Mock the suspend function correctly
+            `when`(getInventoryItemByIdUseCase.invoke("inventory1")).thenReturn(testInventory)
+            `when`(getTransactionHistoryUseCase("material1")).thenReturn(flowOf(listOf(testTransaction)))
+        }
 
         // Initialize the view model
         viewModel = MaterialInventoryViewModel(
@@ -124,11 +125,11 @@ class MaterialInventoryViewModelTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
+        // No cleanup needed for StandardTestDispatcher
     }
 
     @Test
-    fun `loadInventory should update inventory LiveData`() = testDispatcher.runBlockingTest {
+    fun `loadInventory should update inventory LiveData`() = testScope.runTest { // Use runTest
         // Arrange
         val expectedInventory = listOf(testInventory)
         `when`(getAllInventoryItemsUseCase()).thenReturn(flowOf(expectedInventory))
@@ -143,9 +144,8 @@ class MaterialInventoryViewModelTest {
     }
 
     @Test
-    fun `loadInventoryItem should update selectedInventory LiveData`() = testDispatcher.runBlockingTest {
-        // Arrange
-        `when`(getInventoryItemByIdUseCase("inventory1")).thenReturn(testInventory)
+    fun `loadInventoryItem should update selectedInventory LiveData`() = testScope.runTest { // Use runTest
+        // Arrange is now done in setUp
 
         // Act
         viewModel.loadInventoryItem("inventory1")
@@ -156,10 +156,10 @@ class MaterialInventoryViewModelTest {
     }
 
     @Test
-    fun `loadTransactionHistory should update transactionHistory LiveData`() = testDispatcher.runBlockingTest {
+    fun `loadTransactionHistory should update transactionHistory LiveData`() = testScope.runTest { // Use runTest
         // Arrange
         val expectedTransactions = listOf(testTransaction)
-        `when`(getInventoryItemByIdUseCase("inventory1")).thenReturn(testInventory)
+        // `getInventoryItemByIdUseCase` mock is already set up
         `when`(getTransactionHistoryUseCase("material1")).thenReturn(flowOf(expectedTransactions))
 
         // Act
@@ -171,7 +171,7 @@ class MaterialInventoryViewModelTest {
     }
 
     @Test
-    fun `showLowStockItems should update inventory with low stock items`() = testDispatcher.runBlockingTest {
+    fun `showLowStockItems should update inventory with low stock items`() = testScope.runTest { // Use runTest
         // Arrange
         val lowStockInventory = testInventory.copy(quantity = 10.0) // Below minimum of 20
         val expectedLowStockItems = listOf(lowStockInventory)
@@ -186,7 +186,7 @@ class MaterialInventoryViewModelTest {
     }
 
     @Test
-    fun `searchInventory should update inventory with search results`() = testDispatcher.runBlockingTest {
+    fun `searchInventory should update inventory with search results`() = testScope.runTest { // Use runTest
         // Arrange
         val searchQuery = "Test"
         val expectedSearchResults = listOf(testInventory)
@@ -201,7 +201,7 @@ class MaterialInventoryViewModelTest {
     }
 
     @Test
-    fun `adjustInventory should update inventory and create transaction`() = testDispatcher.runBlockingTest {
+    fun `adjustInventory should update inventory and create transaction`() = testScope.runTest { // Use runTest
         // Arrange
         val inventoryId = "inventory1"
         val quantity = 50.0
@@ -219,13 +219,14 @@ class MaterialInventoryViewModelTest {
     }
 
     @Test
-    fun `adjustInventory should handle different transaction types correctly`() = testDispatcher.runBlockingTest {
+    fun `adjustInventory should handle different transaction types correctly`() = testScope.runTest { // Use runTest
         // Arrange - Purchase (add)
         val initialQuantity = 100.0
         val adjustmentQuantity = 50.0
         val inventoryId = "inventory1"
         val inventory = testInventory.copy(quantity = initialQuantity)
-        `when`(getInventoryItemByIdUseCase(inventoryId)).thenReturn(inventory)
+        // Mock the suspend function call for this specific test case
+        `when`(getInventoryItemByIdUseCase.invoke(inventoryId)).thenReturn(inventory)
 
         // Act - Purchase
         viewModel.adjustInventory(inventoryId, adjustmentQuantity, "Purchase", TransactionType.PURCHASE)
@@ -236,7 +237,8 @@ class MaterialInventoryViewModelTest {
         })
 
         // Arrange - Use (subtract)
-        `when`(getInventoryItemByIdUseCase(inventoryId)).thenReturn(inventory)
+        // Mock the suspend function call again for this part of the test
+        `when`(getInventoryItemByIdUseCase.invoke(inventoryId)).thenReturn(inventory)
 
         // Act - Use
         viewModel.adjustInventory(inventoryId, adjustmentQuantity, "Use", TransactionType.USE)

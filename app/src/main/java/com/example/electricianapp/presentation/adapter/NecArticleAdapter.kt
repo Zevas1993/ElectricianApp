@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView // Ensure RecyclerView is imported
 import com.example.electricianapp.databinding.ItemNecArticleBinding
 import com.example.electricianapp.domain.model.neccodes.NecArticle
 import com.google.android.material.chip.Chip
@@ -35,7 +35,7 @@ class NecArticleAdapter(
 
         init {
             binding.root.setOnClickListener {
-                val position = bindingAdapterPosition
+                val position = adapterPosition // Use adapterPosition as workaround
                 if (position != RecyclerView.NO_POSITION) {
                     onItemClick(getItem(position))
                 }

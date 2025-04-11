@@ -59,12 +59,15 @@ dependencies {
     implementation libs.google.material // Updated to 1.11.0 via catalog
     implementation libs.androidx.constraintlayout
 
-    // Domain Module Dependency
-    implementation project(':domain')
+    // Domain Module Dependency (Removed - Code moved to :app)
+    // implementation project(':domain')
+    // Data Module Dependency (Removed - Code moved to :app)
+    // implementation project(':data')
+    // kapt(project(':data')) // Removed - Potentially causing variant ambiguity
 
     // Navigation Component
-    implementation libs.androidx.navigation.fragment.ktx // Updated to 2.7.6 via catalog
-    implementation libs.androidx.navigation.ui.ktx // Updated to 2.7.6 via catalog
+    implementation libs.androidx.navigation.fragment.ktx // Use updated version from catalog
+    implementation libs.androidx.navigation.ui.ktx // Use updated version from catalog
 
     // Lifecycle Components (ViewModel, LiveData, Coroutine Scopes)
     implementation libs.androidx.lifecycle.viewmodel.ktx // Updated to 2.7.0 via catalog
@@ -74,7 +77,7 @@ dependencies {
     // Room Persistence Library
     // def room_version = "2.6.0" // Removed - Use catalog
     implementation libs.androidx.room.runtime // Updated to 2.6.1 via catalog
-    kapt libs.androidx.room.compiler
+    kapt libs.androidx.room.compiler // Use kapt
     implementation libs.androidx.room.ktx // Kotlin Extensions and Coroutines support
 
     // Kotlin Gradle Plugin version (upgrade to 1.9.22)
@@ -83,7 +86,7 @@ dependencies {
     // Hilt Dependency Injection
     // def hilt_version = "2.48" // Removed - Use catalog
     implementation libs.google.hilt.android
-    kapt libs.google.hilt.compiler
+    kapt libs.google.hilt.compiler // Use kapt
     implementation libs.androidx.hilt.navigation.fragment // For Hilt ViewModel in Navigation
 
     // Coroutines
@@ -106,6 +109,9 @@ dependencies {
     implementation libs.google.ar.core // Check for latest compatible version
     implementation libs.google.ar.sceneform.ux // Sceneform UX library for ArFragment (Check compatibility/latest)
 
+    // Glide (Image Loading)
+    implementation libs.glide
+    kapt libs.glide.compiler // Use kapt
 
     // Testing Dependencies
     testImplementation libs.junit
@@ -122,7 +128,7 @@ dependencies {
 
     // Hilt testing
     androidTestImplementation libs.google.hilt.android.testing
-    kaptAndroidTest libs.google.hilt.compiler
+    kaptAndroidTest libs.google.hilt.compiler // Use kaptAndroidTest
 }
 
 // Apply the Google services plugin using the older syntax as well, often needed at the bottom

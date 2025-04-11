@@ -3,35 +3,133 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_dwelling_load">
+    app:startDestination="@+id/navigation_home">
 
+    <!-- Home Fragment (Assuming it exists or will be created) -->
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.electricianapp.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <!-- Calculator List Fragment -->
+    <fragment
+        android:id="@+id/navigation_calculator_list"
+        android:name="com.example.electricianapp.presentation.fragment.calculators.CalculatorListFragment"
+        android:label="@string/title_calculators"
+        tools:layout="@layout/fragment_calculator_list" >
+        <action
+            android:id="@+id/action_calculatorListFragment_to_dwellingLoadFragment"
+            app:destination="@id/navigation_dwelling_load" />
+        <action
+            android:id="@+id/action_calculatorListFragment_to_conduitFillFragment"
+            app:destination="@id/navigation_conduit_fill" />
+         <action
+            android:id="@+id/action_calculatorListFragment_to_pipeBendingFragment"
+            app:destination="@id/navigation_pipe_bending" />
+         <action
+            android:id="@+id/action_calculatorListFragment_to_lightingLayoutFragment"
+            app:destination="@id/navigation_lighting_layout" />
+         <action
+            android:id="@+id/action_calculatorListFragment_to_boxFillFragment"
+            app:destination="@id/navigation_box_fill" />
+         <action
+            android:id="@+id/action_calculatorListFragment_to_voltageDropFragment"
+            app:destination="@id/navigation_voltage_drop" />
+         <action
+            android:id="@+id/action_calculatorListFragment_to_luminaireCalculatorFragment"
+            app:destination="@id/navigation_luminaire_calculator" />
+    </fragment>
+
+    <!-- Calculation Fragments -->
     <fragment
         android:id="@+id/navigation_dwelling_load"
-        android:name="com.example.electricalcalculator.ui.dwellingload.DwellingLoadFragment"
+        android:name="com.example.electricianapp.presentation.fragment.dwellingload.DwellingLoadFragment"
         android:label="@string/title_dwelling_load"
         tools:layout="@layout/fragment_dwelling_load" />
 
     <fragment
         android:id="@+id/navigation_conduit_fill"
-        android:name="com.example.electricalcalculator.ui.conduitfill.ConduitFillFragment"
+        android:name="com.example.electricianapp.presentation.fragment.conduitfill.ConduitFillFragment"
         android:label="@string/title_conduit_fill"
         tools:layout="@layout/fragment_conduit_fill" />
 
     <fragment
         android:id="@+id/navigation_pipe_bending"
-        android:name="com.example.electricalcalculator.ui.pipebending.PipeBendingFragment"
+        android:name="com.example.electricianapp.presentation.fragment.pipebending.PipeBendingFragment"
         android:label="@string/title_pipe_bending"
         tools:layout="@layout/fragment_pipe_bending" />
 
     <fragment
         android:id="@+id/navigation_lighting_layout"
-        android:name="com.example.electricalcalculator.ui.lightinglayout.LightingLayoutFragment"
+        android:name="com.example.electricianapp.presentation.fragment.lightinglayout.LightingLayoutFragment"
         android:label="@string/title_lighting_layout"
         tools:layout="@layout/fragment_lighting_layout" />
 
+     <fragment
+        android:id="@+id/navigation_box_fill"
+        android:name="com.example.electricianapp.presentation.fragment.boxfill.BoxFillFragment"
+        android:label="@string/title_box_fill"
+        tools:layout="@layout/fragment_box_fill" />
+
+     <fragment
+        android:id="@+id/navigation_voltage_drop"
+        android:name="com.example.electricianapp.presentation.fragment.calculators.VoltageDropFragment"
+        android:label="@string/title_voltage_drop"
+        tools:layout="@layout/fragment_voltage_drop" />
+
+     <fragment
+        android:id="@+id/navigation_luminaire_calculator"
+        android:name="com.example.electricianapp.presentation.fragment.calculators.LuminaireCalculatorFragment"
+        android:label="@string/title_luminaire_calculator"
+        tools:layout="@layout/fragment_luminaire_calculator" />
+
+    <!-- Material Management Fragments -->
+    <fragment
+        android:id="@+id/navigation_material_inventory"
+        android:name="com.example.electricianapp.presentation.fragment.materials.MaterialInventoryFragment"
+        android:label="@string/title_material_inventory"
+        tools:layout="@layout/fragment_material_inventory" >
+        <action
+            android:id="@+id/action_materialInventoryFragment_to_materialInventoryDetailFragment"
+            app:destination="@id/navigation_material_inventory_detail" />
+        <action
+            android:id="@+id/action_materialInventoryFragment_to_addEditInventoryFragment"
+            app:destination="@id/navigation_add_edit_inventory" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_material_inventory_detail"
+        android:name="com.example.electricianapp.presentation.fragment.materials.MaterialInventoryDetailFragment"
+        android:label="Inventory Detail"
+        tools:layout="@layout/fragment_material_inventory_detail" >
+        <argument
+            android:name="inventoryId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_materialInventoryDetailFragment_to_addEditInventoryFragment"
+            app:destination="@id/navigation_add_edit_inventory" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_add_edit_inventory"
+        android:name="com.example.electricianapp.presentation.fragment.materials.AddEditInventoryFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_add_edit_inventory" >
+        <argument
+            android:name="inventoryId"
+            app:argType="string"
+            app:nullable="true" />
+         <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
+
+    <!-- Other Fragments -->
     <fragment
         android:id="@+id/navigation_ar_view"
-        android:name="com.example.electricalcalculator.ui.arview.ArViewFragment"
+        android:name="com.example.electricianapp.presentation.fragment.arview.ArViewFragment"
         android:label="@string/title_ar_view"
         tools:layout="@layout/fragment_ar_view" />
+
 </navigation>
