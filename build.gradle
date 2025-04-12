@@ -1,3 +1,23 @@
+// Updated main build.gradle 
+
+// Updated main build.gradle 
+
+// Updated main build.gradle 
+
+// Updated main build.gradle 
+
+// Updated main build.gradle 
+
+// Updated main build.gradle 
+
+// Updated main build.gradle 
+
+// Updated main build.gradle 
+
+// Updated main build.gradle 
+
+// Updated main build.gradle 
+
 buildscript {
     repositories {
         google()
@@ -22,4 +42,164 @@ plugins {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+// Fix for sourceset issues
+allprojects {
+    // Make sure to use full package names
+    afterEvaluate {
+        if (project.hasProperty('android')) {
+            android {
+                sourceSets {
+                    main {
+                        java.srcDirs = ['src/main/java']
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Fix for sourceset issues
+allprojects {
+    // Make sure to use full package names
+    afterEvaluate {
+        if (project.hasProperty('android')) {
+            android {
+                sourceSets {
+                    main {
+                        java.srcDirs = ['src/main/java']
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Fix for sourceset issues
+allprojects {
+    // Make sure to use full package names
+    afterEvaluate {
+        if (project.hasProperty('android')) {
+            android {
+                sourceSets {
+                    main {
+                        java.srcDirs = ['src/main/java']
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Fix for sourceset issues
+allprojects {
+    // Make sure to use full package names
+    afterEvaluate {
+        if (project.hasProperty('android')) {
+            android {
+                sourceSets {
+                    main {
+                        java.srcDirs = ['src/main/java']
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Fix for sourceset issues
+allprojects {
+    // Make sure to use full package names
+    afterEvaluate {
+        if (project.hasProperty('android')) {
+            android {
+                sourceSets {
+                    main {
+                        java.srcDirs = ['src/main/java']
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Fix for sourceset issues
+allprojects {
+    // Make sure to use full package names
+    afterEvaluate {
+        if (project.hasProperty('android')) {
+            android {
+                sourceSets {
+                    main {
+                        java.srcDirs = ['src/main/java']
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Fix for sourceset issues
+allprojects {
+    // Make sure to use full package names
+    afterEvaluate {
+        if (project.hasProperty('android')) {
+            android {
+                sourceSets {
+                    main {
+                        java.srcDirs = ['src/main/java']
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Fix for sourceset issues
+allprojects {
+    // Make sure to use full package names
+    afterEvaluate {
+        if (project.hasProperty('android')) {
+            android {
+                sourceSets {
+                    main {
+                        java.srcDirs = ['src/main/java']
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Fix for sourceset issues
+allprojects {
+    // Make sure to use full package names
+    afterEvaluate {
+        if (project.hasProperty('android')) {
+            android {
+                sourceSets {
+                    main {
+                        java.srcDirs = ['src/main/java']
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Fix for sourceset issues
+allprojects {
+    // Make sure to use full package names
+    afterEvaluate {
+        if (project.hasProperty('android')) {
+            android {
+                sourceSets {
+                    main {
+                        java.srcDirs = ['src/main/java']
+                    }
+                }
+            }
+        }
+    }
 }

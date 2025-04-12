@@ -37,21 +37,21 @@ echo ----------------------------------------------------
 echo # Project-wide Gradle settings > gradle.properties.temp
 echo org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8 >> gradle.properties.temp
 echo. >> gradle.properties.temp
-echo # Use JDK 17 (Temurin/AdoptOpenJDK) >> gradle.properties.temp
-echo org.gradle.java.home=C:\\Program Files\\Eclipse Adoptium\\jdk-17.0.14.7-hotspot >> gradle.properties.temp
-echo. >> gradle.properties.temp
-echo # When configured, Gradle will run in incubating parallel mode. >> gradle.properties.temp
-echo org.gradle.parallel=true >> gradle.properties.temp
-echo. >> gradle.properties.temp
-echo # AndroidX package structure to make it clearer which packages are bundled with the >> gradle.properties.temp
-echo # Android operating system, and which are packaged with your app's APK >> gradle.properties.temp
-echo android.useAndroidX=true >> gradle.properties.temp
-echo. >> gradle.properties.temp
-echo # Enable R8 full mode >> gradle.properties.temp
-echo android.enableR8.fullMode=true >> gradle.properties.temp
-echo. >> gradle.properties.temp
-echo # Kotlin code style for this project: "official" or "obsolete": >> gradle.properties.temp
-echo kotlin.code.style=official >> gradle.properties.temp
+echo # Use JDK 17 (Temurin/AdoptOpenJDK)>> gradle.properties.temp
+echo org.gradle.java.home=C:\\Program Files\\Eclipse Adoptium\\jdk-17.0.14.7-hotspot>> gradle.properties.temp
+echo.>> gradle.properties.temp
+echo # When configured, Gradle will run in incubating parallel mode.>> gradle.properties.temp
+echo org.gradle.parallel=true>> gradle.properties.temp
+echo.>> gradle.properties.temp
+echo # AndroidX package structure to make it clearer which packages are bundled with the>> gradle.properties.temp
+echo # Android operating system, and which are packaged with your app's APK>> gradle.properties.temp
+echo android.useAndroidX=true>> gradle.properties.temp
+echo.>> gradle.properties.temp
+echo # Enable R8 full mode>> gradle.properties.temp
+echo android.enableR8.fullMode=true>> gradle.properties.temp
+echo.>> gradle.properties.temp
+echo # Kotlin code style for this project: "official" or "obsolete":>> gradle.properties.temp
+echo kotlin.code.style=official>> gradle.properties.temp
 
 move /y gradle.properties.temp gradle.properties > nul
 echo.
@@ -67,12 +67,12 @@ echo     main.java.srcDirs -= 'src/main/kotlin'>> config\fix_sourceset.gradle
 echo     main.java.includes = ['**/*.java', '**/*.kt']>> config\fix_sourceset.gradle
 echo }>> config\fix_sourceset.gradle
 echo.>> config\fix_sourceset.gradle
-echo tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {>> config\fix_sourceset.gradle
-echo     kotlinOptions {>> config\fix_sourceset.gradle
-echo         jvmTarget = "17">> config\fix_sourceset.gradle
-echo     }>> config\fix_sourceset.gradle
-echo }>> config\fix_sourceset.gradle
-echo.>> config\fix_sourceset.gradle
+:: echo tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {>> config\fix_sourceset.gradle
+:: echo     kotlinOptions {>> config\fix_sourceset.gradle
+:: echo         jvmTarget = "17">> config\fix_sourceset.gradle
+:: echo     }>> config\fix_sourceset.gradle
+:: echo }>> config\fix_sourceset.gradle
+:: echo.>> config\fix_sourceset.gradle
 echo kapt {>> config\fix_sourceset.gradle
 echo     correctErrorTypes true>> config\fix_sourceset.gradle
 echo     useBuildCache false>> config\fix_sourceset.gradle
@@ -91,13 +91,13 @@ echo ---------------------------------------------------------
 echo Updating app build.gradle
 call :append_apply_from "app\build.gradle"
 
-:: Update data build.gradle
-echo Updating data build.gradle
-call :append_apply_from "data\build.gradle"
+:: Update data build.gradle (Module removed)
+:: echo Updating data build.gradle
+:: call :append_apply_from "data\build.gradle"
 
-:: Update domain build.gradle
-echo Updating domain build.gradle
-call :append_apply_from "domain\build.gradle"
+:: Update domain build.gradle (Module removed)
+:: echo Updating domain build.gradle
+:: call :append_apply_from "domain\build.gradle"
 
 :: Update feature modules build.gradle
 for /d %%d in (feature\*) do (

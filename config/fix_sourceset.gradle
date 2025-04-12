@@ -1,8 +1,17 @@
-// Simplified source set fix
+// Fix for package name mismatch between declared package and expected package 
+
 android.sourceSets {
     main.java.srcDirs += 'src/main/java'
+    main.java.srcDirs -= 'src/main/kotlin'
     main.java.includes = ['**/*.java', '**/*.kt']
 }
 
-// Skip Kotlin-specific configurations to avoid org reference issues
-// We've moved these to the main build.gradle files
+kapt {
+    correctErrorTypes true
+    useBuildCache false
+    arguments {
+        arg("room.schemaLocation", "$projectDir/schemas")
+        arg("room.incremental", "true")
+        arg("room.expandProjection", "true")
+    }
+}

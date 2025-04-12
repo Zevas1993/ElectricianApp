@@ -14,6 +14,22 @@ android {
     buildFeatures {
         buildConfig true
     }
+    
+    // Add dependency conflict resolution
+    configurations.all {
+        resolutionStrategy {
+            // Force use of AndroidX versions
+            force 'androidx.core:core:1.12.0'
+            force 'androidx.appcompat:appcompat:1.6.1'
+            
+            // Exclude older support libraries that conflict with AndroidX
+            exclude group: 'com.android.support', module: 'support-compat'
+            exclude group: 'com.android.support', module: 'support-core-ui'
+            exclude group: 'com.android.support', module: 'support-core-utils'
+            exclude group: 'com.android.support', module: 'support-fragment'
+            exclude group: 'com.android.support', module: 'support-annotations'
+        }
+    }
 
     defaultConfig {
         applicationId "com.example.electricianapp" // Ensure this matches your package
@@ -105,9 +121,10 @@ dependencies {
     // Google Sign-In (part of Play Services)
     implementation libs.google.android.gms.play.services.auth // Check latest
 
-    // ARCore (Google Play Services for AR)
-    implementation libs.google.ar.core // Check for latest compatible version
-    implementation libs.google.ar.sceneform.ux // Sceneform UX library for ArFragment (Check compatibility/latest)
+    // ARCore (Google Play Services for AR) 
+    // Note: Removing Sceneform as it's deprecated and causing dependency conflicts
+    implementation libs.google.ar.core // Using only ARCore
+    // Removed: implementation libs.google.ar.sceneform.ux (deprecated and conflicts with AndroidX)
 
     // Glide (Image Loading)
     implementation libs.glide
@@ -133,3 +150,6 @@ dependencies {
 
 // Apply the Google services plugin using the older syntax as well, often needed at the bottom
 // apply plugin: 'com.google.gms.google-services' // Removed - applied in plugins block
+
+// Apply source set configuration fix
+apply from: '../config/fix_sourceset.gradle'

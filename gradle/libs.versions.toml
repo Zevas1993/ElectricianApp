@@ -15,7 +15,7 @@ gson = "2.10.1"
 firebaseBom = "32.7.4"
 playServicesAuth = "21.0.0"
 arCore = "1.41.0"
-sceneform = "1.17.1" # Deprecated
+# Removed: sceneform = "1.17.1" # Deprecated
 junit = "4.13.2"
 androidxArchCoreTesting = "2.2.0"
 mockitoCore = "5.8.0"
@@ -68,7 +68,7 @@ google-firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-aut
 google-android-gms-play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
 # ARCore
 google-ar-core = { group = "com.google.ar", name = "core", version.ref = "arCore" }
-google-ar-sceneform-ux = { group = "com.google.ar.sceneform.ux", name = "sceneform-ux", version.ref = "sceneform" } # Deprecated
+# Removed: google-ar-sceneform-ux = { group = "com.google.ar.sceneform.ux", name = "sceneform-ux", version.ref = "sceneform" }
 # Testing - JUnit
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 # Testing - Mockito
